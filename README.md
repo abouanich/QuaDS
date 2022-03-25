@@ -1,6 +1,6 @@
 # CatDes
 
-A Python implementation of the catdes() function from the FactoMiner R package (http://factominer.free.fr/factomethods/description-des-modalites.html) with extras.
+A Python implementation of the [catdes()](http://factominer.free.fr/factomethods/description-des-modalites.html) function from the [FactoMiner R package](http://factominer.free.fr) with extras.
 
 ## Getting started
 
