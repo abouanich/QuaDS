@@ -1,0 +1,112 @@
+# Data analysis and manipulation library
+import pandas as pd
+import plotly.express as px
+import os
+
+# System library to manipulate the file system
+from os import path
+from utils import write_excel
+import shutil
+from tqdm import tqdm
+from quads import *
+
+df = pd.ExcelFile('scripts/data/semantic_cluster_coordinates6.xlsx')
+df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
+df2 = pd.read_excel(df)
+#quantitatives variables
+quantitative =['Name (original)','Number of flowers by volume']
+#qualitatives variables
+qualitative = ['Name (original)',
+		      	   'Breeding period',
+		      	   'Geographic origin',
+		       	   'Horticultural group',
+		      	   'Ploidy',
+		       	   'Bush height',
+		       	   'Type',
+		           'Quantity of prickles',
+		       	   'Perfume intensity',
+		       	   'Repeat flowering',
+		       	   'Quantity of bristles by branch',
+		       	   'Shine of upper face',
+		       	   'Corolla form',
+		       	   'Corolla size',
+		       	   'Color repartition',
+		           'Duplicature',
+		       	   'Petal color']
+   	
+df_clus = df1[['Name (original)','Genetic group']]
+df_quali = df1[qualitative]
+df_quanti = df1[quantitative]
+
+#make the dataframe that contain only the qualitatives variables
+dataframe_quali = df_quali.merge(df_clus)
+dataframe_quali = dataframe_quali.fillna('missing values')
+
+#make the dataframe that contain only the quantitatives variables
+dataframe_quanti = df_quanti.merge(df_clus)
+dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers by volume' : 'Number_of_flowers_by_volume'})
+	#make the qualitative analysis
+sdqualitative = sdquali(dataframe_quali, qualitative, 'Genetic group', 0.05)
+sdqualitative=sdqualitative.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+quali_a = quali_analysis(dataframe_quali, qualitative, 'Genetic group')
+cm = clamod(quali_a,'Genetic group')
+mc = modcla(quali_a,'Genetic group')
+g = globa(quali_a)
+pv = pvalue(quali_a,'Genetic group')
+test_value = vtest(quali_a,'Genetic group',0.05)
+test_value=test_value.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+w = variable_weight(quali_a)
+w=w.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')	
+
+#make the quantitative analysis for each quantitative variable
+sd = sdquanti(dataframe_quanti,'Number_of_flowers_by_volume', 'Genetic group')
+sd = sd.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_by_volume', 'Genetic group',0.05,0.05)
+quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+
+#out :
+#create the new path for the result
+if not os.path.exists('results/semantic/GG') :
+	os.makedirs('results/semantic/GG')
+path = 'results/semantic/GG/'
+	
+#name the files
+file_name_x2 = 'x2_semantic_GG.xlsx'
+file_name_qualitative = 'qualitative_analysis_semantic_GG.xlsx'
+file_name_weight = 'weight_semantic_GG.xlsx'
+file_name_anova = 'anova_semantic_GG.xlsx'
+file_name_quantitative = 'quantitative_analysis_semantic_GG.xlsx'
+	
+#create the excel files
+write_excel(file_name_x2,'sheet', sdqualitative, idx=True)
+write_excel(file_name_qualitative,'sheet',test_value,idx=True)
+write_excel(file_name_weight,'sheet', w,idx=True)
+write_excel(file_name_anova,'sheet', sd,idx=True)
+write_excel(file_name_quantitative,'sheet', quanti_a, idx=True)
+	
+#make the visualisations
+data = pd.ExcelFile(file_name_qualitative)
+col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
+title = 'Proportions of modalities in each genetic group with Semantic distance'
+df = pd.read_excel(data)
+legend=''
+for i in range (len(df)):
+	if legend == '' :
+		pass
+	else : 
+		legend = legend+' ; '
+	if df['variables'][i] =='Genetic group' :
+		legend= legend+ str(df['Genetic group'][i])+' : '+str(round(df['global'][i],2))+'%'
+sunburst = px.sunburst(df, path=['Genetic group', 'variables', 'modalities'],values='mod/cla',title=title, color = 'signification',color_discrete_map=col)
+sunburst.add_annotation(x=0,y=1.1,text=legend,font = dict(color='black',size=14),showarrow=False)
+sunburst.add_annotation(x=0.2,y=1,text= 'Overrepresented',font = dict(color='red',size=14),showarrow=False)
+sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',font = dict(color='blue',size=14),showarrow=False)
+sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
+sunburst.show()
+
+#move the files in the good directory	
+shutil.move(file_name_x2,path+file_name_x2)
+shutil.move(file_name_qualitative,path+file_name_qualitative)
+shutil.move(file_name_weight,path+file_name_weight)
+shutil.move(file_name_anova,path+file_name_anova)
+shutil.move(file_name_quantitative,path+file_name_quantitative)
