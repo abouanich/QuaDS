@@ -22,7 +22,7 @@ import pandas as pd
 #sunburst_under = px.sunburst(df_und, path=['cluster', 'variables', 'modalities'], values='cla/mod')
 #sunburst_under.show()
 
-file_name_qualitative = 'qualitative_analysis_semantic_cluster6.xlsx'	
+file_name_qualitative = 'results/semantic/cluster7/qualitative_analysis_semantic_cluster7.xlsx'	
 data = pd.ExcelFile(file_name_qualitative)
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 sheets = data.sheet_names

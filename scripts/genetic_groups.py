@@ -66,16 +66,16 @@ quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code
 
 #out :
 #create the new path for the result
-if not os.path.exists('results/semantic/GG') :
-	os.makedirs('results/semantic/GG')
-path = 'results/semantic/GG/'
+if not os.path.exists('results/Genetic groups') :
+	os.makedirs('results/Genetic groups')
+path = 'results/Genetic groups/'
 	
 #name the files
-file_name_x2 = 'x2_semantic_GG.xlsx'
-file_name_qualitative = 'qualitative_analysis_semantic_GG.xlsx'
-file_name_weight = 'weight_semantic_GG.xlsx'
-file_name_anova = 'anova_semantic_GG.xlsx'
-file_name_quantitative = 'quantitative_analysis_semantic_GG.xlsx'
+file_name_x2 = 'x2_GG.xlsx'
+file_name_qualitative = 'qualitative_analysis_GG.xlsx'
+file_name_weight = 'weight_GG.xlsx'
+file_name_anova = 'anova_GG.xlsx'
+file_name_quantitative = 'quantitative_analysis_GG.xlsx'
 	
 #create the excel files
 write_excel(file_name_x2,'sheet', sdqualitative, idx=True)

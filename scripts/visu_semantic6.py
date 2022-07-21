@@ -22,8 +22,7 @@ import pandas as pd
 #sunburst_under = px.sunburst(df_und, path=['cluster', 'variables', 'modalities'], values='cla/mod')
 #sunburst_under.show()
 
-
-file_name_qualitative = 'qualitative_analysis_semantic_cluster5.xlsx'	
+file_name_qualitative = 'results/semantic/cluster6/qualitative_analysis_semantic_cluster6.xlsx'	
 data = pd.ExcelFile(file_name_qualitative)
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 sheets = data.sheet_names
@@ -45,8 +44,6 @@ for sheet in sheets :
 	sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
 	sunburst.show()
 	
-
-
 	#treemap = px.treemap(df, path=['cluster', 'variables', 'modalities'],values='mod/cla',title=legend, color = 'signification')
 	#treemap.update_traces(root_color="lightgrey")
 	#treemap.update_layout(margin = dict(t=50, l=25, r=25, b=25))

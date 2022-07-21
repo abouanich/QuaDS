@@ -23,12 +23,12 @@ import pandas as pd
 #sunburst_under.show()
 
 
-file_name_qualitative = 'qualitative_analysis_gower_cluster7.xlsx'	
+file_name_qualitative = 'results/semantic/cluster5/qualitative_analysis_semantic_cluster5.xlsx'	
 data = pd.ExcelFile(file_name_qualitative)
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 sheets = data.sheet_names
 for sheet in sheets :
-	title = 'Proportions of modalities in each clusters with Gower distance and '+sheet+' method'
+	title = 'Proportions of modalities in each clusters with Semantic distance and '+sheet+' method'
 	df = pd.read_excel(data, sheet)
 	legend=''
 	for i in range (len(df)):
@@ -39,12 +39,14 @@ for sheet in sheets :
 		if df['variables'][i] =='cluster' :
 			legend= legend+ str(df['cluster'][i])+' : '+str(round(df['global'][i],2))+'%'
 	sunburst = px.sunburst(df, path=['cluster', 'variables', 'modalities'],values='mod/cla',title=title, color = 'signification',color_discrete_map=col)
-	
 	sunburst.add_annotation(x=0,y=1.1,text=legend,font = dict(color='black',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=1,text= 'Overrepresented',font = dict(color='red',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',font = dict(color='blue',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
 	sunburst.show()
+	
+
+
 	#treemap = px.treemap(df, path=['cluster', 'variables', 'modalities'],values='mod/cla',title=legend, color = 'signification')
 	#treemap.update_traces(root_color="lightgrey")
 	#treemap.update_layout(margin = dict(t=50, l=25, r=25, b=25))
