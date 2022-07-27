@@ -114,7 +114,7 @@ for sheet in sheets :
 	sunburst.add_annotation(x=0.2,y=1,text= 'Overrepresented',font = dict(color='red',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',font = dict(color='blue',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
-	sunburst.show())
+	sunburst.show()
 
 #move the files in the good directory	
 shutil.move(file_name_x2,path+file_name_x2)

@@ -14,6 +14,8 @@ Alternatively the dependencies can by installed using pip:
     python -m pip install -r requirements.txt
 
 ## Usage
+You have to put your data files in the case : scripts/data
+
 descriptives statistics :
 
 for gower distance:

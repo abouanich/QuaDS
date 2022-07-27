@@ -35,17 +35,19 @@ qualitative = ['Name (original)',
 		       	   'Petal color']
    	
 df_clus = df1[['Name (original)','Genetic group']]
+df_clus = df_clus.fillna(0)
+df_clus["Genetic group"]= df_clus["Genetic group"].astype(int)
 df_quali = df1[qualitative]
 df_quanti = df1[quantitative]
 
 #make the dataframe that contain only the qualitatives variables
 dataframe_quali = df_quali.merge(df_clus)
-dataframe_quali = dataframe_quali.fillna('missing values')
+dataframe_quali = dataframe_quali.fillna("missing values")
 
 #make the dataframe that contain only the quantitatives variables
 dataframe_quanti = df_quanti.merge(df_clus)
 dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers by volume' : 'Number_of_flowers_by_volume'})
-	#make the qualitative analysis
+#make the qualitative analysis
 sdqualitative = sdquali(dataframe_quali, qualitative, 'Genetic group', 0.05)
 sdqualitative=sdqualitative.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
 quali_a = quali_analysis(dataframe_quali, qualitative, 'Genetic group')
