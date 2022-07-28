@@ -16,7 +16,7 @@ df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
     df2 = pd.read_excel(df, sheet)
     #quantitatives variables
-    quantitative =['Name (original)','Number of flowers by volume']
+    quantitative =['Name (original)','Number of flowers per inflorescence']
     #qualitatives variables
     qualitative = ['Name (original)',
                    'Breeding period',
@@ -24,7 +24,7 @@ for sheet in tqdm(sheets) :
                    'Horticultural group',
                    'Ploidy',
                    'Bush height',
-                   'Type',
+                   'Shape',
                    'Quantity of prickles',
                    'Perfume intensity',
                    'Repeat flowering',

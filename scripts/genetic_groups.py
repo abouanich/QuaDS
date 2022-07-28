@@ -14,7 +14,7 @@ df = pd.ExcelFile('scripts/data/semantic_cluster_coordinates6.xlsx')
 df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
 df2 = pd.read_excel(df)
 #quantitatives variables
-quantitative =['Name (original)','Number of flowers by volume']
+quantitative =['Name (original)','Number of flowers per inflorescence']
 #qualitatives variables
 qualitative = ['Name (original)',
 		      	   'Breeding period',
@@ -22,7 +22,7 @@ qualitative = ['Name (original)',
 		       	   'Horticultural group',
 		      	   'Ploidy',
 		       	   'Bush height',
-		       	   'Type',
+		       	   'Shape',
 		           'Quantity of prickles',
 		       	   'Perfume intensity',
 		       	   'Repeat flowering',

@@ -14,27 +14,27 @@ df = pd.ExcelFile('scripts/data/gower_cluster_coordinates6.xlsx')
 sheets = df.sheet_names
 df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
-	df2 = pd.read_excel(df, sheet)
-	#quantitatives variables
-	quantitative =['Name (original)','Number of flowers by volume']
-	#qualitatives variables
-	qualitative = ['Name (original)',
-		      	   'Breeding period',
-		      	   'Geographic origin',
-		       	   'Horticultural group',
-		      	   'Ploidy',
-		       	   'Bush height',
-		       	   'Type',
-		           'Quantity of prickles',
-		       	   'Perfume intensity',
-		       	   'Repeat flowering',
-		       	   'Quantity of bristles by branch',
-		       	   'Shine of upper face',
-		       	   'Corolla form',
-		       	   'Corolla size',
-		       	   'Color repartition',
-		           'Duplicature',
-		       	   'Petal color']
+    df2 = pd.read_excel(df, sheet)
+    #quantitatives variables
+    quantitative =['Name (original)','Number of flowers per inflorescence']
+    #qualitatives variables
+    qualitative = ['Name (original)',
+                   'Breeding period',
+                   'Geographic origin',
+                   'Horticultural group',
+                   'Ploidy',
+                   'Bush height',
+                   'Shape',
+                   'Quantity of prickles',
+                   'Perfume intensity',
+                   'Repeat flowering',
+                   'Quantity of bristles by branch',
+                   'Shine of upper face',
+                   'Corolla form',
+                   'Corolla size',
+                   'Color repartition',
+                   'Duplicature',
+                   'Petal color']
    	
 	df_quali = df1[qualitative]
 	df_quanti = df1[quantitative]
