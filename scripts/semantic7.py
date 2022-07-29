@@ -53,7 +53,7 @@ for sheet in tqdm(sheets) :
 	
 	#make the dataframe that contain only the quantitatives variables
 	dataframe_quanti = df_quanti.merge(df2)
-	dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers by volume' : 'Number_of_flowers_by_volume'})
+	dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers per inflorescence' : 'Number_of_flowers_per_inflorescence'})
 
 	#make the qualitative analysis
 	sdqualitative = sdquali(dataframe_quali, qualitative, 'cluster', 0.05)
@@ -69,9 +69,9 @@ for sheet in tqdm(sheets) :
 	w=w.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')	
 	
 	#make the quantitative analysis for each quantitative variable
-	sd = sdquanti(dataframe_quanti,'Number_of_flowers_by_volume', 'cluster')
+	sd = sdquanti(dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster')
 	sd = sd.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
-	quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_by_volume', 'cluster',0.05,0.05)
+	quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster',0.05,0.05)
 	quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
 	
 	#out :

@@ -22,7 +22,7 @@ import pandas as pd
 #df_und.drop(ind_ns,inplace=True)
 #sunburst_under = px.sunburst(df_und, path=['cluster', 'variables', 'modalities'], values='cla/mod')
 #sunburst_under.show()
-file_name_qualitative = 'results/gower/cluster5/qualitative_analysis_gower_cluster5.xlsx'	
+file_name_qualitative = 'results_quads/gower/cluster5/qualitative_analysis_gower_cluster5.xlsx'	
 data = pd.ExcelFile(file_name_qualitative)
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 sheets = data.sheet_names

@@ -46,7 +46,7 @@ dataframe_quali = dataframe_quali.fillna("missing values")
 
 #make the dataframe that contain only the quantitatives variables
 dataframe_quanti = df_quanti.merge(df_clus)
-dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers by volume' : 'Number_of_flowers_by_volume'})
+dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers per inflorescence' : 'Number_of_flowers_per_inflorescence'})
 #make the qualitative analysis
 sdqualitative = sdquali(dataframe_quali, qualitative, 'Genetic group', 0.05)
 sdqualitative=sdqualitative.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
@@ -61,9 +61,9 @@ w = variable_weight(quali_a)
 w=w.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')	
 
 #make the quantitative analysis for each quantitative variable
-sd = sdquanti(dataframe_quanti,'Number_of_flowers_by_volume', 'Genetic group')
+sd = sdquanti(dataframe_quanti,'Number_of_flowers_per_inflorescence', 'Genetic group')
 sd = sd.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
-quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_by_volume', 'Genetic group',0.05,0.05)
+quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_per_inflorescence', 'Genetic group',0.05,0.05)
 quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
 
 #out :

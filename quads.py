@@ -73,7 +73,7 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
 	p_value = []
 	chi = []
 	significative = []
-	for col in df:
+	for col in df[columns]:
 		cont = pd.crosstab(df[col],df[vchi2])
 		# Chi-square test of independence
 		chi2, p, dof, expected = chi2_contingency(cont)
@@ -91,6 +91,7 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
 			significative.append('Not significant')
 	global new_df
 	new_df = df[column]
+	new_df['cluster'] = df['cluster']
 	
 	#generate the table from the chi2 test with the variables 
 	#and their p_value
@@ -98,10 +99,11 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
 	for element in columns :
 		v.append('Not significant')
 	global X2
+
 	X2 = pd.DataFrame({'Variables' : columns,
-			   'Chi2 Statistic' : chi[0:-1], 
-			   'p_value' : p_value[0:-1],
-			   'significance' : significative[0:-1]})
+			   'Chi2 Statistic' : chi, 
+			   'p_value' : p_value,
+			   'significance' : significative})
 	return X2
 
 def quali_analysis(df, columns, vchi2):
@@ -742,7 +744,7 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova, pv_vtest):
         * Make the v-test and final statistics
 	
 		Args:
-			anova : the dataframe from the anova analysis
+		anova : the dataframe from the anova analysis
         	df: a pandas DataFrame containing only quantitative variable 
         	var : the quantitative variables
         	variable_cat : the variable to test
