@@ -91,7 +91,7 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
 			significative.append('Not significant')
 	global new_df
 	new_df = df[column]
-	new_df['cluster'] = df['cluster']
+	new_df[vchi2] = df[vchi2]
 	
 	#generate the table from the chi2 test with the variables 
 	#and their p_value
@@ -685,7 +685,7 @@ def variable_weight(result):
 		    			   'number mod over' : nb_mod_over[0:-1], 
 		    			   'number mod under' : nb_mod_under[0:-1],
 						   'number mod over&under' : nb_mod_overunder[0:-1],
-						   'sum of all mod of all clusters' : nb_var[0:-1],
+						   'sum of all mod of all groups' : nb_var[0:-1],
 						   'ratio over/mod' : ratio1[0:-1],
 						   'contribution over/mod' : ranking1,
 						   'ratio under/mod' : ratio2[0:-1],

@@ -10,9 +10,9 @@ import shutil
 from tqdm import tqdm
 from quads import *
 
-df = pd.ExcelFile('scripts/data/gower_cluster_coordinates6.xlsx')
+df = pd.ExcelFile('data/gower_cluster_coordinates6.xlsx')
 sheets = df.sheet_names
-df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
+df1 = pd.read_excel('data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
     df2 = pd.read_excel(df, sheet)
     #quantitatives variables
@@ -36,63 +36,63 @@ for sheet in tqdm(sheets) :
                    'Duplicature',
                    'Petal color']
    	
-	df_quali = df1[qualitative]
-	df_quanti = df1[quantitative]
+    df_quali = df1[qualitative]
+    df_quanti = df1[quantitative]
 
 	#take the variable cluster from the second table 
 	#with a merge from df1 to df2
 	#merge : df1 = Name(original) ; df2 = Unnamed: 0
 	#rename the df2 columns from Unnamed: 0 to Name(original) to make the merge
-	df2.rename(columns={'Unnamed: 0' : 'Name (original)'}, inplace = True)
-	columns_df2 = ['Name (original)','cluster']
-	df2 = df2[columns_df2]
+    df2.rename(columns={'Unnamed: 0' : 'Name (original)'}, inplace = True)
+    columns_df2 = ['Name (original)','cluster']
+    df2 = df2[columns_df2]
 	
 	#make the dataframe that contain only the qualitatives variables
-	dataframe_quali = df_quali.merge(df2)
-	dataframe_quali = dataframe_quali.fillna('missing values')
+    dataframe_quali = df_quali.merge(df2)
+    dataframe_quali = dataframe_quali.fillna('missing values')
 	
 	#make the dataframe that contain only the quantitatives variables
-	dataframe_quanti = df_quanti.merge(df2)
-	dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers per inflorescence' : 'Number_of_flowers_per_inflorescence'})
+    dataframe_quanti = df_quanti.merge(df2)
+    dataframe_quanti = dataframe_quanti.rename(columns = {'Number of flowers per inflorescence' : 'Number_of_flowers_per_inflorescence'})
 
 	#make the qualitative analysis
-	sdqualitative = sdquali(dataframe_quali, qualitative, 'cluster', 0.05)
-	sdqualitative=sdqualitative.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
-	quali_a = quali_analysis(dataframe_quali, qualitative, 'cluster')
-	cm = clamod(quali_a,'cluster')
-	mc = modcla(quali_a,'cluster')
-	g = globa(quali_a)
-	pv = pvalue(quali_a,'cluster')
-	test_value = vtest(quali_a,'cluster',0.05)
-	test_value=test_value.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
-	w = variable_weight(quali_a)
-	w=w.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')	
+    sdqualitative = sdquali(dataframe_quali, qualitative, 'cluster', 0.05)
+    sdqualitative=sdqualitative.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+    quali_a = quali_analysis(dataframe_quali, qualitative, 'cluster')
+    cm = clamod(quali_a,'cluster')
+    mc = modcla(quali_a,'cluster')
+    g = globa(quali_a)
+    pv = pvalue(quali_a,'cluster')
+    test_value = vtest(quali_a,'cluster',0.05)
+    test_value=test_value.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+    w = variable_weight(quali_a)
+    w=w.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')	
 	
 	#make the quantitative analysis for each quantitative variable
-	sd = sdquanti(dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster')
-	sd = sd.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
-	quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster',0.05,0.05)
-	quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+    sd = sdquanti(dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster')
+    sd = sd.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
+    quanti_a = quanti_analysis(sd, dataframe_quanti,'Number_of_flowers_per_inflorescence', 'cluster',0.05,0.05)
+    quanti_a = quanti_a.rename_axis('file : 20220615_florhige_synthese_english, code : 20220615_quads')
 	
 	#out :
 	#create the new path for the result
-	if not os.path.exists('results/gower/cluster6') :
-		os.makedirs('results/gower/cluster6')
-	path = 'results/gower/cluster6/'
+    if not os.path.exists('results/gower/cluster6') :
+        os.makedirs('results/gower/cluster6')
+    path = 'results/gower/cluster6/'
 	
 	#name the files
-	file_name_x2 = 'x2_gower_cluster6.xlsx'
-	file_name_qualitative = 'qualitative_analysis_gower_cluster6.xlsx'
-	file_name_weight = 'weight_gower_cluster6.xlsx'
-	file_name_anova = 'anova_gower_cluster6.xlsx'
-	file_name_quantitative = 'quantitative_analysis_gower_cluster6.xlsx'
+    file_name_x2 = 'x2_gower_cluster6.xlsx'
+    file_name_qualitative = 'qualitative_analysis_gower_cluster6.xlsx'
+    file_name_weight = 'weight_gower_cluster6.xlsx'
+    file_name_anova = 'anova_gower_cluster6.xlsx'
+    file_name_quantitative = 'quantitative_analysis_gower_cluster6.xlsx'
 	
 	#create the excel files
-	write_excel(file_name_x2, sheet, sdqualitative, idx=True)
-	write_excel(file_name_qualitative, sheet, test_value,idx=True)
-	write_excel(file_name_weight, sheet, w,idx=True)
-	write_excel(file_name_anova, sheet, sd,idx=True)
-	write_excel(file_name_quantitative, sheet, quanti_a, idx=True)
+    write_excel(file_name_x2, sheet, sdqualitative, idx=True)
+    write_excel(file_name_qualitative, sheet, test_value,idx=True)
+    write_excel(file_name_weight, sheet, w,idx=True)
+    write_excel(file_name_anova, sheet, sd,idx=True)
+    write_excel(file_name_quantitative, sheet, quanti_a, idx=True)
 
 #make the visualisations
 data = pd.ExcelFile(file_name_qualitative)

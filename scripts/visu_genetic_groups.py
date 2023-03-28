@@ -23,7 +23,7 @@ import pandas as pd
 #sunburst_under.show()
 
 
-file_name_qualitative = 'results_quads/Genetic groups/qualitative_analysis_GG.xlsx'	
+file_name_qualitative = 'results/Genetic groups/qualitative_analysis_GG.xlsx'	
 data = pd.ExcelFile(file_name_qualitative)
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 title = 'Proportions of modalities in each genetic group with semantic distance'

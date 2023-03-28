@@ -10,9 +10,9 @@ import shutil
 from tqdm import tqdm
 from quads import *
 
-df = pd.ExcelFile('scripts/data/gower_cluster_coordinates5.xlsx')
+df = pd.ExcelFile('data/gower_cluster_coordinates5.xlsx')
 sheets = df.sheet_names
-df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
+df1 = pd.read_excel('data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
     df2 = pd.read_excel(df, sheet)
     #quantitatives variables

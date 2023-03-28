@@ -10,8 +10,8 @@ import shutil
 from tqdm import tqdm
 from quads import *
 
-df = pd.ExcelFile('scripts/data/semantic_cluster_coordinates6.xlsx')
-df1 = pd.read_excel('scripts/data/input_data_file.xlsx')
+df = pd.ExcelFile('data/semantic_cluster_coordinates6.xlsx')
+df1 = pd.read_excel('data/input_data_file.xlsx')
 df2 = pd.read_excel(df)
 #quantitatives variables
 quantitative =['Name (original)','Number of flowers per inflorescence']
