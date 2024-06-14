@@ -1,0 +1,86 @@
+# Directory management
+# --------------------
+directory_management:
+
+  #: String: Path of the file containing the original rose data (Required)
+  data_path: data/
+
+  #: String: Path of the directory in which to write result files (Required)
+  result_path: results/
+
+ 
+# File management
+#----------------
+file_management:
+
+  #: String: type of file: csv or excel
+  table: csv
+
+  #: String: Name of the file containing the variables 
+  original_data_file: data_test.csv
+
+  #: String: Output files:
+  quantitative_test: anova.csv
+  quantitative_enrichment: quantitative_gaussian.csv
+  qualitative_test: x2.csv
+  qualitative_enrichment: qualitative_hypergeometric.csv
+  variable_weight: weight.csv
+
+
+# Variable management 
+#-------------------
+variable_management:
+
+  #: String: [Names of the variables] for the qualitative variables
+  qualitative_variables: ["type","strand"]
+  
+  #: String: [Names of the variables] for the quantitative variables
+  quantitative_variables: ["nb_dupli","length"]
+  
+  #: String: Names of the cluster variable
+  cluster_variable: chr
+
+# Thresholds tests
+#-------------------
+thresholds_management:
+
+  #: Float: threshold for the anova test
+  anova_threshold: 0.01
+
+  #: Float: threshold for centered and reduced Gaussian distribution
+  gaussian_threshold: 0.01
+
+  #: Float: threshold for the X2 test
+  x2_threshold: 0.01
+
+  #: Float: threshold for hypergeometric distribution
+  hypergeometric_threshold: 0.01
+
+
+# Color management
+#-----------------------------------
+figure_management:
+
+  #: String : Color palette for the sunburst qualitative analysis and statistic to show in the sunburst
+  over_represented: red
+  under_represented: blue
+  not_significant: wheat
+  statistic: mod/cla
+
+
+# File logging
+#-------------
+logging:
+
+  #: String: Define log level
+  #:
+  #: Possible log levels:
+  #:
+  #: * :code:`INFO` standard level. Only produces final images and CSV measurement files
+  #: * :code:`DEBUG` level to use to generate trace images
+  #:
+  #: (Required)
+  log_level: INFO
+
+  #: String: Location of the log file (path and file name) (Required)
+  log_file: quads.log
