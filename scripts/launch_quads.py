@@ -15,7 +15,7 @@ data_path = config["directory_management"]["data_path"]
 result_path = config["directory_management"]["result_path"]
 #name the files
 if config["file_management"]["table"] == "excel" :
-    df = pd.ExcelFile(data_path+config["file_management"]["original_data_file"],index_col=0)
+    df = pd.read_excel(data_path+config["file_management"]["original_data_file"],index_col=0)
 elif config["file_management"]["table"] == "csv" :
     df = pd.read_csv(data_path+config["file_management"]["original_data_file"],index_col=0)
 
@@ -111,7 +111,7 @@ col = {'overrepresented' : config["figure_management"]["over_represented"], \
 
 
 if config["file_management"]["table"] == "excel" :
-    data = pd.ExcelFile(file_name_qualitative)
+    df = pd.read_excel(file_name_qualitative,index_col=0)
 elif config["file_management"]["table"] == "csv" :
     df = pd.read_csv(file_name_qualitative,index_col=0)
 
