@@ -36,7 +36,7 @@ from os import path
 
 
 def write_excel(
-    filename: str, sheetname: str, dataframe: pd.DataFrame, idx: bool = False
+    filename: str, dataframe: pd.DataFrame, idx: bool = False
 ):
     """
     Function to write into excel file. Doesn't create new sheets when one of the
@@ -44,7 +44,6 @@ def write_excel(
 
     Args:
         filename: name of the Excel file
-        sheetname: name of the sheet in the excel file
         dataframe: dataframe to write to the sheet
         idx: boolean to indicate if we have to write the line indexes or not
     """
@@ -54,26 +53,9 @@ def write_excel(
         writer = pd.ExcelWriter(
             filename, engine="xlsxwriter", datetime_format="mmmm dd yyyy"
         )
-        dataframe.to_excel(writer, sheet_name=sheetname, na_rep="", index=idx)
+        dataframe.to_excel(writer, na_rep="", index=idx)
         writer.save()
         return
-    with pd.ExcelWriter(
-        filename,
-        engine="openpyxl",
-        mode="a",
-        datetime_format="mmmm dd yyyy",
-        na_rep="",
-    ) as writer:
-        workBook = writer.book
-        try:
-            workBook.remove(workBook[sheetname])
-            logging.info("      -> Sheet replacing")
-        except:
-            logging.info("      -> Sheet doesn't exists - creating")
-        finally:
-            dataframe.to_excel(writer, sheet_name=sheetname, index=idx)
-            writer.save()
-
 
 def scale_df(df: pd.DataFrame, maxi: int) -> pd.DataFrame:
     """
