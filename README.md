@@ -20,43 +20,23 @@ Alternatively the dependencies can by installed using pip:
 
 ## Usage
 You have to put your data files in the case : /data
+You have to say in the config_file.yml the different parameters :
+  - directory of data and results
+  - names of datafile, and output files
+  - list of qualitative variable names
+  - list of quantitative variable names
+  - cluster variable
+  - different thresholds of the tests
+  - colors of the visual output
 
 descriptives statistics :
 
-for gower distance:
-
-    python -m scripts.gower5
-    python -m scripts.gower6
-    python -m scripts.gower7
-    
-for semantic distance :
-
-    python -m scripts.semantic5
-    python -m scripts.semantic6
-    python -m scripts.semantic7
-    
-for genetic groups :
-
-    python -m scripts.genetic_groups
+    python -m scripts.launch_quads
     
 ## Visuals
 When you have your tables support and you want to see the visualisation
 
-for gower distance :
-
-    python -m scripts.visu_gower5
-    python -m scripts.visu_gower6
-    python -m scripts.visu_gower7
-
-for semantic distance :
-
-    python -m scripts.visu_semantic5
-    python -m scripts.visu_semantic6
-    python -m scripts.visu_semantic7
-    
-for genetic groups :
-
-    python -m scripts.visu_genetic_groups
+    python -m scripts.visualisation
 
 
 ## Deactivation of conda
