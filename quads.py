@@ -540,17 +540,23 @@ def pvalue(result,vchi2):
 				for y in range(nkj+1,nj):
 					nm = table['nj'][j]-y
 					p = (bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
-					s1 = s1+p
+					if s1 == s1+p :
+						break
+					else :
+						s1 = s1+p
 					
 				#if aux2 < aux3
 				for y in range(nkj,nj):
 					nm = table['nj'][j]-y
 					p = (bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
-					s2 = s2+p
+					if s2 == s2+p :
+						break
+					else :
+						s2 = s2+p
 				result['p-value'][i] = 2*min(s1,(1-round(s2,7))) + (bi(nk,nkj)*bi(n_nk,nj-nkj))/bi(n,nj)
 	return result
 
-def vtest(result, vchi2, v_p_value) :
+def vtest(result, v_p_value) :
 	"""
         Function used to make the v-test column for the result table
 
@@ -726,15 +732,23 @@ def sdquanti(df, var, variable_cat):
 		dictionary_1 = OrderedDict(sorted(dictionary_1.items(), key=lambda x: x[0]))
 	
 	#anova
-	lm = ols('df_na[var] ~ C(df_na[variable_cat])', data = df_na).fit()
-	table = sm.stats.anova_lm(lm)
+	list_var = []
+	list_eta2 = []
+	list_pvalue = []
+	for varia in var :
+		lm = ols('df_na[varia] ~ C(df_na[variable_cat])', data = df_na).fit()
+		table = sm.stats.anova_lm(lm)
 	#eta2 : Etat squared ranges from 0 to 1, where values close to 1 indicate a
 	#higher proportion of variance that can be explained by a given variable in 
 	#the model
-	eta2 = table['sum_sq'][0]/(table['sum_sq'][0]+table['sum_sq'][1])
-	anova = pd.DataFrame({'variable' : var,
-						  'Eta2' : eta2,
-						  'p-value' : table['PR(>F)'][0]},index=[0])
+		eta2 = table['sum_sq'][0]/(table['sum_sq'][0]+table['sum_sq'][1])
+		pval = table['PR(>F)'][0]
+		list_var.append(varia)
+		list_eta2.append(eta2)
+		list_pvalue.append(pval)
+	anova = pd.DataFrame({'variable' : list_var,
+						  'Eta2' : list_eta2,
+						  'p-value' : list_pvalue})
 	return anova
 
 
@@ -756,6 +770,7 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova, pv_vtest):
           	         variable_cat and variables
         """
 	df_na = df.dropna()#dataframe without missing values
+	variable_cluster = []
 	variable = []
 	v_test = []
 	mean_category = []
@@ -763,88 +778,92 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova, pv_vtest):
 	category_sd = [] 
 	overall_sd = [] 
 	pv = []#pvalue
-	I = len(df) #number of individuals
-	Im = len(df_na)#number of individuals that don't contain missing values
-	x = round(df[var].mean(),6)#mean of the modalities
-	#check if all the data in the vchi2 are missing values
-	sign=[]
-	ms = []
-	for element in dictionary :
-		variable.append(element)
-		sign.append('Not significant')
-		ms.append(dictionary[element][var].isna().all())
+	for varia in var : 
+		I = len(df) #number of individuals
+		Im = len(df_na)#number of individuals that don't contain missing values
+		x = round(df[varia].mean(),6)#mean of the modalities
+		#check if all the data in the vchi2 are missing values
+		ms = []
+		for element in dictionary :
+			variable_cluster.append(element)
+			variable.append(varia)
+			ms.append(dictionary[element][varia].isna().all())
+		if True in ms :
+			mean_category.append('Not significant')
+			overall_mean.append('Not significant')
+			category_sd.append('Not significant')
+			overall_sd.append('Not significant')
+			pv.append('Not significant')
+			v_test.append('Not significant')
 
-	if True in ms :
-		quantitative = pd.DataFrame({variable_cat : variable,
-			    			  	 	'Mean in category':sign,
-			    			  	 	'Overall mean': sign,
-			    			  		'Sd in category':sign,
-			    			  		'Overall sd':sign,
-			    			  		'p-value':sign,
-			    			  		'v-test':sign})
-		return quantitative
-	else : 
-		sous_ov = np.empty((0,2), float)
-		for el in range(len(df_na)) :
+		else : 
+			sous_ov = np.empty((0,2), float)
 			df_na = df_na.reset_index(drop=True)
-			df_na=df_na.astype(type('float'))
-			sous_ov=np.append(sous_ov,np.array([[float(df_na[var][el]), float(x)]]),axis=0)
-		som_ov = 0
-		for i in sous_ov :
-			som_ov = som_ov+(i[0]-i[1])*(i[0]-i[1])
-		et_overall = round(sqrt(som_ov/Im),6)
-		for i,j in zip(dictionary_1,dictionary) :
-			Iq_df_na = len(dictionary_1[i])
-			Iq = len(dictionary[j])
-			xq = round(dictionary[j].mean(),6)#mean of the modalities of the cluster 
-			xq=xq[0].astype(type('float'))
-			data = dictionary_1[i]
-			mean_category.append(float(xq))
-			overall_mean.append(float(x))
-			sous_cat = np.empty((0,2), float)
-			for el in range(len(data)) :
-				data = data.reset_index(drop=True)
-				data=data.astype(type('float'))
-				sous_cat=np.append(sous_cat,np.array([[float(data[var][el]), float(xq)]]),axis=0)
-			som_cat = 0
-			for k in sous_cat :
-				som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
-			vtest= round((float(xq)-float(x))/sqrt(((et_overall**2)/Iq)*((I-Iq)/(I-1))),6)
-			v_test.append(vtest)
-			pvalue = (1-norm.cdf(abs(vtest)))*2
-			pv.append(pvalue)
-			et_category = round(sqrt(som_cat/Iq_df_na),6)
-			category_sd.append(et_category)
-			overall_sd.append(et_overall)
-		if anova['p-value'][0] < pv_anova :
-			sign = []
-			for element in pv :
-				if element<pv_vtest :
-					sign.append('Significant')
-				else:
-					sign.append('Not significant')
-			for element in range(len(sign)) :
-				if sign[element] == 'Not significant' :
-					v_test[element] = 'Not significant'
-			quantitative = pd.DataFrame({variable_cat : variable,
-		    		  		 			'Mean in category':mean_category,
-		    		  		 			'Overall mean': overall_mean,
-		    		  					'Sd in category':category_sd,
-		    		  					'Overall sd':overall_sd,
-		    		  		 			'p-value':pv,
-		    		  		 			'v-test':v_test,
-		    		  					'signification':sign})
-			return quantitative
-		
-		else :
-			sign=[]
-			for i in dictionary :
-				sign.append('Not significant')
-			quantitative = pd.DataFrame({variable_cat : variable,
-		    			  		 			'Mean in category':mean_category,
-		    			  		 			'Overall mean': overall_mean,
-		    			  					'Sd in category':category_sd,
-		    			  					'Overall sd':overall_sd,
-		    			  		 			'p-value':sign,
-		    			  		 			'v-test':sign})
-			return quantitative
+			for el in range(len(df_na)) :
+				df_na=df_na.astype(type('float'))
+				sous_ov=np.append(sous_ov,np.array([[float(df_na[varia][el]), float(x)]]),axis=0)
+			som_ov = 0
+			for i in sous_ov :
+				som_ov = som_ov+(i[0]-i[1])*(i[0]-i[1])
+			et_overall = round(sqrt(som_ov/Im),6)
+			index_pvalue = anova.index[anova["variable"] == varia].to_list()
+			for ind in index_pvalue :
+				index_pv = ind
+			if anova["p-value"][index_pv] > pv_anova :
+				for i,j in zip(dictionary_1,dictionary) :
+					v_test.append('Not significant')
+					pv.append("Not significant")
+					Iq_df_na = len(dictionary_1[i])
+					Iq = len(dictionary[j][varia])
+					xq = round(dictionary[j][varia].mean(),6)#mean of the modalities of the cluster 
+					data = dictionary_1[i]
+					mean_category.append(float(xq))
+					overall_mean.append(float(x))
+					sous_cat = np.empty((0,2), float)
+					for el in range(len(data)) :
+						data = data.reset_index(drop=True)
+						data=data.astype(type('float'))
+						sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), float(xq)]]),axis=0)
+					som_cat = 0
+					for k in sous_cat :
+						som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
+					et_category = round(sqrt(som_cat/Iq_df_na),6)
+					category_sd.append(et_category)
+					overall_sd.append(et_overall)
+
+				
+			else :
+				for i,j in zip(dictionary_1,dictionary) :
+					Iq_df_na = len(dictionary_1[i])
+					Iq = len(dictionary[j][varia])
+					xq = round(dictionary[j][varia].mean(),6)#mean of the modalities of the cluster 
+					data = dictionary_1[i]
+					mean_category.append(float(xq))
+					overall_mean.append(float(x))
+					sous_cat = np.empty((0,2), float)
+					for el in range(len(data)) :
+						data = data.reset_index(drop=True)
+						data=data.astype(type('float'))
+						sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), float(xq)]]),axis=0)
+					som_cat = 0
+					for k in sous_cat :
+						som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
+					et_category = round(sqrt(som_cat/Iq_df_na),6)
+					category_sd.append(et_category)
+					overall_sd.append(et_overall)
+					vtest= round((float(xq)-float(x))/sqrt(((et_overall**2)/Iq)*((I-Iq)/(I-1))),6)
+					v_test.append(vtest)
+					pvalue = (1-norm.cdf(abs(vtest)))*2
+					pv.append(pvalue)
+				
+				
+
+	quantitative = pd.DataFrame({variable_cat : variable_cluster,
+							    'variable' : variable,
+								'Mean in category':mean_category,
+								'Overall mean': overall_mean,
+								'Sd in category':category_sd,
+								'Overall sd':overall_sd,
+								'p-value':pv,
+								'v-test':v_test})
+	return quantitative
