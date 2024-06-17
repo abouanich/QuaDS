@@ -15,9 +15,11 @@ data_path = config["directory_management"]["data_path"]
 result_path = config["directory_management"]["result_path"]
 #name the files
 if config["file_management"]["table"] == "excel" :
-    df = pd.read_excel(data_path+config["file_management"]["original_data_file"],index_col=0)
+  df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
+                   index_col=0)
 elif config["file_management"]["table"] == "csv" :
-    df = pd.read_csv(data_path+config["file_management"]["original_data_file"],index_col=0)
+  df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
+                 index_col=0)
 
 file_name_x2 = config["directory_management"]["result_path"]+\
 	           config["file_management"]["qualitative_test"]
@@ -38,7 +40,7 @@ cluster= config["variable_management"]["cluster_variable"]
 #quantitatives variables
 quantitative =config["variable_management"]["quantitative_variables"]
 df_quantitative = df[quantitative+\
-					 [config["variable_management"]["cluster_variable"]]]
+				    [config["variable_management"]["cluster_variable"]]]
 df_quantitative = df_quantitative.fillna(0)
 
 #make the quantitative analysis for each quantitative variable
@@ -87,33 +89,33 @@ print("variable weight done.")
 #out :
 #create the new path for the result
 if not os.path.exists(config["directory_management"]["result_path"]) :
-    os.makedirs(config["directory_management"]["result_path"])
+  os.makedirs(config["directory_management"]["result_path"])
 
 if config["file_management"]["table"] == "excel" :
-    write_excel(file_name_x2, sdqualitative, idx=True)
-    write_excel(file_name_qualitative, test_value,idx=True)
-    write_excel(file_name_weight, weight,idx=True)
-    write_excel(file_name_anova, sd,idx=True)
-    write_excel(file_name_quantitative, quanti_a, idx=True)
+  write_excel(file_name_x2, sdqualitative, idx=True)
+  write_excel(file_name_qualitative, test_value,idx=True)
+  write_excel(file_name_weight, weight,idx=True)
+  write_excel(file_name_anova, sd,idx=True)
+  write_excel(file_name_quantitative, quanti_a, idx=True)
 elif config["file_management"]["table"] == "csv" :
-    sdqualitative.to_csv(file_name_x2)
-    test_value.to_csv(file_name_qualitative)
-    weight.to_csv(file_name_weight)
-    sd.to_csv(file_name_anova)
-    quanti_a.to_csv(file_name_quantitative)
+  sdqualitative.to_csv(file_name_x2)
+  test_value.to_csv(file_name_qualitative)
+  weight.to_csv(file_name_weight)
+  sd.to_csv(file_name_anova)
+  quanti_a.to_csv(file_name_quantitative)
 
 
 
 #make the visualisations
 col = {'overrepresented' : config["figure_management"]["over_represented"], \
-	   'underrepresented' : config["figure_management"]["under_represented"], \
+	   'underrepresented' : config["figure_management"]["under_represented"],\
 	   'Not significant': config["figure_management"]["not_significant"]}
 
 
 if config["file_management"]["table"] == "excel" :
-    df = pd.read_excel(file_name_qualitative,index_col=0)
+  df = pd.read_excel(file_name_qualitative,index_col=0)
 elif config["file_management"]["table"] == "csv" :
-    df = pd.read_csv(file_name_qualitative,index_col=0)
+  df = pd.read_csv(file_name_qualitative,index_col=0)
 
 sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
