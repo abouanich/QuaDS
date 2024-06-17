@@ -47,9 +47,6 @@ thresholds_management:
   #: Float: threshold for the anova test
   anova_threshold: 0.01
 
-  #: Float: threshold for centered and reduced Gaussian distribution
-  gaussian_threshold: 0.01
-
   #: Float: threshold for the X2 test
   x2_threshold: 0.01
 

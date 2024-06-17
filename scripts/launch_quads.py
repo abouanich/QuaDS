@@ -51,8 +51,7 @@ quanti_a = quanti_analysis(sd, \
 					df_quantitative, \
 					config["variable_management"]["quantitative_variables"],\
 					config["variable_management"]["cluster_variable"], \
-					config["thresholds_management"]["anova_threshold"], \
-					config["thresholds_management"]["gaussian_threshold"])
+					config["thresholds_management"]["anova_threshold"])
 print("quantitative analysis done.")
 
 #qualitatives variables
@@ -67,9 +66,7 @@ sdqualitative = sdquali(df_qualitative, \
 						qualitative, \
 						cluster, \
 						config["thresholds_management"]["x2_threshold"])
-quali_a = quali_analysis(df_qualitative, \
-						 qualitative, \
-						 cluster)
+quali_a = quali_analysis(cluster)
 print("qualitative analysis done.")
 cla_mod = clamod(quali_a,cluster)
 print("cla/mod calcul done.")
