@@ -11,39 +11,98 @@ import os
 from utils import write_excel
 import shutil
 from quads import *
+import sys
+
+###############################################################################
+#name variables
+###############################################################################
+
 data_path = config["directory_management"]["data_path"]
 result_path = config["directory_management"]["result_path"]
-#name the files
-if config["file_management"]["table"] == "excel" :
-  df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
-                   index_col=0)
-elif config["file_management"]["table"] == "csv" :
-  df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
-                 index_col=0)
-
 file_name_x2 = config["directory_management"]["result_path"]+\
 	           config["file_management"]["qualitative_test"]
-
 file_name_qualitative = result_path+\
 	                    config["file_management"]["qualitative_enrichment"]
-
 file_name_weight = result_path+\
 	               config["file_management"]["variable_weight"]
-
 file_name_anova = result_path+\
 	              config["file_management"]["quantitative_test"]
-
 file_name_quantitative = result_path+\
 	                     config["file_management"]["quantitative_enrichment"]
+separator = config["file_management"]["sep"]
+index = config["file_management"]["index"]
+tab_type = config["file_management"]["table"]
 cluster= config["variable_management"]["cluster_variable"]
+if type(cluster) != str :
+  print("Your cluster variable have to be repertoried as a string")
+  sys.exit()
 
+############################################################################### 
+#open the file
+###############################################################################
+
+if tab_type == "excel" and index == True:
+  try :
+    df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
+                   sep=separator, index_col=0)
+  except FileNotFoundError: 
+    print("The file is not present in the repository",data_path)
+    sys.exit()
+
+elif tab_type == "excel" and index == False:
+  try :
+    df=pd.read_excel(data_path+config["file_management"]["original_data_file"]\
+                     ,sep=separator)
+  except FileNotFoundError: 
+    print("The file is not present in the repository",data_path)
+    sys.exit()
+
+elif tab_type == "csv" and index == True:
+  try :
+    df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
+                 sep = separator, index_col=0)
+  except FileNotFoundError: 
+    print("The file is not present in the repository",data_path)
+    print("Or the name of your file is not the good one.")
+    sys.exit()
+
+
+elif tab_type == "csv" and index == False:
+  try :
+    df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
+                 sep = separator)
+  except FileNotFoundError: 
+    print("The file is not present in the repository",data_path)
+    print("Or the name of your file is not the good one.")
+    sys.exit()
+
+###############################################################################
 #quantitatives variables
-quantitative =config["variable_management"]["quantitative_variables"]
-df_quantitative = df[quantitative+\
-				    [config["variable_management"]["cluster_variable"]]]
-df_quantitative = df_quantitative.fillna(0)
+###############################################################################
 
+quantitative =config["variable_management"]["quantitative_variables"]
+if type(quantitative) != list :
+  print("Your quantative variables have to be repertoried in a list")
+  sys.exit()
+try :
+  df_quantitative = df[quantitative+\
+				    [config["variable_management"]["cluster_variable"]]]
+except KeyError:
+  print("One or more quantitative variable(s) or \
+        cluster variable is/are not in the table.")
+  sys.exit()
+
+try :
+  df_quantitative = df_quantitative.infer_objects()
+  df_quantitative = df_quantitative.fillna(0)
+except ValueError :
+  print("One/or more of your quantitative variable(s) is/are not quantitative")
+  sys.exit()
+
+###############################################################################
 #make the quantitative analysis for each quantitative variable
+###############################################################################
+
 sd = sdquanti(df_quantitative, \
 			  config["variable_management"]["quantitative_variables"], \
 			  config["variable_management"]["cluster_variable"])
@@ -54,14 +113,34 @@ quanti_a = quanti_analysis(sd, \
 					config["thresholds_management"]["anova_threshold"])
 print("quantitative analysis done.")
 
+###############################################################################
 #qualitatives variables
+###############################################################################
+
 qualitative = config["variable_management"]["qualitative_variables"]
-df_qualitative = df[qualitative+\
+for variable in qualitative :
+  variable_modalities = df[variable].to_list()
+  if variable in variable_modalities :
+    print("Take care, a modality have the same name as its variable!")
+    print("Change the name of the variable or its modalities in your table")
+    sys.exit()
+if type(qualitative) != list :
+  print("Your qualitative variables have to be repertoried in a list")
+  sys.exit()
+try :
+  df_qualitative = df[qualitative+\
 					[config["variable_management"]["cluster_variable"]]]
+except KeyError:
+  print("One or more qualitative variable(s) or \
+        cluster variable is/are not in the table.")
+  sys.exit()
+df_qualitative = df_qualitative.astype(str)
 df_qualitative = df_qualitative.fillna('missing values')
 
-
+###############################################################################
 #make the qualitative analysis
+###############################################################################
+
 sdqualitative = sdquali(df_qualitative, \
 						qualitative, \
 						cluster, \
@@ -82,9 +161,11 @@ print("hypergeometric distribution done.")
 weight = variable_weight(quali_a)
 print("variable weight done.")
 
-
+###############################################################################
 #out :
 #create the new path for the result
+###############################################################################
+
 if not os.path.exists(config["directory_management"]["result_path"]) :
   os.makedirs(config["directory_management"]["result_path"])
 
@@ -101,9 +182,10 @@ elif config["file_management"]["table"] == "csv" :
   sd.to_csv(file_name_anova)
   quanti_a.to_csv(file_name_quantitative)
 
-
-
+###############################################################################
 #make the visualisations
+###############################################################################
+
 col = {'overrepresented' : config["figure_management"]["over_represented"], \
 	   'underrepresented' : config["figure_management"]["under_represented"],\
 	   'Not significant': config["figure_management"]["not_significant"]}
