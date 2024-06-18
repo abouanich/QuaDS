@@ -23,8 +23,10 @@ You have to put your data files in the case : /data
 You have to say in the config_file.yml the different parameters :
   - directory of data and results
   - names of datafile, and output files
-  - list of qualitative variable names
-  - list of quantitative variable names
+  - separator of your datafile
+  - presence of an index in your datafile
+  - list of qualitative variables names
+  - list of quantitative variables names
   - cluster variable
   - different thresholds of the tests
   - colors of the visual output

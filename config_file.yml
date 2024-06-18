@@ -16,6 +16,12 @@ file_management:
   #: String: type of file: csv or excel
   table: csv
 
+  #: Bool: index in your table: True or False
+  index: True
+
+  #: String: separator of your table: "," or ";" or "\t" (for tab)
+  sep: ","
+
   #: String: Name of the file containing the variables 
   original_data_file: data_test.csv
 
