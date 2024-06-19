@@ -5,10 +5,10 @@ import os
 
 # System library to manipulate the file system
 from os import path
-from utils import write_excel
+from scripts.utils import write_excel
 import shutil
 from tqdm import tqdm
-from quads import *
+from scripts.quads import *
 
 df = pd.ExcelFile('data/semantic_cluster_coordinates6.xlsx')
 df1 = pd.read_excel('data/input_data_file.xlsx')

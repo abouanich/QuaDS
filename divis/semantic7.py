@@ -5,12 +5,12 @@ import os
 
 # System library to manipulate the file system
 from os import path
-from utils import write_excel
+from scripts.utils import write_excel
 import shutil
 from tqdm import tqdm
-from quads import *
+from scripts.quads import *
 
-df = pd.ExcelFile('data/semantic_cluster_coordinates5.xlsx')
+df = pd.ExcelFile('data/semantic_cluster_coordinates7.xlsx')
 sheets = df.sheet_names
 df1 = pd.read_excel('data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
@@ -76,16 +76,16 @@ for sheet in tqdm(sheets) :
 	
 	#out :
 	#create the new path for the result
-    if not os.path.exists('results/semantic/cluster5') :
-        os.makedirs('results/semantic/cluster5')
-    path = 'results/semantic/cluster5/'
+    if not os.path.exists('results/semantic/cluster7') :
+         os.makedirs('results/semantic/cluster7')
+    path = 'results/semantic/cluster7/'
 	
 	#name the files
-    file_name_x2 = 'x2_semantic_cluster5.xlsx'
-    file_name_qualitative = 'qualitative_analysis_semantic_cluster5.xlsx'
-    file_name_weight = 'weight_semantic_cluster5.xlsx'
-    file_name_anova = 'anova_semantic_cluster5.xlsx'
-    file_name_quantitative = 'quantitative_analysis_semantic_cluster5.xlsx'
+    file_name_x2 = 'x2_semantic_cluster7.xlsx'
+    file_name_qualitative = 'qualitative_analysis_semantic_cluster7.xlsx'
+    file_name_weight = 'weight_semantic_cluster7.xlsx'
+    file_name_anova = 'anova_semantic_cluster7.xlsx'
+    file_name_quantitative = 'quantitative_analysis_semantic_cluster7.xlsx'
 	
 	#create the excel files
     write_excel(file_name_x2, sheet, sdqualitative, idx=True)
@@ -115,7 +115,7 @@ for sheet in sheets :
 	sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',font = dict(color='blue',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
 	sunburst.show()
-
+	
 #move the files in the good directory	
 shutil.move(file_name_x2,path+file_name_x2)
 shutil.move(file_name_qualitative,path+file_name_qualitative)

@@ -5,12 +5,12 @@ import os
 
 # System library to manipulate the file system
 from os import path
-from utils import write_excel
+from scripts.utils import write_excel
 import shutil
 from tqdm import tqdm
-from quads import *
+from scripts.quads import *
 
-df = pd.ExcelFile('data/semantic_cluster_coordinates7.xlsx')
+df = pd.ExcelFile('data/gower_cluster_coordinates6.xlsx')
 sheets = df.sheet_names
 df1 = pd.read_excel('data/input_data_file.xlsx')
 for sheet in tqdm(sheets) :
@@ -76,16 +76,16 @@ for sheet in tqdm(sheets) :
 	
 	#out :
 	#create the new path for the result
-    if not os.path.exists('results/semantic/cluster7') :
-         os.makedirs('results/semantic/cluster7')
-    path = 'results/semantic/cluster7/'
+    if not os.path.exists('results/gower/cluster6') :
+        os.makedirs('results/gower/cluster6')
+    path = 'results/gower/cluster6/'
 	
 	#name the files
-    file_name_x2 = 'x2_semantic_cluster7.xlsx'
-    file_name_qualitative = 'qualitative_analysis_semantic_cluster7.xlsx'
-    file_name_weight = 'weight_semantic_cluster7.xlsx'
-    file_name_anova = 'anova_semantic_cluster7.xlsx'
-    file_name_quantitative = 'quantitative_analysis_semantic_cluster7.xlsx'
+    file_name_x2 = 'x2_gower_cluster6.xlsx'
+    file_name_qualitative = 'qualitative_analysis_gower_cluster6.xlsx'
+    file_name_weight = 'weight_gower_cluster6.xlsx'
+    file_name_anova = 'anova_gower_cluster6.xlsx'
+    file_name_quantitative = 'quantitative_analysis_gower_cluster6.xlsx'
 	
 	#create the excel files
     write_excel(file_name_x2, sheet, sdqualitative, idx=True)
@@ -99,7 +99,7 @@ data = pd.ExcelFile(file_name_qualitative)
 sheets = data.sheet_names
 col = {'overrepresented' : 'red', 'underrepresented' : 'blue', 'Not significant': 'grey'}
 for sheet in sheets :
-	title = 'Proportions of modalities in each clusters with Semantic distance and '+sheet+' method'
+	title = 'Proportions of modalities in each clusters with Gower distance and '+sheet+' method'
 	df = pd.read_excel(data, sheet)
 	legend=''
 	for i in range (len(df)):
@@ -115,10 +115,13 @@ for sheet in sheets :
 	sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',font = dict(color='blue',size=14),showarrow=False)
 	sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',font = dict(color='grey',size=14),showarrow=False)
 	sunburst.show()
-	
+
 #move the files in the good directory	
 shutil.move(file_name_x2,path+file_name_x2)
 shutil.move(file_name_qualitative,path+file_name_qualitative)
 shutil.move(file_name_weight,path+file_name_weight)
 shutil.move(file_name_anova,path+file_name_anova)
 shutil.move(file_name_quantitative,path+file_name_quantitative)
+
+
+	
