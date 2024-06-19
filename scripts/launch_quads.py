@@ -88,8 +88,8 @@ try :
   df_quantitative = df[quantitative+\
 				    [config["variable_management"]["cluster_variable"]]]
 except KeyError:
-  print("One or more quantitative variable(s) or \
-        cluster variable is/are not in the table.")
+  print("One or more quantitative variable(s) is/are not in the header table.")  
+  print("or cluster variable is not in the header table.")
   sys.exit()
 
 try :
@@ -131,8 +131,8 @@ try :
   df_qualitative = df[qualitative+\
 					[config["variable_management"]["cluster_variable"]]]
 except KeyError:
-  print("One or more qualitative variable(s) or \
-        cluster variable is/are not in the table.")
+  print("One or more qualitative variable(s) is/are not in the header table.")  
+  print("or cluster variable is not in the header table.")
   sys.exit()
 df_qualitative = df_qualitative.astype(str)
 df_qualitative = df_qualitative.fillna('missing values')
