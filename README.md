@@ -16,7 +16,7 @@ You have to create a Python environment to run the pipeline.
 It relies on several libraries which are listed in the `requirement.txt` file.
 Alternatively the dependencies can by installed using pip:
 
-    python -m pip install -r requirements.txt
+    pip install -r requirements.txt
 
 ## Usage
 You have to put your data files in the case : /data
@@ -33,12 +33,12 @@ You have to say in the config_file.yml the different parameters :
 
 descriptives statistics :
 
-    python -m scripts.launch_quads
+    python3 scripts/launch_quads.py
     
 ## Visuals
 When you have your tables support and you want to see the visualisation
 
-    python -m scripts.visualisation
+    python3 scripts/visualisation.py
 
 
 ## Deactivation of conda
