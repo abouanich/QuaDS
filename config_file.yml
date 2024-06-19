@@ -6,7 +6,7 @@ directory_management:
   data_path: data/
 
   #: String: Path of the directory in which to write result files (Required)
-  result_path: results/
+  result_path: results/analyses_test/
 
  
 # File management
