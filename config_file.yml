@@ -12,20 +12,20 @@ directory_management:
 # File management
 #----------------
 file_management:
-
-  #: String: type of file: csv or excel
+ 
+  #: String: name of the file containing the data
+  original_data_file: data_test.csv
+ 
+  #: String: type of file: csv or excel 
   table: csv
 
-  #: Bool: index in your table: True or False
+  #: Bool: index (row names) in your table: True or False
   index: True
 
-  #: String: separator of your table: "," or ";" or "\t" (for tab)
+  #: String: separator between columns: "," or ";" or "\t" (for tabulation)
   sep: ","
 
-  #: String: Name of the file containing the variables 
-  original_data_file: data_test.csv
-
-  #: String: Output files:
+  #: String: output files (view README.md for details)
   quantitative_test: anova.csv
   quantitative_enrichment: quantitative_gaussian.csv
   qualitative_test: x2.csv
@@ -37,13 +37,13 @@ file_management:
 #-------------------
 variable_management:
 
-  #: String: [Names of the variables] for the qualitative variables
+  #: String: [names of the variables] for the qualitative variables
   qualitative_variables: ["type","strand"]
   
-  #: String: [Names of the variables] for the quantitative variables
+  #: String: [names of the variables] for the quantitative variables
   quantitative_variables: ["nb_dupli","length"]
   
-  #: String: Names of the cluster variable
+  #: String: name of the cluster variable
   cluster_variable: chr
 
 # Thresholds tests
@@ -64,10 +64,11 @@ thresholds_management:
 #-----------------------------------
 figure_management:
 
-  #: String : Color palette for the sunburst qualitative analysis and statistic to show in the sunburst
+  #: String: color palette for the sunburst qualitative analysis and statistic to show in the sunburst
   over_represented: red
   under_represented: blue
   not_significant: wheat
+  #: String: choose one among QuaDS statistics: mod/cla, cla/mod, global
   statistic: mod/cla
 
 
