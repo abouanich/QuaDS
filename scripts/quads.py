@@ -98,9 +98,9 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
   global X2
 
   X2 = pd.DataFrame({'Variables' : columns,
-			         'Chi2 Statistic' : chi, 
-                     'p_value' : p_value,
-			         'significance' : significative})
+                     'Chi2 Statistic' : chi, 
+                     'p-value' : p_value,
+			               'interpretation' : significative})
   return X2
 
 def quali_analysis(vchi2):
