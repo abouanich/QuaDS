@@ -16,7 +16,7 @@ file_management:
   #: String: name of the file containing the data
   original_data_file: data_test.csv
  
-  #: String: type of file: csv or excel 
+  #: String: type of file: csv or xslx
   table: csv
 
   #: Bool: index (row names) in your table: True or False

@@ -41,7 +41,7 @@ if type(cluster) != str :
 #open the file
 ###############################################################################
 
-if tab_type == "excel" and index == True:
+if tab_type == "xslx" and index == True:
   try :
     df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
                    sep=separator, index_col=0)
@@ -49,7 +49,7 @@ if tab_type == "excel" and index == True:
     print("The file is not present in the repository",data_path)
     sys.exit()
 
-elif tab_type == "excel" and index == False:
+elif tab_type == "xslx" and index == False:
   try :
     df=pd.read_excel(data_path+config["file_management"]["original_data_file"]\
                      ,sep=separator)
