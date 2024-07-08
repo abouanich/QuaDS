@@ -34,7 +34,23 @@ You have to say in the config_file.yml the different parameters :
 descriptives statistics :
 
     python3 scripts/launch_quads.py
-    
+
+## Outputs 
+For your qualitative analysis, you will obtain 2 outputs (datatest explication):
+  - x2.csv : informs which variable is implicated in the groups
+  - qualitative_hypergeometric.csv informs if the variable is implicated in the groups, 
+    this file informs in each groups if the modality is:
+    - over-represented
+    - under-represented
+    - not significant
+    - not present
+  - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
+  - quantitative_gaussian.csv informs if the average of the variable is:
+    - above from the average for all individuals
+    - below from the average for all individuals
+    - Not significantly different from the average for all individuals
+
+
 ## Visuals
 When you have your tables support and you want to see the visualisation
 
