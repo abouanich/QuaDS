@@ -206,7 +206,7 @@ def quali_analysis(vchi2):
 		'global' : NA, 
 		'p-value' : NA, 
 		'v-test' : NA,
-		'signification': NA})
+		'interpretation': NA})
   return result
 
 
@@ -587,13 +587,13 @@ def vtest(result, v_p_value) :
 		
     if result['v-test'][i] != 'Not significant':
       if result['v-test'][i] < 0 :
-        result['signification'][i] ='underrepresented'
+        result['interpretation'][i] ='under-represented'
       elif result['v-test'][i] > 0 :
-        result['signification'][i] ='overrepresented'
+        result['interpretation'][i] ='over-represented'
     elif result['mod/cla'][i] == 0 :
-      result['signification'][i] = 'Not present'
+      result['interpretation'][i] = 'Not present'
     elif result['v-test'][i] == 'Not significant' :
-      result['signification'][i] ='Not significant'
+      result['interpretation'][i] ='Not significant'
   return result
 	
 
@@ -604,7 +604,7 @@ def variable_weight(result):
     Actions performed:
 
     * calcule the weight of a variable counting the number of modality
-      overrepresented in this variable divided by the number of modality
+      over-represented in this variable divided by the number of modality
       of the variable
 	
     Args: the qualitative_analysis table
@@ -619,12 +619,12 @@ def variable_weight(result):
   over_under = []
   mod = []
   for i in range(len(result)) :
-    if result['signification'][i] == 'overrepresented' :
+    if result['interpretation'][i] == 'over-represented' :
       over.append(result['variables'][i])
-    if result['signification'][i] == 'underrepresented' :
+    if result['interpretation'][i] == 'under-represented' :
       under.append(result['variables'][i])
-    if result['signification'][i] == 'overrepresented' or\
-        result['signification'][i] == 'underrepresented' :
+    if result['interpretation'][i] == 'over-represented' or\
+        result['interpretation'][i] == 'under-represented' :
       over_under.append(result['variables'][i])
     mod.append(result['variables'][i])
   var = set(over)
@@ -704,7 +704,7 @@ def variable_weight(result):
 						   'contribution over&under/mod' : ranking3})
   return weight
 
-def sdquanti(df, var, variable_cat):
+def sdquanti(df, var, variable_cat, threshold_anova):
   """
     Actions performed:
     * Make the anova on each quantitative variable with variable_cat
@@ -739,6 +739,7 @@ def sdquanti(df, var, variable_cat):
   list_var = []
   list_eta2 = []
   list_pvalue = []
+  info_interpretation = []
   for varia in var :
     lm = ols('df_na[varia] ~ C(df_na[variable_cat])', data = df_na).fit()
     table = sm.stats.anova_lm(lm)
@@ -749,14 +750,19 @@ def sdquanti(df, var, variable_cat):
     pval = table['PR(>F)'][0]
     list_var.append(varia)
     list_eta2.append(eta2)
-    list_pvalue.append(pval)
+    list_pvalue.append(round(pval,6))
+    if pval < threshold_anova :
+      info_interpretation.append("Significant")
+    else :
+      info_interpretation.append("Not significant")
   anova = pd.DataFrame({'variable' : list_var,
 						  'Eta2' : list_eta2,
-						  'p-value' : list_pvalue})
+						  'p-value' : list_pvalue,
+              'interpretation' : info_interpretation})
   return anova
 
 
-def quanti_analysis(anova, df, var, variable_cat, pv_anova):
+def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
   """
     Actions performed:
     * Make the v-test and final statistics
@@ -766,7 +772,8 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
       df: a pandas DataFrame containing only quantitative variable 
       var : the quantitative variables
       variable_cat : the variable to test
-      pv_anova : the anova pvalue to continue the statistics
+      thres_anova : the anova threshold to continue the statistics
+      thres_gaussian : the gaussian threshold for the distribution
         
     Returns:
       DataFrame: a pandas DataFrame containing statistics analysis for each
@@ -780,7 +787,8 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
   overall_mean = []
   category_sd = [] 
   overall_sd = [] 
-  pv = []#pvalue
+  pv = []#
+  info_interpretation = []
   for varia in var : 
     I = len(df) #number of individuals
     Im = len(df_na)#number of individuals that don't contain missing values
@@ -798,6 +806,7 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
       overall_sd.append('Not significant')
       pv.append('Not significant')
       v_test.append('Not significant')
+      info_interpretation.append('Not significant')
 
     else : 
       sous_ov = np.empty((0,2), float)
@@ -813,10 +822,11 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
       index_pvalue = anova.index[anova["variable"] == varia].to_list()
       for ind in index_pvalue :
         index_pv = ind
-      if anova["p-value"][index_pv] > pv_anova :
+      if anova["p-value"][index_pv] > thres_anova :
         for i,j in zip(dictionary_1,dictionary) :
           v_test.append('Not significant')
           pv.append("Not significant")
+          info_interpretation.append("Not significant")
           Iq_df_na = len(dictionary_1[i])
           Iq = len(dictionary[j][varia])
           xq = round(dictionary[j][varia].mean(),6)
@@ -864,6 +874,12 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
           v_test.append(vtest)
           pvalue = (1-norm.cdf(abs(vtest)))*2
           pv.append(pvalue)
+          if pvalue < thres_gaussian and vtest < 0 :
+            info_interpretation.append("below average")
+          elif pvalue < thres_gaussian and vtest > 0 :
+            info_interpretation.append("above average")
+          elif pvalue > thres_gaussian :
+            info_interpretation.append("Not significant")
 				
 				
 
@@ -874,5 +890,6 @@ def quanti_analysis(anova, df, var, variable_cat, pv_anova):
 								'Sd in category':category_sd,
 								'Overall sd':overall_sd,
 								'p-value':pv,
-								'v-test':v_test})
+								'v-test':v_test,
+                'interpretation':info_interpretation})
   return quantitative

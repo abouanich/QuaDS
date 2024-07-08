@@ -59,6 +59,9 @@ thresholds_management:
   #: Float: threshold for hypergeometric distribution
   hypergeometric_threshold: 0.01
 
+  #: Float: threshold for gaussian distribution
+  gaussian_threshold: 0.01
+
 
 # Color management
 #-----------------------------------

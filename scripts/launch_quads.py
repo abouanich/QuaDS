@@ -105,12 +105,14 @@ except ValueError :
 
 sd = sdquanti(df_quantitative, \
 			  config["variable_management"]["quantitative_variables"], \
-			  config["variable_management"]["cluster_variable"])
+			  config["variable_management"]["cluster_variable"],\
+				config["thresholds_management"]["anova_threshold"])
 quanti_a = quanti_analysis(sd, \
 					df_quantitative, \
 					config["variable_management"]["quantitative_variables"],\
 					config["variable_management"]["cluster_variable"], \
-					config["thresholds_management"]["anova_threshold"])
+					config["thresholds_management"]["anova_threshold"], \
+          config["thresholds_management"]["gaussian_threshold"])
 print("quantitative analysis done.")
 
 ###############################################################################
@@ -186,8 +188,8 @@ elif config["file_management"]["table"] == "csv" :
 #make the visualisations
 ###############################################################################
 
-col = {'overrepresented' : config["figure_management"]["over_represented"], \
-	   'underrepresented' : config["figure_management"]["under_represented"],\
+col = {'over-represented' : config["figure_management"]["over_represented"], \
+	   'under-represented' : config["figure_management"]["under_represented"],\
 	   'Not significant': config["figure_management"]["not_significant"]}
 
 
@@ -198,7 +200,7 @@ elif config["file_management"]["table"] == "csv" :
 
 sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
-                       color = 'signification',\
+                       color = 'interpretation',\
                        color_discrete_map=col)
 sunburst.add_annotation(x=0,y=1.1,\
                         font=dict(color='black',size=14),\
