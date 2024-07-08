@@ -19,7 +19,7 @@ Alternatively the dependencies can by installed using pip:
     pip install -r requirements.txt
 
 ## Usage
-You have to put your data files in the case : /data
+In the example test, the datafile is in the repository: /data
 You have to say in the config_file.yml the different parameters :
   - directory of data and results
   - names of datafile, and output files
