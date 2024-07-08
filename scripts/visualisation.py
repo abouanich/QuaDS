@@ -27,8 +27,8 @@ file_name_qualitative = result_path+\
 cluster= config["variable_management"]["cluster_variable"]
 
 #make the visualisations
-col = {'overrepresented' : config["figure_management"]["over_represented"], \
-	   'underrepresented' : config["figure_management"]["under_represented"], \
+col = {'over-represented' : config["figure_management"]["over_represented"], \
+	   'under-represented' : config["figure_management"]["under_represented"], \
 	   'Not significant': config["figure_management"]["not_significant"]}
 
 
@@ -39,7 +39,7 @@ elif config["file_management"]["table"] == "csv" :
 
 sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
-                       color = 'signification',\
+                       color = 'interpretation',\
                        color_discrete_map=col)
 sunburst.add_annotation(x=0,y=1.1,\
                         font=dict(color='black',size=14),\
