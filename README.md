@@ -44,6 +44,8 @@ For your qualitative analysis, you will obtain 2 outputs (datatest explication):
     - under-represented
     - not significant
     - not present
+
+For your quantitative analysis, you will obtain 2 outputs (datatest explication): 
   - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
   - quantitative_gaussian.csv informs if the average of the variable is:
     - above from the average for all individuals
