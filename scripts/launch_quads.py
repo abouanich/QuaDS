@@ -118,8 +118,10 @@ print("quantitative analysis done.")
 ###############################################################################
 #qualitatives variables
 ###############################################################################
-
 qualitative = config["variable_management"]["qualitative_variables"]
+if qualitative != [] :
+  print("!! WARNING !!")
+  print("Take care, be sure your qualitative variables are indeed qualitative")
 for variable in qualitative :
   variable_modalities = df[variable].to_list()
   if variable in variable_modalities :
