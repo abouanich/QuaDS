@@ -1,3 +1,3 @@
-,variable,Eta2,p-value,interpretation
-0,nb_dupli,0.00752035882024361,0.0,Significant
-1,length,0.0009505279806777869,0.020941,Not significant
+,variable,eta-squared,p-value,interpretation
+0,nb_dupli,0.00752,0.0,Significant
+1,length,0.000951,0.020941,Not significant

@@ -749,14 +749,14 @@ def sdquanti(df, var, variable_cat, threshold_anova):
     eta2 = table['sum_sq'][0]/(table['sum_sq'][0]+table['sum_sq'][1])
     pval = table['PR(>F)'][0]
     list_var.append(varia)
-    list_eta2.append(eta2)
+    list_eta2.append(round(eta2,6))
     list_pvalue.append(round(pval,6))
     if pval < threshold_anova :
       info_interpretation.append("Significant")
     else :
       info_interpretation.append("Not significant")
   anova = pd.DataFrame({'variable' : list_var,
-						  'Eta2' : list_eta2,
+						  'eta-squared' : list_eta2,
 						  'p-value' : list_pvalue,
               'interpretation' : info_interpretation})
   return anova
@@ -873,7 +873,7 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
                                                  ((I-Iq)/(I-1))),6)
           v_test.append(vtest)
           pvalue = (1-norm.cdf(abs(vtest)))*2
-          pv.append(pvalue)
+          pv.append(round(pvalue,6))
           if pvalue < thres_gaussian and vtest < 0 :
             info_interpretation.append("below average")
           elif pvalue < thres_gaussian and vtest > 0 :
