@@ -74,7 +74,11 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
     cont = pd.crosstab(df[col],df[vchi2])
 	# Chi-square test of independence
     chi2, p, dof, expected = chi2_contingency(cont)
-    p_value.append(p)
+    if p < 0.000001 :
+      p_value.append("<10-6")
+    else:
+      p_value.append(round(p,7))
+
     chi.append(round(chi2,2))
 
     #if the p-value < chi2_p_value, the variable is variable chi2's dependent
@@ -413,7 +417,8 @@ def pvalue(result,vchi2):
       DataFrame: a pandas DataFrame containing the p-value for each vchi2, 
           		     variables and modalities
   """
-    
+  global list_pval
+  list_pval = []  
   #table is a df that contain all the numbers we need for the p-value calcul
   global table
   table = pd.DataFrame({vchi2 : chi2_var,
@@ -552,8 +557,13 @@ def pvalue(result,vchi2):
             break
           else :
             s2 = s2+p
-        result['p-value'][i] = 2*min(s1,(1-round(s2,7)))+\
+        p_value = 2*min(s1,(1-round(s2,7)))+\
             (bi(nk,nkj)*bi(n_nk,nj-nkj))/bi(n,nj)
+        list_pval.append(p_value)
+        if p_value < 0.000001 :
+          result['p-value'][i] = "<10-6"
+        else : 
+          result['p-value'][i] = round(p_value,7)
   return result
 
 def vtest(result, v_p_value) :
@@ -576,10 +586,10 @@ def vtest(result, v_p_value) :
       if result['mod/cla'][i] > result['global'][i] :
         val = 1
       else :
-        val = 0
-      if result['p-value'][i] < v_p_value :
+        val = 0 
+      if list_pval[i] < v_p_value :
         result['v-test'][i] = round((1-2*val)*\
-                                    norm.ppf(result['p-value'][i]/2),7)
+                                    norm.ppf(list_pval[i]/2),7)
       else :
         result['v-test'][i] = 'Not significant'
 		
@@ -822,31 +832,31 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
       index_pvalue = anova.index[anova["variable"] == varia].to_list()
       for ind in index_pvalue :
         index_pv = ind
-      if anova["p-value"][index_pv] > thres_anova or \
-         anova["p-value"][index_pv] != "<10-6":
-        for i,j in zip(dictionary_1,dictionary) :
-          v_test.append('Not significant')
-          pv.append("Not significant")
-          info_interpretation.append("Not significant")
-          Iq_df_na = len(dictionary_1[i])
-          Iq = len(dictionary[j][varia])
-          xq = round(dictionary[j][varia].mean(),6)
-          #mean of the modalities of the cluster 
-          data = dictionary_1[i]
-          mean_category.append(float(xq))
-          overall_mean.append(float(x))
-          sous_cat = np.empty((0,2), float)
-          for el in range(len(data)) :
-            data = data.reset_index(drop=True)
-            data=data.astype(type('float'))
-            sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), \
-                                                   float(xq)]]),axis=0)
-          som_cat = 0
-          for k in sous_cat :
-            som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
-          et_category = round(sqrt(som_cat/Iq_df_na),6)
-          category_sd.append(et_category)
-          overall_sd.append(et_overall)
+      if str(anova["p-value"][index_pv]) != "<10-6" :
+        if anova["p-value"][index_pv] > thres_anova :
+          for i,j in zip(dictionary_1,dictionary) :
+            v_test.append('Not significant')
+            pv.append("Not significant")
+            info_interpretation.append("Not significant")
+            Iq_df_na = len(dictionary_1[i])
+            Iq = len(dictionary[j][varia])
+            xq = round(dictionary[j][varia].mean(),6)
+            #mean of the modalities of the cluster 
+            data = dictionary_1[i]
+            mean_category.append(float(xq))
+            overall_mean.append(float(x))
+            sous_cat = np.empty((0,2), float)
+            for el in range(len(data)) :
+              data = data.reset_index(drop=True)
+              data=data.astype(type('float'))
+              sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), \
+                                                     float(xq)]]),axis=0)
+            som_cat = 0
+            for k in sous_cat :
+              som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
+            et_category = round(sqrt(som_cat/Iq_df_na),6)
+            category_sd.append(et_category)
+            overall_sd.append(et_overall)
 
 				
       else :

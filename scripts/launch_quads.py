@@ -7,7 +7,9 @@ with open("config_file.yml", "r") as yamlfile:
 import pandas as pd
 import plotly.express as px
 import os
-
+import logging
+logger = logging.getLogger(__name__) 
+logging.basicConfig(filename=config["logging"]["log_file"], filemode='w')
 # System library to manipulate the file system
 from utils import write_excel
 import shutil
@@ -35,7 +37,14 @@ index = config["file_management"]["index"]
 tab_type = config["file_management"]["table"]
 cluster= config["variable_management"]["cluster_variable"]
 if type(cluster) != str :
-  print("Your cluster variable have to be repertoried as a string")
+  if config["logging"]["log_level"]=="twice":
+    print("Your cluster variable have to be repertoried as a string")
+    logger.WARNING("Your cluster variable have to be repertoried as a string")
+  elif config["logging"]["log_level"]== "console" :
+    print("Your cluster variable have to be repertoried as a string")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.WARNING("Your cluster variable have to be repertoried as a string")
+
   sys.exit()
 
 ############################################################################### 
