@@ -16,19 +16,40 @@ file_management:
   #: String: name of the file containing the data
   original_data_file: data_test.csv
  
-  #: String: type of file: csv or xslx
+  #: String: type of file
+  #: Possible type of files:
+
+  #: * :code: csv
+  #: * :code: xslx
+
+  #: (Required)
+
   table: csv
 
-  #: Bool: index (row names) in your table: True or False
+  #: Bool: index (row names) in your table
+  #: Possible index:
+
+  #: * :code: True
+  #: * :code: False
+
+  #: (Required)
+
   index: True
 
-  #: String: separator between columns: "," or ";" or "\t" (for tabulation)
+  #: String: separator between columns
+  #: Possible separators:
+
+  #: * :code: "," comma separator
+  #: * :code: ";" semicomma separator
+  #: * :code: "\t" tabulation separator
+
+  #: (Required)
   sep: ","
 
   #: String: output files (view README.md for details)
   quantitative_test: anova.csv
   quantitative_enrichment: quantitative_gaussian.csv
-  qualitative_test: x2.csv
+  qualitative_test: Chi2.csv
   qualitative_enrichment: qualitative_hypergeometric.csv
   variable_weight: weight.csv
 
@@ -68,10 +89,20 @@ thresholds_management:
 figure_management:
 
   #: String: color palette for the sunburst qualitative analysis and statistic to show in the sunburst
+  #: Possible color are present in the plotly_colors.txt file
   over_represented: red
   under_represented: blue
   not_significant: wheat
-  #: String: choose one among QuaDS statistics: mod/cla, cla/mod, global
+
+  #: String: choose one among QuaDS statistics
+  #: Possible QuaDS statistics:
+
+  #: * :code: mod/cla
+  #: * :code: cla/mod
+  #: * :code: global
+
+  #: (Required)
+
   statistic: mod/cla
 
 
