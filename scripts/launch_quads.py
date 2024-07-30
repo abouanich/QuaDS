@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 
 import yaml
 with open("config_file.yml", "r") as yamlfile:

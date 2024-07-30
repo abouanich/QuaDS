@@ -1,7 +1,5 @@
+#!/usr/bin/python3
 """
-Import input rose data and preprocess the dataset
-
-:project: DIVIS: Biological ontology Integration and Visualisation on RoseData
 :author: Andrea Bouanich
 :version: 1.0
 :email: andrea.bouanich@inrae.fr
@@ -750,7 +748,10 @@ def sdquanti(df, var, variable_cat, threshold_anova):
     pval = table['PR(>F)'][0]
     list_var.append(varia)
     list_eta2.append(round(eta2,6))
-    list_pvalue.append(round(pval,6))
+    if pval < 0.000001 :
+      list_pvalue.append("<10-6")
+    else: 
+      list_pvalue.append(round(pval,6))
     if pval < threshold_anova :
       info_interpretation.append("Significant")
     else :
@@ -760,7 +761,6 @@ def sdquanti(df, var, variable_cat, threshold_anova):
 						  'p-value' : list_pvalue,
               'interpretation' : info_interpretation})
   return anova
-
 
 def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
   """
@@ -822,7 +822,8 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
       index_pvalue = anova.index[anova["variable"] == varia].to_list()
       for ind in index_pvalue :
         index_pv = ind
-      if anova["p-value"][index_pv] > thres_anova :
+      if anova["p-value"][index_pv] > thres_anova or \
+         anova["p-value"][index_pv] != "<10-6":
         for i,j in zip(dictionary_1,dictionary) :
           v_test.append('Not significant')
           pv.append("Not significant")
@@ -873,7 +874,10 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
                                                  ((I-Iq)/(I-1))),6)
           v_test.append(vtest)
           pvalue = (1-norm.cdf(abs(vtest)))*2
-          pv.append(round(pvalue,6))
+          if pvalue < 0.000001 :
+            pv.append("<10-6")
+          else: 
+            pv.append(round(pvalue,6))
           if pvalue < thres_gaussian and vtest < 0 :
             info_interpretation.append("below average")
           elif pvalue < thres_gaussian and vtest > 0 :
