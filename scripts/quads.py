@@ -91,7 +91,7 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
       significative.append('Not significant')
   global new_df
   new_df = df[column]
-  new_df[vchi2] = df[vchi2]
+  new_df.insert(len(columns)-1,vchi2,df[vchi2].to_list())
 	
   #generate the table from the chi2 test with the variables and their p_value
   v = []
