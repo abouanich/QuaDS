@@ -114,11 +114,12 @@ logging:
   #:
   #: Possible log levels:
   #:
-  #: * :code:`INFO` standard level. Only produces final images and CSV measurement files
-  #: * :code:`DEBUG` level to use to generate trace images
+  #: * :code: `twice` standard level. Information in console and Logger
+  #: * :code:`console` , informations only in the console
+  #: * :code:`logger`, informations only in the logger
   #:
   #: (Required)
-  log_level: INFO
+  log_level: twice
 
   #: String: Location of the log file (path and file name) (Required)
   log_file: quads.log

@@ -9,7 +9,8 @@ import plotly.express as px
 import os
 import logging
 logger = logging.getLogger(__name__) 
-logging.basicConfig(filename=config["logging"]["log_file"], filemode='w')
+logging.basicConfig(filename=config["logging"]["log_file"], encoding='utf-8',\
+                    level=logging.DEBUG)
 # System library to manipulate the file system
 from utils import write_excel
 import shutil
@@ -39,11 +40,11 @@ cluster= config["variable_management"]["cluster_variable"]
 if type(cluster) != str :
   if config["logging"]["log_level"]=="twice":
     print("Your cluster variable have to be repertoried as a string")
-    logger.WARNING("Your cluster variable have to be repertoried as a string")
+    logger.warning("Your cluster variable have to be repertoried as a string")
   elif config["logging"]["log_level"]== "console" :
     print("Your cluster variable have to be repertoried as a string")
   elif config["logging"]["log_level"]== "logger": 
-    logger.WARNING("Your cluster variable have to be repertoried as a string")
+    logger.warning("Your cluster variable have to be repertoried as a string")
 
   sys.exit()
 
@@ -56,7 +57,17 @@ if tab_type == "xslx" and index == True:
     df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
                    sep=separator, index_col=0)
   except FileNotFoundError: 
-    print("The file is not present in the repository",data_path)
+    if config["logging"]["log_level"]=="twice":
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "console" :
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
     sys.exit()
 
 elif tab_type == "xslx" and index == False:
@@ -64,7 +75,17 @@ elif tab_type == "xslx" and index == False:
     df=pd.read_excel(data_path+config["file_management"]["original_data_file"]\
                      ,sep=separator)
   except FileNotFoundError: 
-    print("The file is not present in the repository",data_path)
+    if config["logging"]["log_level"]=="twice":
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "console" :
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
     sys.exit()
 
 elif tab_type == "csv" and index == True:
@@ -72,8 +93,17 @@ elif tab_type == "csv" and index == True:
     df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
                  sep = separator, index_col=0)
   except FileNotFoundError: 
-    print("The file is not present in the repository",data_path)
-    print("Or the name of your file is not the good one.")
+    if config["logging"]["log_level"]=="twice":
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "console" :
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
     sys.exit()
 
 
@@ -82,8 +112,17 @@ elif tab_type == "csv" and index == False:
     df=pd.read_csv(data_path+config["file_management"]["original_data_file"],\
                  sep = separator)
   except FileNotFoundError: 
-    print("The file is not present in the repository",data_path)
-    print("Or the name of your file is not the good one.")
+    if config["logging"]["log_level"]=="twice":
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "console" :
+      print("The file is not present in the repository",data_path)
+      print("Or the name of your file is not the good one.")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("The file is not present in the repository",data_path)
+      logger.warning("Or the name of your file is not the good one.")
     sys.exit()
 
 ###############################################################################
@@ -92,21 +131,42 @@ elif tab_type == "csv" and index == False:
 
 quantitative =config["variable_management"]["quantitative_variables"]
 if type(quantitative) != list :
-  print("Your quantative variables have to be repertoried in a list")
+  if config["logging"]["log_level"]=="twice":
+    print("Your quantative variables have to be repertoried in a list")
+    logger.warning("Your quantative variables have to be repertoried in a list")
+  elif config["logging"]["log_level"]== "console" :
+    print("Your quantative variables have to be repertoried in a list")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("Your quantative variables have to be repertoried in a list")
   sys.exit()
 try :
   df_quantitative = df[quantitative+\
 				    [config["variable_management"]["cluster_variable"]]]
 except KeyError:
-  print("One or more quantitative variable(s) is/are not in the header table.")  
-  print("or cluster variable is not in the header table.")
+  if config["logging"]["log_level"]=="twice":
+    print("One or more quantitative variable(s) is/are not in the header table.")
+    print("or cluster variable is not in the header table.")
+    logger.warning("One or more quantitative variable(s) is/are not in the header table.")
+    logger.warning("or cluster variable is not in the header table.")
+  elif config["logging"]["log_level"]== "console" :
+    print("One or more quantitative variable(s) is/are not in the header table.")
+    print("or cluster variable is not in the header table.")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("One or more quantitative variable(s) is/are not in the header table.")
+    logger.warning("or cluster variable is not in the header table.")
   sys.exit()
 
 try :
   df_quantitative = df_quantitative.infer_objects()
   df_quantitative = df_quantitative.fillna(0)
 except ValueError :
-  print("One/or more of your quantitative variable(s) is/are not quantitative")
+  if config["logging"]["log_level"]=="twice":
+    print("One/or more of your quantitative variable(s) is/are not quantitative")
+    logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+  elif config["logging"]["log_level"]== "console" :
+    print("One/or more of your quantitative variable(s) is/are not quantitative")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
   sys.exit()
 
 ###############################################################################
@@ -123,31 +183,72 @@ quanti_a = quanti_analysis(sd, \
 					config["variable_management"]["cluster_variable"], \
 					config["thresholds_management"]["anova_threshold"], \
           config["thresholds_management"]["gaussian_threshold"])
-print("quantitative analysis done.")
+
+if config["logging"]["log_level"]=="twice":
+  print("quantitative analysis done.")
+  logger.info("quantitative analysis done.")
+elif config["logging"]["log_level"]== "console" :
+  print("quantitative analysis done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("quantitative analysis done.")
 
 ###############################################################################
 #qualitatives variables
 ###############################################################################
 qualitative = config["variable_management"]["qualitative_variables"]
 if qualitative != [] :
-  print("!! WARNING !!")
-  print("Take care, be sure your qualitative variables are indeed qualitative")
+  if config["logging"]["log_level"]=="twice":
+    print("!! WARNING !!")
+    print("Take care, be sure your qualitative variables are indeed qualitative")
+    logger.warning("Take care, be sure your qualitative variables are indeed qualitative")
+  elif config["logging"]["log_level"]== "console" :
+    print("!! WARNING !!")
+    print("Take care, be sure your qualitative variables are indeed qualitative")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("Take care, be sure your qualitative variables are indeed qualitative")
+
 for variable in qualitative :
   variable_modalities = df[variable].to_list()
   if variable in variable_modalities :
-    print("Take care, a modality have the same name as its variable!")
-    print("Change the name of the variable or its modalities in your table")
+    if config["logging"]["log_level"]=="twice":
+      print("Take care, a modality have the same name as its variable!")
+      print("Change the name of the variable or its modalities in your table")
+      logger.warning("Take care, a modality have the same name as its variable!")
+      logger.warning("Change the name of the variable or its modalities in your table")
+    elif config["logging"]["log_level"]== "console" :
+      print("Take care, a modality have the same name as its variable!")
+      print("Change the name of the variable or its modalities in your table")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("Take care, a modality have the same name as its variable!")
+      logger.warning("Change the name of the variable or its modalities in your table")
     sys.exit()
+
 if type(qualitative) != list :
-  print("Your qualitative variables have to be repertoried in a list")
+  if config["logging"]["log_level"]=="twice":
+    print("Your qualitative variables have to be repertoried in a list")
+    logger.warning("Your qualitative variables have to be repertoried in a list")
+  elif config["logging"]["log_level"]== "console" :
+    print("Your qualitative variables have to be repertoried in a list")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("Your qualitative variables have to be repertoried in a list")
   sys.exit()
 try :
   df_qualitative = df[qualitative+\
 					[config["variable_management"]["cluster_variable"]]]
 except KeyError:
-  print("One or more qualitative variable(s) is/are not in the header table.")  
-  print("or cluster variable is not in the header table.")
+  if config["logging"]["log_level"]=="twice":
+    print("One or more qualitative variable(s) is/are not in the header table.")  
+    print("or cluster variable is not in the header table.")
+    logger.warning("One or more qualitative variable(s) is/are not in the header table.")
+    logger.warning("or cluster variable is not in the header table.")
+  elif config["logging"]["log_level"]== "console" :
+    print("One or more qualitative variable(s) is/are not in the header table.")  
+    print("or cluster variable is not in the header table.")
+  elif config["logging"]["log_level"]== "logger": 
+    logger.warning("One or more qualitative variable(s) is/are not in the header table.")
+    logger.warning("or cluster variable is not in the header table.")
   sys.exit()
+
 df_qualitative = df_qualitative.astype(str)
 df_qualitative = df_qualitative.fillna('missing values')
 
@@ -160,20 +261,74 @@ sdqualitative = sdquali(df_qualitative, \
 						cluster, \
 						config["thresholds_management"]["x2_threshold"])
 quali_a = quali_analysis(cluster)
-print("qualitative analysis done.")
+if config["logging"]["log_level"]=="twice":
+  print("qualitative analysis done.")
+  logger.info("qualitative analysis done.")
+elif config["logging"]["log_level"]== "console" :
+  print("qualitative analysis done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("qualitative analysis done.")
+
+#cla/mod
 cla_mod = clamod(quali_a,cluster)
-print("cla/mod calcul done.")
+if config["logging"]["log_level"]=="twice":
+  print("cla/mod calcul done.")
+  logger.info("cla/mod calcul done.")
+elif config["logging"]["log_level"]== "console" :
+  print("cla/mod calcul done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("cla/mod calcul done.")
+
+#mod/cla
 mod_cla = modcla(quali_a,cluster)
-print("mod/cla calcul done")
+if config["logging"]["log_level"]=="twice":
+  print("mod/cla calcul done")
+  logger.info("mod/cla calcul done")
+elif config["logging"]["log_level"]== "console" :
+  print("mod/cla calcul done")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("mod/cla calcul done")
+
+#global
 global_stat = globa(quali_a)
-print("global calcul done.")
+if config["logging"]["log_level"]=="twice":
+  print("global calcul done.")
+  logger.info("global calcul done.")
+elif config["logging"]["log_level"]== "console" :
+  print("global calcul done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("global calcul done.")
+
+#pvalue
 p_value = pvalue(quali_a,cluster)
-print('pvalue done.')
+if config["logging"]["log_level"]=="twice":
+  print('pvalue done.')
+  logger.info('pvalue done.')
+elif config["logging"]["log_level"]== "console" :
+  print('pvalue done.')
+elif config["logging"]["log_level"]== "logger": 
+  logger.info('pvalue done.')
+
+#test value
 test_value = vtest(quali_a,\
 				config["thresholds_management"]["hypergeometric_threshold"])
-print("hypergeometric distribution done.")
+if config["logging"]["log_level"]=="twice":
+  print("hypergeometric distribution done.")
+  logger.info("hypergeometric distribution done.")
+elif config["logging"]["log_level"]== "console" :
+  print("hypergeometric distribution done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("hypergeometric distribution done.")
+
+#variable weight  
 weight = variable_weight(quali_a)
-print("variable weight done.")
+if config["logging"]["log_level"]=="twice":
+  print("variable weight done.")
+  logger.info("variable weight done.")
+elif config["logging"]["log_level"]== "console" :
+  print("variable weight done.")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("variable weight done.")
 
 ###############################################################################
 #out :
