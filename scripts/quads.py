@@ -91,8 +91,7 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
       significative.append('Not significant')
   global new_df
   new_df = df[column]
-  new_df.insert(len(columns)-1,vchi2,df[vchi2].to_list())
-	
+  new_df.insert(len(column),vchi2,df[vchi2].to_list())   
   #generate the table from the chi2 test with the variables and their p_value
   v = []
   for element in columns :
@@ -603,7 +602,7 @@ def vtest(result, v_p_value) :
     elif result['v-test'][i] == 'Not significant' :
       result['interpretation'][i] ='Not significant'
   return result
-	
+
 
 def variable_weight(result):
   """
@@ -649,8 +648,7 @@ def variable_weight(result):
     nb_var.append(mod.count(element))
     nb_mod_over.append(over.count(element))
     nb_mod_under.append(under.count(element))	
-    nb_mod_overunder.append(over_under.count(element))	
-	
+    nb_mod_overunder.append(over_under.count(element))
   ratio1 = []
   for i,j in zip (range(len(nb_mod_over)),range(len(nb_var))) :
       ratio1.append(round(nb_mod_over[i]/nb_var[j]*100,2))	
@@ -699,16 +697,16 @@ def variable_weight(result):
     o=o[0:-1]
     i=i+1
 				
-  weight = pd.DataFrame({'variables' : var[0:-1],
-		    			   'number mod over' : nb_mod_over[0:-1], 
-		    			   'number mod under' : nb_mod_under[0:-1],
-						   'number mod over&under' : nb_mod_overunder[0:-1],
-						   'sum of all mod of all groups' : nb_var[0:-1],
-						   'ratio over/mod' : ratio1[0:-1],
+  weight = pd.DataFrame({'variables' : var[1:],
+		    			   'number mod over' : nb_mod_over[1:], 
+		    			   'number mod under' : nb_mod_under[1:],
+						   'number mod over&under' : nb_mod_overunder[1:],
+						   'sum of all mod of all groups' : nb_var[1:],
+						   'ratio over/mod' : ratio1[1:],
 						   'contribution over/mod' : ranking1,
-						   'ratio under/mod' : ratio2[0:-1],
+						   'ratio under/mod' : ratio2[1:],
 						   'contribution under/mod' : ranking2,
-						   'ratio over&under/mod' : ratio3[0:-1],
+						   'ratio over&under/mod' : ratio3[1:],
 						   'contribution over&under/mod' : ranking3})
   return weight
 
