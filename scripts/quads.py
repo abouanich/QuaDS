@@ -855,7 +855,41 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
             et_category = round(sqrt(som_cat/Iq_df_na),6)
             category_sd.append(et_category)
             overall_sd.append(et_overall)
-
+        else : 
+          for i,j in zip(dictionary_1,dictionary) :
+            Iq_df_na = len(dictionary_1[i])
+            Iq = len(dictionary[j][varia])
+            #mean of the modalities of the cluster
+            xq = round(dictionary[j][varia].mean(),6) 
+            data = dictionary_1[i]
+            mean_category.append(float(xq))
+            overall_mean.append(float(x))
+            sous_cat = np.empty((0,2), float)
+            for el in range(len(data)) :
+              data = data.reset_index(drop=True)
+              data=data.astype(type('float'))
+              sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]),\
+                                                 float(xq)]]),axis=0)
+            som_cat = 0
+            for k in sous_cat :
+              som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
+            et_category = round(sqrt(som_cat/Iq_df_na),6)
+            category_sd.append(et_category)
+            overall_sd.append(et_overall)
+            vtest= round((float(xq)-float(x))/sqrt(((et_overall**2)/Iq)*\
+                                                 ((I-Iq)/(I-1))),6)
+            v_test.append(vtest)
+            pvalue = (1-norm.cdf(abs(vtest)))*2
+            if pvalue < 0.000001 :
+              pv.append("<10-6")
+            else: 
+              pv.append(round(pvalue,6))
+            if pvalue < thres_gaussian and vtest < 0 :
+              info_interpretation.append("below average")
+            elif pvalue < thres_gaussian and vtest > 0 :
+              info_interpretation.append("above average")
+            elif pvalue > thres_gaussian :
+              info_interpretation.append("Not significant")
 				
       else :
         for i,j in zip(dictionary_1,dictionary) :
@@ -893,8 +927,6 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
           elif pvalue > thres_gaussian :
             info_interpretation.append("Not significant")
 				
-				
-
   quantitative = pd.DataFrame({variable_cat : variable_cluster,
 							    'variable' : variable,
 								'Mean in category':mean_category,
