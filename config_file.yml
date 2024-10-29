@@ -93,7 +93,7 @@ figure_management:
   over_represented: red
   under_represented: blue
   not_significant: wheat
-  general_color: black
+  general_color: darkviolet
 
   #: String: choose one among QuaDS statistics
   #: Possible QuaDS statistics:
