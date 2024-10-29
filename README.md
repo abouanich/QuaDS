@@ -37,14 +37,15 @@ descriptives statistics :
 
 ## Outputs 
 For your qualitative analysis, you will obtain 2 outputs (datatest explication):
-  - x2.csv : informs which variable is implicated in the groups
-  - qualitative_hypergeometric.csv informs if the variable is implicated in the groups, 
+  - Chi2.csv : informs which variable is implicated in the groups
+  - qualitative_hypergeometric.csv : informs if the variable is implicated in the groups, 
     this file informs in each groups if the modality is:
     - over-represented
     - under-represented
     - not significant
     - not present
-
+  - weight.csv : informs the qualitative variables contribution to the groups
+  
 For your quantitative analysis, you will obtain 2 outputs (datatest explication): 
   - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
   - quantitative_gaussian.csv informs if the average of the variable is:
