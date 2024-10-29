@@ -30,7 +30,7 @@ cluster= config["variable_management"]["cluster_variable"]
 col = {'over-represented' : config["figure_management"]["over_represented"], \
 	   'under-represented' : config["figure_management"]["under_represented"], \
 	   'Not significant': config["figure_management"]["not_significant"]}
-
+general_color = config["figure_management"]["general_color"]
 
 if config["file_management"]["table"] == "excel" :
   df = pd.read_excel(file_name_qualitative,index_col=0)
@@ -40,7 +40,8 @@ elif config["file_management"]["table"] == "csv" :
 sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
                        color = 'interpretation',\
-                       color_discrete_map=col)
+                       color_discrete_map=col,\
+                       color_discrete_sequence = [general_color])
 sunburst.add_annotation(x=0,y=1.1,\
                         font=dict(color='black',size=14),\
                         showarrow=False)
