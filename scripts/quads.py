@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """
 :author: Andrea Bouanich
-:version: 1.0
+:version: 2.0
 :email: andrea.bouanich@inrae.fr
+:email: julie.bourbeillon@institut-agro.fr
 """
 
 ################################################################################
