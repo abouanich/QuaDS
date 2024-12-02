@@ -2,7 +2,7 @@
 # --------------------
 directory_management:
 
-  #: String: Path of the file containing the original rose data (Required)
+  #: String: Path of the file containing the data (Required)
   data_path: data/
 
   #: String: Path of the directory in which to write result files (Required)
@@ -26,7 +26,7 @@ file_management:
 
   table: csv
 
-  #: Bool: index (row names) in your table
+  #: Bool: index (row number) in your table
   #: Possible index:
 
   #: * :code: True
