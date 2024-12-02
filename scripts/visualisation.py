@@ -24,7 +24,7 @@ elif config["file_management"]["table"] == "csv" :
 file_name_qualitative = result_path+\
 	                    config["file_management"]["qualitative_enrichment"]
 
-cluster= config["variable_management"]["cluster_variable"]
+factor= config["variable_management"]["factor_variable"]
 
 #make the visualisations
 col = {'over-represented' : config["figure_management"]["over_represented"], \
@@ -37,7 +37,7 @@ if config["file_management"]["table"] == "excel" :
 elif config["file_management"]["table"] == "csv" :
   df = pd.read_csv(file_name_qualitative,index_col=0)
 
-sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
+sunburst = px.sunburst(df, path=[factor, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
                        color = 'interpretation',\
                        color_discrete_map=col,\

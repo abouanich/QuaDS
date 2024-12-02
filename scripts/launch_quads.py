@@ -36,15 +36,15 @@ file_name_quantitative = result_path+\
 separator = config["file_management"]["sep"]
 index = config["file_management"]["index"]
 tab_type = config["file_management"]["table"]
-cluster= config["variable_management"]["cluster_variable"]
-if type(cluster) != str :
+factor= config["variable_management"]["factor_variable"]
+if type(factor) != str :
   if config["logging"]["log_level"]=="twice":
-    print("Your cluster variable have to be repertoried as a string")
-    logger.warning("Your cluster variable have to be repertoried as a string")
+    print("Your factor variable have to be repertoried as a string")
+    logger.warning("Your factor variable have to be repertoried as a string")
   elif config["logging"]["log_level"]== "console" :
-    print("Your cluster variable have to be repertoried as a string")
+    print("Your factor variable have to be repertoried as a string")
   elif config["logging"]["log_level"]== "logger": 
-    logger.warning("Your cluster variable have to be repertoried as a string")
+    logger.warning("Your factor variable have to be repertoried as a string")
 
   sys.exit()
 
@@ -141,19 +141,19 @@ if type(quantitative) != list :
   sys.exit()
 try :
   df_quantitative = df[quantitative+\
-				    [config["variable_management"]["cluster_variable"]]]
+				    [config["variable_management"]["factor_variable"]]]
 except KeyError:
   if config["logging"]["log_level"]=="twice":
     print("One or more quantitative variable(s) is/are not in the header table.")
-    print("or cluster variable is not in the header table.")
+    print("or factor variable is not in the header table.")
     logger.warning("One or more quantitative variable(s) is/are not in the header table.")
-    logger.warning("or cluster variable is not in the header table.")
+    logger.warning("or factor variable is not in the header table.")
   elif config["logging"]["log_level"]== "console" :
     print("One or more quantitative variable(s) is/are not in the header table.")
-    print("or cluster variable is not in the header table.")
+    print("or factor variable is not in the header table.")
   elif config["logging"]["log_level"]== "logger": 
     logger.warning("One or more quantitative variable(s) is/are not in the header table.")
-    logger.warning("or cluster variable is not in the header table.")
+    logger.warning("or factor variable is not in the header table.")
   sys.exit()
 
 try :
@@ -175,12 +175,12 @@ except ValueError :
 
 sd = sdquanti(df_quantitative, \
 			  config["variable_management"]["quantitative_variables"], \
-			  config["variable_management"]["cluster_variable"],\
+			  config["variable_management"]["factor_variable"],\
 				config["thresholds_management"]["anova_threshold"])
 quanti_a = quanti_analysis(sd, \
 					df_quantitative, \
 					config["variable_management"]["quantitative_variables"],\
-					config["variable_management"]["cluster_variable"], \
+					config["variable_management"]["factor_variable"], \
 					config["thresholds_management"]["anova_threshold"], \
           config["thresholds_management"]["gaussian_threshold"])
 
@@ -234,19 +234,19 @@ if type(qualitative) != list :
   sys.exit()
 try :
   df_qualitative = df[qualitative+\
-					[config["variable_management"]["cluster_variable"]]]
+					[config["variable_management"]["factor_variable"]]]
 except KeyError:
   if config["logging"]["log_level"]=="twice":
     print("One or more qualitative variable(s) is/are not in the header table.")  
-    print("or cluster variable is not in the header table.")
+    print("or factor variable is not in the header table.")
     logger.warning("One or more qualitative variable(s) is/are not in the header table.")
-    logger.warning("or cluster variable is not in the header table.")
+    logger.warning("or factor variable is not in the header table.")
   elif config["logging"]["log_level"]== "console" :
     print("One or more qualitative variable(s) is/are not in the header table.")  
-    print("or cluster variable is not in the header table.")
+    print("or factor variable is not in the header table.")
   elif config["logging"]["log_level"]== "logger": 
     logger.warning("One or more qualitative variable(s) is/are not in the header table.")
-    logger.warning("or cluster variable is not in the header table.")
+    logger.warning("or factor variable is not in the header table.")
   sys.exit()
 
 df_qualitative = df_qualitative.astype(str)
@@ -258,9 +258,9 @@ df_qualitative = df_qualitative.fillna('missing values')
 
 sdqualitative = sdquali(df_qualitative, \
 						qualitative, \
-						cluster, \
+						factor, \
 						config["thresholds_management"]["x2_threshold"])
-quali_a = quali_analysis(cluster)
+quali_a = quali_analysis(factor)
 if config["logging"]["log_level"]=="twice":
   print("qualitative analysis done.")
   logger.info("qualitative analysis done.")
@@ -270,7 +270,7 @@ elif config["logging"]["log_level"]== "logger":
   logger.info("qualitative analysis done.")
 
 #cla/mod
-cla_mod = clamod(quali_a,cluster)
+cla_mod = clamod(quali_a,factor)
 if config["logging"]["log_level"]=="twice":
   print("cla/mod calcul done.")
   logger.info("cla/mod calcul done.")
@@ -280,7 +280,7 @@ elif config["logging"]["log_level"]== "logger":
   logger.info("cla/mod calcul done.")
 
 #mod/cla
-mod_cla = modcla(quali_a,cluster)
+mod_cla = modcla(quali_a,factor)
 if config["logging"]["log_level"]=="twice":
   print("mod/cla calcul done")
   logger.info("mod/cla calcul done")
@@ -300,7 +300,7 @@ elif config["logging"]["log_level"]== "logger":
   logger.info("global calcul done.")
 
 #pvalue
-p_value = pvalue(quali_a,cluster)
+p_value = pvalue(quali_a,factor)
 if config["logging"]["log_level"]=="twice":
   print('pvalue done.')
   logger.info('pvalue done.')
@@ -365,7 +365,7 @@ if config["file_management"]["table"] == "excel" :
 elif config["file_management"]["table"] == "csv" :
   df = pd.read_csv(file_name_qualitative,index_col=0)
 
-sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
+sunburst = px.sunburst(df, path=[factor, 'variables', 'modalities'],\
                        values=config["figure_management"]["statistic"], \
                        color = 'interpretation',\
                        color_discrete_map=col,\
