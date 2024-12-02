@@ -72,16 +72,16 @@ variable_management:
 thresholds_management:
 
   #: Float: threshold for the anova test
-  anova_threshold: 0.01
+  anova_threshold: 0.05
 
   #: Float: threshold for the X2 test
-  x2_threshold: 0.01
+  x2_threshold: 0.05
 
   #: Float: threshold for hypergeometric distribution
-  hypergeometric_threshold: 0.01
+  hypergeometric_threshold: 0.05
 
   #: Float: threshold for gaussian distribution
-  gaussian_threshold: 0.01
+  gaussian_threshold: 0.05
 
 
 # Color management
