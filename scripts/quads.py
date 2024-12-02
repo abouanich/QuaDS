@@ -702,16 +702,16 @@ def variable_weight(result):
     i=i+1
 				
   weight = pd.DataFrame({'variables' : var,
-		    			   'number mod over' : nb_mod_over, 
-		    			   'number mod under' : nb_mod_under,
-						   'number mod over&under' : nb_mod_overunder,
-						   'sum of all mod of all groups' : nb_var,
-						   'ratio over/mod' : ratio1,
-						   'contribution over/mod' : ranking1,
-						   'ratio under/mod' : ratio2,
-						   'contribution under/mod' : ranking2,
-						   'ratio over&under/mod' : ratio3,
-						   'contribution over&under/mod' : ranking3})
+						            'sum of all mod of all groups' : nb_var,
+		    			          'number mod over' : nb_mod_over, 
+						            'ratio over mod' : ratio1,
+						            'contribution over mod' : ranking1,
+		    			          'number mod under' : nb_mod_under,
+						            'ratio under mod' : ratio2,
+						            'contribution under mod' : ranking2,
+						            'number mod over&under' : nb_mod_overunder,
+						            'ratio over&under mod' : ratio3,
+						            'contribution over&under mod' : ranking3})
   return weight
 
 def sdquanti(df, var, variable_cat, threshold_anova):
