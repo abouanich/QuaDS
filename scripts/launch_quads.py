@@ -370,13 +370,11 @@ sunburst = px.sunburst(df, path=[cluster, 'variables', 'modalities'],\
                        color = 'interpretation',\
                        color_discrete_map=col,\
                        color_discrete_sequence = [general_color])
-sunburst.add_annotation(x=0,y=1.1,\
-                        font=dict(color='black',size=14),\
-                        showarrow=False)
-sunburst.add_annotation(x=0.2,y=1,text= 'Overrepresented',\
+
+sunburst.add_annotation(x=0.2,y=1,text= 'Over-represented',\
 font = dict(color=config["figure_management"]["over_represented"],size=14),\
 showarrow=False)
-sunburst.add_annotation(x=0.2,y=0.95,text= 'Underrepresented',\
+sunburst.add_annotation(x=0.2,y=0.95,text= 'Under-represented',\
 font = dict(color=config["figure_management"]["under_represented"],size=14),\
 showarrow=False)
 sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',\
