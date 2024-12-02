@@ -1,7 +1,11 @@
 ,chr,variables,modalities,cla/mod,mod/cla,global,p-value,v-test,interpretation
 0,Chr01,type,singleton,40.8100644,55.3705246,58.1030487,0.000335,-3.5866328,under-represented
-1,Chr01,type,ohnologous,45.6170213,44.6294754,41.8969513,0.0003351,3.5865556,over-represented
-2,Chr02,type,singleton,59.1899356,60.1496726,58.1030487,0.0003351,3.5865556,over-represented
-3,Chr02,type,ohnologous,54.3829787,39.8503274,41.8969513,0.000335,-3.5866328,under-represented
-4,Chr01,chr,Chr01,100.0,100.0,42.8240328,<10-6,inf,over-represented
-5,Chr02,chr,Chr02,100.0,100.0,57.1759672,<10-6,inf,over-represented
+1,Chr01,type,unique_ohnologous,42.6739927,29.1007494,29.2030665,0.8845494,Not significant,Not significant
+2,Chr01,type,several_ohnologous,52.3876404,15.5287261,12.6938848,<10-6,5.4872817,over-represented
+3,Chr01,strand,-,41.370826,49.0008326,50.7220538,0.025699,-2.2307309,under-represented
+4,Chr01,strand,+,44.3198263,50.9991674,49.2779462,0.025699,2.2307302,over-represented
+5,Chr02,type,singleton,59.1899356,60.1496726,58.1030487,0.0003351,3.5865556,over-represented
+6,Chr02,type,unique_ohnologous,57.3260073,29.2797007,29.2030665,0.8845495,Not significant,Not significant
+7,Chr02,type,several_ohnologous,47.6123596,10.5706268,12.6938848,<10-6,-5.7459921,under-represented
+8,Chr02,strand,-,58.629174,52.0112254,50.7220538,0.025699,2.2307302,over-represented
+9,Chr02,strand,+,55.6801737,47.9887746,49.2779462,0.025699,-2.2307309,under-represented
