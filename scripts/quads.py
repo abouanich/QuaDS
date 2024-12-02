@@ -566,7 +566,7 @@ def pvalue(result,vchi2):
           result['p-value'][i] = round(p_value,7)
   return result
 
-def vtest(result, v_p_value) :
+def vtest(result, v_p_value,cluster) :
   """
     Function used to make the v-test column for the result table
 
@@ -602,6 +602,9 @@ def vtest(result, v_p_value) :
       result['interpretation'][i] = 'Not present'
     elif result['v-test'][i] == 'Not significant' :
       result['interpretation'][i] ='Not significant'
+  index_name = result[(result["variables"] == cluster)].index
+  result.drop(index_name,inplace=True)
+  result = result.reset_index(drop=True)
   return result
 
 
@@ -653,10 +656,10 @@ def variable_weight(result):
   ratio1 = []
   for i,j in zip (range(len(nb_mod_over)),range(len(nb_var))) :
       ratio1.append(round(nb_mod_over[i]/nb_var[j]*100,2))	
-  m = ratio1[0:-1].copy()
-  ranking1 = ratio1[0:-1].copy()
+  m = ratio1.copy()
+  ranking1 = ratio1.copy()
   m.sort()
-  r1 = np.array(ratio1[0:-1])
+  r1 = np.array(ratio1)
   i=1
   for num in m :
     maxi = max(m)
@@ -669,10 +672,10 @@ def variable_weight(result):
   ratio2 = []
   for i,j in zip(range(len(nb_mod_under)),range(len(nb_var))):
     ratio2.append(round(nb_mod_under[i]/nb_var[j]*100,2))
-  n = ratio2[0:-1].copy()
-  ranking2 = ratio2[0:-1].copy()
+  n = ratio2.copy()
+  ranking2 = ratio2.copy()
   n.sort()
-  r2 = np.array(ratio2[0:-1])
+  r2 = np.array(ratio2)
   i=1
   for num in n :
     maximum = max(n)
@@ -685,10 +688,10 @@ def variable_weight(result):
   ratio3 = []
   for i,j in zip(range(len(nb_mod_overunder)),range(len(nb_var))):
     ratio3.append(round(nb_mod_overunder[i]/nb_var[j]*100,2))	
-  o = ratio3[0:-1].copy()
-  ranking3 = ratio3[0:-1].copy()
+  o = ratio3.copy()
+  ranking3 = ratio3.copy()
   o.sort()
-  r3 = np.array(ratio3[0:-1])
+  r3 = np.array(ratio3)
   i=1
   for num in o :
     maxim = max(o)
@@ -698,16 +701,16 @@ def variable_weight(result):
     o=o[0:-1]
     i=i+1
 				
-  weight = pd.DataFrame({'variables' : var[1:],
-		    			   'number mod over' : nb_mod_over[1:], 
-		    			   'number mod under' : nb_mod_under[1:],
-						   'number mod over&under' : nb_mod_overunder[1:],
-						   'sum of all mod of all groups' : nb_var[1:],
-						   'ratio over/mod' : ratio1[1:],
+  weight = pd.DataFrame({'variables' : var,
+		    			   'number mod over' : nb_mod_over, 
+		    			   'number mod under' : nb_mod_under,
+						   'number mod over&under' : nb_mod_overunder,
+						   'sum of all mod of all groups' : nb_var,
+						   'ratio over/mod' : ratio1,
 						   'contribution over/mod' : ranking1,
-						   'ratio under/mod' : ratio2[1:],
+						   'ratio under/mod' : ratio2,
 						   'contribution under/mod' : ranking2,
-						   'ratio over&under/mod' : ratio3[1:],
+						   'ratio over&under/mod' : ratio3,
 						   'contribution over&under/mod' : ranking3})
   return weight
 

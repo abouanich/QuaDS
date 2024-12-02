@@ -311,7 +311,8 @@ elif config["logging"]["log_level"]== "logger":
 
 #test value
 test_value = vtest(quali_a,\
-				config["thresholds_management"]["hypergeometric_threshold"])
+				config["thresholds_management"]["hypergeometric_threshold"],\
+        config["variable_management"]["factor_variable"])
 if config["logging"]["log_level"]=="twice":
   print("hypergeometric distribution done.")
   logger.info("hypergeometric distribution done.")
