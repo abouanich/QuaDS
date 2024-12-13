@@ -20,7 +20,7 @@ file_management:
   #: Possible type of files:
 
   #: * :code: csv
-  #: * :code: xslx
+  #: * :code: xlsx
 
   #: (Required)
 
@@ -37,7 +37,7 @@ file_management:
   index: True
 
   #: String: separator between columns
-  #: Possible separators:
+  #: Possible separators FOR CSV FILES ONLY:
 
   #: * :code: "," comma separator
   #: * :code: ";" semicomma separator
@@ -92,10 +92,10 @@ figure_management:
 
   #: String: color palette for the sunburst qualitative analysis and statistic to show in the sunburst
   #: Possible color are present in the plotly_colors.txt file
-  over_represented: red
-  under_represented: blue
-  not_significant: wheat
-  general_color: darkviolet
+  over_represented: yellowgreen
+  under_represented: slateblue
+  not_significant: black
+  general_color: wheat
 
   #: String: choose one among QuaDS statistics
   #: Possible QuaDS statistics:

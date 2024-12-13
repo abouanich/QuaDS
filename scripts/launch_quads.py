@@ -23,7 +23,7 @@ import sys
 
 data_path = config["directory_management"]["data_path"]
 result_path = config["directory_management"]["result_path"]
-file_name_x2 = config["directory_management"]["result_path"]+\
+file_name_x2 = result_path+\
 	           config["file_management"]["qualitative_test"]
 file_name_qualitative = result_path+\
 	                    config["file_management"]["qualitative_enrichment"]
@@ -52,10 +52,10 @@ if type(factor) != str :
 #open the file
 ###############################################################################
 
-if tab_type == "xslx" and index == True:
+if tab_type == "xlsx" and index == True:
   try :
     df=pd.read_excel(data_path+config["file_management"]["original_data_file"],\
-                   sep=separator, index_col=0)
+                    index_col=0)
   except FileNotFoundError: 
     if config["logging"]["log_level"]=="twice":
       print("The file is not present in the repository",data_path)
@@ -70,10 +70,9 @@ if tab_type == "xslx" and index == True:
       logger.warning("Or the name of your file is not the good one.")
     sys.exit()
 
-elif tab_type == "xslx" and index == False:
+elif tab_type == "xlsx" and index == False:
   try :
-    df=pd.read_excel(data_path+config["file_management"]["original_data_file"]\
-                     ,sep=separator)
+    df=pd.read_excel(data_path+config["file_management"]["original_data_file"])
   except FileNotFoundError: 
     if config["logging"]["log_level"]=="twice":
       print("The file is not present in the repository",data_path)
@@ -339,13 +338,13 @@ elif config["logging"]["log_level"]== "logger":
 if not os.path.exists(config["directory_management"]["result_path"]) :
   os.makedirs(config["directory_management"]["result_path"])
 
-if config["file_management"]["table"] == "excel" :
+if tab_type == "xlsx" :
   write_excel(file_name_x2, sdqualitative, idx=True)
   write_excel(file_name_qualitative, test_value,idx=True)
   write_excel(file_name_weight, weight,idx=True)
   write_excel(file_name_anova, sd,idx=True)
   write_excel(file_name_quantitative, quanti_a, idx=True)
-elif config["file_management"]["table"] == "csv" :
+if tab_type == "csv" :
   sdqualitative.to_csv(file_name_x2)
   test_value.to_csv(file_name_qualitative)
   weight.to_csv(file_name_weight)
@@ -361,9 +360,9 @@ col = {'over-represented' : config["figure_management"]["over_represented"], \
 	   'Not significant': config["figure_management"]["not_significant"]}
 general_color = config["figure_management"]["general_color"]
 
-if config["file_management"]["table"] == "excel" :
+if tab_type == "xlsx" :
   df = pd.read_excel(file_name_qualitative,index_col=0)
-elif config["file_management"]["table"] == "csv" :
+if tab_type == "csv" :
   df = pd.read_csv(file_name_qualitative,index_col=0)
 
 sunburst = px.sunburst(df, path=[factor, 'variables', 'modalities'],\
@@ -373,13 +372,13 @@ sunburst = px.sunburst(df, path=[factor, 'variables', 'modalities'],\
                        color_discrete_sequence = [general_color])
 
 sunburst.add_annotation(x=0.2,y=1,text= 'Over-represented',\
-font = dict(color=config["figure_management"]["over_represented"],size=14),\
+font = dict(color=config["figure_management"]["over_represented"],size=20),\
 showarrow=False)
 sunburst.add_annotation(x=0.2,y=0.95,text= 'Under-represented',\
-font = dict(color=config["figure_management"]["under_represented"],size=14),\
+font = dict(color=config["figure_management"]["under_represented"],size=20),\
 showarrow=False)
 sunburst.add_annotation(x=0.2,y=0.9,text= 'Not significant',\
-font = dict(color=config["figure_management"]["not_significant"],size=14),\
+font = dict(color=config["figure_management"]["not_significant"],size=20),\
 showarrow=False)
 sunburst.show()
 
