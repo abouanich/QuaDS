@@ -36,7 +36,7 @@ descriptives statistics :
     python3 scripts/launch_quads.py
 
 ## Outputs 
-For your qualitative analysis, you will obtain 2 outputs (datatest explication):
+For your qualitative analysis, you will obtain 2 outputs:
   - Chi2.csv : informs which variable is implicated in the groups
   - qualitative_hypergeometric.csv : informs if the variable is implicated in the groups, 
     this file informs in each groups if the modality is:
@@ -46,7 +46,7 @@ For your qualitative analysis, you will obtain 2 outputs (datatest explication):
     - not present
   - weight.csv : informs the qualitative variables contribution to the groups
   
-For your quantitative analysis, you will obtain 2 outputs (datatest explication): 
+For your quantitative analysis, you will obtain 2 outputs: 
   - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
   - quantitative_gaussian.csv informs if the average of the variable is:
     - above from the average for all individuals
