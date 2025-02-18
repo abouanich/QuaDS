@@ -129,6 +129,7 @@ elif tab_type == "csv" and index == False:
 ###############################################################################
 
 quantitative =config["variable_management"]["quantitative_variables"]
+ms_quanti=config["missing_data_management"]["quanti_missing_data"]
 if type(quantitative) != list :
   if config["logging"]["log_level"]=="twice":
     print("Your quantative variables have to be repertoried in a list")
@@ -155,18 +156,59 @@ except KeyError:
     logger.warning("or factor variable is not in the header table.")
   sys.exit()
 
-try :
-  df_quantitative = df_quantitative.infer_objects()
-  df_quantitative = df_quantitative.fillna(0)
-except ValueError :
+if ms_quanti=="drop":
+  try :
+    df_quantitative = df_quantitative.infer_objects()
+    df_quantitative = df_quantitative.dropna()
+  except ValueError :
+    if config["logging"]["log_level"]=="twice":
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "console" :
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    sys.exit()
+
+elif ms_quanti=="zero":
+  try :
+    df_quantitative = df_quantitative.infer_objects()
+    df_quantitative = df_quantitative.fillna(0)
+  except ValueError :
+    if config["logging"]["log_level"]=="twice":
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "console" :
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    sys.exit()
+
+elif ms_quanti=="mean":
+  try :
+    df_quantitative = df_quantitative.infer_objects()
+    for col in quantitative:
+      df_quantitative[col] = df_quantitative[col].fillna(df_quantitative[col].mean())
+  except ValueError :
+    if config["logging"]["log_level"]=="twice":
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "console" :
+      print("One/or more of your quantitative variable(s) is/are not quantitative")
+    elif config["logging"]["log_level"]== "logger": 
+      logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    sys.exit()
+
+else:
   if config["logging"]["log_level"]=="twice":
-    print("One/or more of your quantitative variable(s) is/are not quantitative")
-    logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    print("Your parameter in config file is not known for missing data quantitative management")
+    logger.warning("Your parameter in config file is not known for missing data quantitative management")
   elif config["logging"]["log_level"]== "console" :
-    print("One/or more of your quantitative variable(s) is/are not quantitative")
+    print("Your parameter in config file is not known for missing data quantitative management")
   elif config["logging"]["log_level"]== "logger": 
-    logger.warning("One/or more of your quantitative variable(s) is/are not quantitative")
+    logger.warning("Your parameter in config file is not known for missing data quantitative management")
   sys.exit()
+
 
 ###############################################################################
 #make the quantitative analysis for each quantitative variable
@@ -195,6 +237,7 @@ elif config["logging"]["log_level"]== "logger":
 #qualitatives variables
 ###############################################################################
 qualitative = config["variable_management"]["qualitative_variables"]
+ms_quali = config["missing_data_management"]["quali_missing_data"]
 if qualitative != [] :
   if config["logging"]["log_level"]=="twice":
     print("!! WARNING !!")
@@ -248,8 +291,11 @@ except KeyError:
     logger.warning("or factor variable is not in the header table.")
   sys.exit()
 
-df_qualitative = df_qualitative.astype(str)
-df_qualitative = df_qualitative.fillna('missing values')
+#df_qualitative = df_qualitative.astype(str)
+if ms_quali=="drop":
+  df_qualitative  = df_qualitative.dropna()
+else :
+  df_qualitative = df_qualitative.fillna(ms_quali)
 
 ###############################################################################
 #make the qualitative analysis

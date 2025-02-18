@@ -1,5 +1,5 @@
 ,chr,variable,Mean in category,Overall mean,Sd in category,Overall sd,p-value,v-test,interpretation
-0,Chr01,nb_dupli,0.748959,0.649492,1.102496,0.992655,<10-6,6.494141,above average
-1,Chr02,nb_dupli,0.574992,0.649492,0.894447,0.992655,<10-6,-6.494189,below average
+0,Chr01,nb_dupli,0.734388,0.637903,1.090902,0.980791,<10-6,6.375648,above average
+1,Chr02,nb_dupli,0.565638,0.637903,0.882553,0.980791,<10-6,-6.375563,below average
 2,Chr01,length,2608.013322,2703.673204,2581.641969,2685.248035,Not significant,Not significant,Not significant
 3,Chr02,length,2775.321172,2703.673204,2758.12945,2685.248035,Not significant,Not significant,Not significant

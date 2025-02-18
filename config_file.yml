@@ -19,8 +19,8 @@ file_management:
   #: String: type of file
   #: Possible type of files:
 
-  #: * :code: csv
-  #: * :code: xlsx
+  #: * :code: `csv`
+  #: * :code: `xlsx`
 
   #: (Required)
 
@@ -29,8 +29,8 @@ file_management:
   #: Bool: index (row number) in your table
   #: Possible index:
 
-  #: * :code: True
-  #: * :code: False
+  #: * :code: `True`
+  #: * :code: `False`
 
   #: (Required)
 
@@ -67,6 +67,7 @@ variable_management:
   #: String: name of the cluster variable
   factor_variable: chr
 
+
 # Thresholds tests
 #-------------------
 thresholds_management:
@@ -84,6 +85,30 @@ thresholds_management:
   hypergeometric_threshold: 0.05
 
 
+# Missing data management
+#----------------
+missing_data_management:
+ 
+  #: String: choice of quantitative missing data management
+  #: Possible type of quantitative missing data management:
+
+  #: * :code: `drop`
+  #: * :code: `zero`
+  #: * :code: `mean`
+
+  #: (Required)
+
+  quanti_missing_data : zero
+
+  #: String: choice of qualitative missing data management
+  #: Possible type of qualitative missing data management:
+
+  #: * :code: `drop`
+  #: * :code: "modality user choose"
+
+  #: (Required)
+
+  quali_missing_data : "missing values"
 
 
 # Color management
@@ -100,9 +125,9 @@ figure_management:
   #: String: choose one among QuaDS statistics
   #: Possible QuaDS statistics:
 
-  #: * :code: mod/cla
-  #: * :code: cla/mod
-  #: * :code: global
+  #: * :code: `mod/cla`
+  #: * :code: `cla/mod`
+  #: * :code: `global`
 
   #: (Required)
 

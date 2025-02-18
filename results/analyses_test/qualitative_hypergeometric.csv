@@ -1,11 +1,13 @@
 ,chr,variables,modalities,cla/mod,mod/cla,global,p-value,v-test,interpretation
-0,Chr01,type,singleton,40.8100644,55.3705246,58.1030487,0.000335,-3.5866328,under-represented
-1,Chr01,type,unique_ohnologous,42.6739927,29.1007494,29.2030665,0.8845494,Not significant,Not significant
-2,Chr01,type,several_ohnologous,52.3876404,15.5287261,12.6938848,<10-6,5.4872817,over-represented
-3,Chr01,strand,-,41.370826,49.0008326,50.7220538,0.025699,-2.2307309,under-represented
-4,Chr01,strand,+,44.3198263,50.9991674,49.2779462,0.025699,2.2307302,over-represented
-5,Chr02,type,singleton,59.1899356,60.1496726,58.1030487,0.0003351,3.5865556,over-represented
-6,Chr02,type,unique_ohnologous,57.3260073,29.2797007,29.2030665,0.8845495,Not significant,Not significant
-7,Chr02,type,several_ohnologous,47.6123596,10.5706268,12.6938848,<10-6,-5.7459921,under-represented
-8,Chr02,strand,-,58.629174,52.0112254,50.7220538,0.025699,2.2307302,over-represented
-9,Chr02,strand,+,55.6801737,47.9887746,49.2779462,0.025699,-2.2307309,under-represented
+0,Chr01,type,singleton,40.7395994,55.0374688,57.8534498,0.0002215,-3.6931332,under-represented
+1,Chr01,type,unique_ohnologous,42.5153374,28.8509575,29.0604386,0.7654298,Not significant,Not significant
+2,Chr01,type,missing values,63.6363636,0.5828476,0.3922268,0.054242,Not significant,Not significant
+3,Chr01,type,several_ohnologous,52.3876404,15.5287261,12.6938848,<10-6,5.4872817,over-represented
+4,Chr01,strand,-,41.370826,49.0008326,50.7220538,0.025699,-2.2307309,under-represented
+5,Chr01,strand,+,44.3198263,50.9991674,49.2779462,0.025699,2.2307302,over-represented
+6,Chr02,type,singleton,59.2604006,59.9625819,57.8534498,0.0002215,3.6931197,over-represented
+7,Chr02,type,unique_ohnologous,57.4846626,29.2173371,29.0604386,0.7654297,Not significant,Not significant
+8,Chr02,type,missing values,36.3636364,0.2494543,0.3922268,0.0542509,Not significant,Not significant
+9,Chr02,type,several_ohnologous,47.6123596,10.5706268,12.6938848,<10-6,-5.7459921,under-represented
+10,Chr02,strand,-,58.629174,52.0112254,50.7220538,0.025699,2.2307302,over-represented
+11,Chr02,strand,+,55.6801737,47.9887746,49.2779462,0.025699,-2.2307309,under-represented
