@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import yaml
-with open("config_file.yml", "r") as yamlfile:
+with open("config_file_copy.yml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 import pandas as pd
@@ -406,25 +406,43 @@ if not os.path.exists(config["directory_management"]["result_path"]) :
   os.makedirs(config["directory_management"]["result_path"])
 
 if tab_type == "xlsx" :
-  write_excel(file_name_x2, chi2, idx=True)
-  write_excel(file_name_fisher, fisher, idx=True)
-  write_excel(file_name_qualitative, test_value,idx=True)
-  write_excel(file_name_weight, weight,idx=True)
-  write_excel(file_name_normality, normality_calcul,idx=True)
-  write_excel(file_name_homoscedasticity, homoscedasticity_calcul,idx=True)
-  write_excel(file_name_anova, sd_anova,idx=True)
-  write_excel(file_name_kruskal_wallis, sd_kruskal_wallis,idx=True)
-  write_excel(file_name_quantitative, quanti_a, idx=True)
+  if len(chi2) != 0 :
+    write_excel(file_name_x2, chi2, idx=True)
+  if len(fisher) != 0 :
+    write_excel(file_name_fisher, fisher, idx=True)
+  if len(test_value) != 0 :  
+    write_excel(file_name_qualitative, test_value,idx=True)
+  if len(weight) != 0 :
+    write_excel(file_name_weight, weight,idx=True)
+  if len(normality_calcul) != 0 :
+    write_excel(file_name_normality, normality_calcul,idx=True)
+  if len(homoscedasticity_calcul) != 0 :
+    write_excel(file_name_homoscedasticity, homoscedasticity_calcul,idx=True)
+  if len(sd_anova) != 0 :
+    write_excel(file_name_anova, sd_anova,idx=True)
+  if len(sd_kruskal_wallis) != 0 :
+    write_excel(file_name_kruskal_wallis, sd_kruskal_wallis,idx=True)
+  if len(quanti_a) != 0 :
+    write_excel(file_name_quantitative, quanti_a, idx=True)
 if tab_type == "csv" :
-  chi2.to_csv(file_name_x2)
-  fisher.to_csv(file_name_fisher)
-  test_value.to_csv(file_name_qualitative)
-  weight.to_csv(file_name_weight)
-  normality_calcul.to_csv(file_name_normality)
-  homoscedasticity_calcul.to_csv(file_name_homoscedasticity)
-  sd_anova.to_csv(file_name_anova)
-  sd_kruskal_wallis.to_csv(file_name_kruskal_wallis)
-  quanti_a.to_csv(file_name_quantitative)
+  if len(chi2) != 0:
+    chi2.to_csv(file_name_x2)
+  if len(fisher) != 0:
+    fisher.to_csv(file_name_fisher)
+  if len(test_value) != 0:
+    test_value.to_csv(file_name_qualitative)
+  if len(weight) != 0:
+    weight.to_csv(file_name_weight)
+  if len(normality_calcul) != 0:
+    normality_calcul.to_csv(file_name_normality)
+  if len(homoscedasticity_calcul) != 0:
+    homoscedasticity_calcul.to_csv(file_name_homoscedasticity)
+  if len(sd_anova) != 0:
+    sd_anova.to_csv(file_name_anova)
+  if len(sd_kruskal_wallis) != 0:
+    sd_kruskal_wallis.to_csv(file_name_kruskal_wallis)
+  if len(quanti_a) != 0 :
+    quanti_a.to_csv(file_name_quantitative)
 
 ###############################################################################
 #make the visualisations
