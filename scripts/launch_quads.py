@@ -24,13 +24,21 @@ import sys
 data_path = config["directory_management"]["data_path"]
 result_path = config["directory_management"]["result_path"]
 file_name_x2 = result_path+\
-	           config["file_management"]["qualitative_test"]
+	           config["file_management"]["chi2_test"]
+file_name_fisher = result_path+\
+	           config["file_management"]["fisher_test"]
 file_name_qualitative = result_path+\
 	                    config["file_management"]["qualitative_enrichment"]
 file_name_weight = result_path+\
 	               config["file_management"]["variable_weight"]
+file_name_normality = result_path+\
+	              config["file_management"]["normality_test"]
+file_name_homoscedasticity = result_path+\
+	              config["file_management"]["homoscedasticity_test"]
 file_name_anova = result_path+\
-	              config["file_management"]["quantitative_test"]
+	              config["file_management"]["anova_test"]
+file_name_kruskal_wallis = result_path+\
+	              config["file_management"]["kruskal_wallis_test"]
 file_name_quantitative = result_path+\
 	                     config["file_management"]["quantitative_enrichment"]
 separator = config["file_management"]["sep"]
@@ -213,16 +221,28 @@ else:
 ###############################################################################
 #make the quantitative analysis for each quantitative variable
 ###############################################################################
-
-sd = sdquanti(df_quantitative, \
+homoscedasticity_calcul, new_quanti_var = quanti_homoscedasticity(df_quantitative, \
 			  config["variable_management"]["quantitative_variables"], \
 			  config["variable_management"]["factor_variable"],\
+        config["thresholds_management"]["bartlett_threshold"])
+normality_calcul, var_anova, var_kruskalwallis =quanti_normality(df_quantitative, \
+			  new_quanti_var,\
+          config["thresholds_management"]["shapiro_threshold"]) 
+sd_anova, anova_var = anova(df_quantitative, \
+			  var_anova, \
+			  config["variable_management"]["factor_variable"],\
 				config["thresholds_management"]["anova_threshold"])
-quanti_a = quanti_analysis(sd, \
-					df_quantitative, \
-					config["variable_management"]["quantitative_variables"],\
+sd_kruskal_wallis, kw_var = anova(df_quantitative, \
+			  var_kruskalwallis, \
+			  config["variable_management"]["factor_variable"],\
+				config["thresholds_management"]["kruskal_wallis_threshold"])
+
+var_quanti_desc = anova_var+kw_var
+
+quanti_a = quanti_analysis(df_quantitative, \
+					new_quanti_var,\
+          var_quanti_desc,\
 					config["variable_management"]["factor_variable"], \
-					config["thresholds_management"]["anova_threshold"], \
           config["thresholds_management"]["gaussian_threshold"])
 
 if config["logging"]["log_level"]=="twice":
@@ -301,10 +321,11 @@ else :
 #make the qualitative analysis
 ###############################################################################
 
-sdqualitative = sdquali(df_qualitative, \
+chi2, fisher = sdquali(df_qualitative, \
 						qualitative, \
 						factor, \
-						config["thresholds_management"]["x2_threshold"])
+						config["thresholds_management"]["x2_threshold"],\
+            config["thresholds_management"]["fisher_threshold"])
 quali_a = quali_analysis(factor)
 if config["logging"]["log_level"]=="twice":
   print("qualitative analysis done.")
@@ -385,16 +406,24 @@ if not os.path.exists(config["directory_management"]["result_path"]) :
   os.makedirs(config["directory_management"]["result_path"])
 
 if tab_type == "xlsx" :
-  write_excel(file_name_x2, sdqualitative, idx=True)
+  write_excel(file_name_x2, chi2, idx=True)
+  write_excel(file_name_fisher, fisher, idx=True)
   write_excel(file_name_qualitative, test_value,idx=True)
   write_excel(file_name_weight, weight,idx=True)
-  write_excel(file_name_anova, sd,idx=True)
+  write_excel(file_name_normality, normality_calcul,idx=True)
+  write_excel(file_name_homoscedasticity, homoscedasticity_calcul,idx=True)
+  write_excel(file_name_anova, sd_anova,idx=True)
+  write_excel(file_name_kruskal_wallis, sd_kruskal_wallis,idx=True)
   write_excel(file_name_quantitative, quanti_a, idx=True)
 if tab_type == "csv" :
-  sdqualitative.to_csv(file_name_x2)
+  chi2.to_csv(file_name_x2)
+  fisher.to_csv(file_name_fisher)
   test_value.to_csv(file_name_qualitative)
   weight.to_csv(file_name_weight)
-  sd.to_csv(file_name_anova)
+  normality_calcul.to_csv(file_name_normality)
+  homoscedasticity_calcul.to_csv(file_name_homoscedasticity)
+  sd_anova.to_csv(file_name_anova)
+  sd_kruskal_wallis.to_csv(file_name_kruskal_wallis)
   quanti_a.to_csv(file_name_quantitative)
 
 ###############################################################################

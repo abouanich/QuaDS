@@ -47,9 +47,13 @@ file_management:
   sep: ","
 
   #: String: output files (view README.md for details)
-  quantitative_test: anova.csv
+  normality_test: normality.csv
+  homoscedasticity_test: homoscedasticity.csv
+  anova_test: anova.csv
+  kruskal_wallis_test: kruskal_wallis.csv
   quantitative_enrichment: quantitative_gaussian.csv
-  qualitative_test: Chi2.csv
+  chi2_test: Chi2.csv
+  fisher_test: fisher_exact.csv
   qualitative_enrichment: qualitative_hypergeometric.csv
   variable_weight: weight.csv
 
@@ -72,14 +76,26 @@ variable_management:
 #-------------------
 thresholds_management:
 
+  #: Float: threshold for the shapiro test
+  shapiro_threshold: 0.01
+
+  #: Float: threshold for the bartlett test
+  bartlett_threshold: 0.01
+
   #: Float: threshold for the anova test
   anova_threshold: 0.01
+
+  #: Float: threshold for the kruskal wallis test
+  kruskal_wallis_threshold: 0.01
 
   #: Float: threshold for gaussian distribution
   gaussian_threshold: 0.01
 
   #: Float: threshold for the X2 test
   x2_threshold: 0.05
+
+  #: Float: threshold for the fisher exact test
+  fisher_threshold: 0.05
 
   #: Float: threshold for hypergeometric distribution
   hypergeometric_threshold: 0.05

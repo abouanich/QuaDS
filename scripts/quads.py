@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 :author: Andrea Bouanich
-:version: 2.0
+:version: 3.0
 :email: andrea.bouanich@inrae.fr
 :email: julie.bourbeillon@institut-agro.fr
 """
@@ -18,8 +18,8 @@ import numpy as np
 from collections import OrderedDict
 
 #Data statistics analysis library
-from scipy.stats import chi2_contingency
-from scipy.stats import norm
+from scipy.stats import chi2_contingency, fisher_exact, norm
+from scipy.stats import shapiro, bartlett, kruskal
 import math
 from math import *
 import statsmodels.formula.api as smf
@@ -43,7 +43,7 @@ def bi(n,k) :
   """
   return math.comb(n,k)
 
-def sdquali (df, columns, vchi2, chi2_p_value) :
+def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
   """
     Function used to select which modalities are over and under represented
     in the different groups of the vchi2
@@ -68,42 +68,60 @@ def sdquali (df, columns, vchi2, chi2_p_value) :
   #each columns make a chi2 test with the variable vchi2
   global column
   column = []
-  p_value = []
+  chi_p_value = []
   chi = []
-  significative = []
+  fisher_column = []
+  fisher_pvalue = []
+  fisher=[]
+  chi_significative = []
+  fisher_significative = []
   for col in df[columns]:
     cont = pd.crosstab(df[col],df[vchi2])
 	# Chi-square test of independence
-    chi2, p, dof, expected = chi2_contingency(cont)
-    if p < 0.000001 :
-      p_value.append("<10-6")
-    else:
-      p_value.append(round(p,7))
+    chi2, p_chi2, dof, expected = chi2_contingency(cont)
+    if np.all(expected >= 5) :
+      if p_chi2 < 0.000001 :
+        chi_p_value.append("<10-6")
+      else:
+        chi_p_value.append(round(p_chi2,7))
+      chi.append(round(chi2,2))
 
-    chi.append(round(chi2,2))
-
-    #if the p-value < chi2_p_value, the variable is variable chi2's dependent
-	#we can move the variable that are independant from the variable chi2 
-	# for the next steps
-    if p < chi2_p_value :
-      column.append(col)
-      significative.append('Significant')
+      #if the p-value < threshold_chi2, the variable is variable chi2's
+      #  dependent we can move the variable that are independant from 
+      # the variable chi2 for the next steps
+      if p_chi2 < threshold_chi2 :
+        column.append(col)
+        chi_significative.append('Significant')
+      else :
+        chi_significative.append('Not significant')
     else :
-      significative.append('Not significant')
+      fisher_column.append(col)
+      oddsratio, p_fisher = fisher_exact(cont)
+      if p_fisher < 0.000001 :
+        fisher_pvalue.append("<10-6")
+      else:
+        fisher_pvalue.append(round(p_fisher,7))
+      if p_fisher < threshold_fisher_exact :
+        column.append(col)
+        fisher_significative.append('Significant')
+      else : 
+        fisher_significative.append("Not significant")
+      fisher.append(round(oddsratio,2))
+
   global new_df
   new_df = df[column]
-  new_df.insert(len(column),vchi2,df[vchi2].to_list())   
+  new_df.insert(len(column),vchi2,df[vchi2].to_list())
   #generate the table from the chi2 test with the variables and their p_value
-  v = []
-  for element in columns :
-    v.append('Not significant')
-  global X2
 
   X2 = pd.DataFrame({'Variables' : columns,
                      'Chi2 Statistic' : chi, 
-                     'p-value' : p_value,
-			               'interpretation' : significative})
-  return X2
+                     'p-value' : chi_p_value,
+			               'interpretation' : chi_significative})
+  FISHER = pd.DataFrame({'Variables' : fisher_column,
+                         'Odds ratio' : fisher, 
+                         'p-value' : fisher_pvalue,
+			                   'interpretation' : fisher_significative})
+  return X2, FISHER
 
 def quali_analysis(vchi2):
   """
@@ -132,67 +150,37 @@ def quali_analysis(vchi2):
 	#order the dictionary by the number of vchi2
     dictio = OrderedDict(sorted(dictio.items(), key=lambda x: x[0]))
 	
-
   #column : modalities
-  index = []
-  nb_mod_by_var=[]
-  for col in new_df :
-    nb = 0
-    for element in new_df[col].unique() :
-      index.append(element)
-      nb +=1
-    nb_mod_by_var.append(nb)
-  nb_mod_by_var = nb_mod_by_var[0:-1]
-  index_chi2 = index[-len(new_df[vchi2].unique()):]
-  index_chi2.sort()
-  index = index[0:-len(new_df[vchi2].unique())]#remove the vchi2 index
   global modality
-  modality = index*len(new_df[vchi2].unique())
-  for element in index_chi2 :
-    modality.append(element)
-
+  index = []
+  nb_mod_by_var = []
+  for col in new_df:
+    unique_elements = new_df[col].unique()
+    nb_mod_by_var.append(len(unique_elements))  
+    index.extend(unique_elements)  
+  index_chi2 = np.sort(new_df[vchi2].unique())  
+  index = [elem for elem in index if elem not in index_chi2]  
+  modality = index * len(index_chi2) + list(index_chi2)
 
   #column : vchi2	
-  variable = []
-  el = (new_df[vchi2].unique())
-  el.sort()
-  for element in el:
-    t = (' '+str(element))*len(index)
-    t =t.split()
-    variable.append(t)
   global chi2_var
-  chi2_var =[]
-  for i in variable :
-    chi2_var = chi2_var+i
-  for j in index_chi2 :
-    chi2_var.append(j)
-
+  el = np.sort(new_df[vchi2].unique())
+  variable = [str(element) for element in el for _ in range(len(index))]
+  chi2_var = variable + list(index_chi2)
 
   #column : variables
-  var = []
-  for i,j in zip(column,nb_mod_by_var) :
-    u = (i+';')*j
-    u = u.split(';')
-    var.append(u)
-  nb_vchi2 = []
-  for element in new_df[vchi2].unique():
-    nb_vchi2.append(vchi2)
   global variables
-  variables = []
-  for i in var :
-    variables = variables+i
-  while '' in variables :
-    del variables[variables.index('')]
-  variables = variables*len(new_df[vchi2].unique())
-  for element in nb_vchi2 :
-    variables.append(element)		
   global variables_2
-  variables_2 =[]
-  for i in var : 
-    variables_2 = variables_2+i
-  while '' in variables_2 :
-    del variables_2[variables_2.index('')]
-  variables_2 = variables_2 + nb_vchi2
+  var = [([i]*j) for i,j in zip(column,nb_mod_by_var)]
+  nb_vchi2 = [vchi2] * len(new_df[vchi2].unique())
+  variables = []
+  for i in var:
+    variables.extend(i)
+  variables = variables * len(new_df[vchi2].unique()) + nb_vchi2
+  variables_2 = []
+  for i in var:
+    variables_2.extend(i)
+  variables_2.extend(nb_vchi2)
 
   global NA
   NA = []
@@ -210,7 +198,6 @@ def quali_analysis(vchi2):
 		'v-test' : NA,
 		'interpretation': NA})
   return result
-
 
 #column : cla/mod
 def clamod(result, vchi2):
@@ -248,19 +235,9 @@ def clamod(result, vchi2):
         var_chi2.append(v)
       li_clamod = clamod_value.index.tolist()
       i_clamod.append(li_clamod)
-      l_modalities = []
+      modalities = []
       for i in i_clamod :
-        for j in i :
-          v = str(j)+(';')
-          v = v.split(';')
-          l_modalities.append(v)
-	
-        modalities = []
-        for i in l_modalities :
-          modalities = modalities+i
-        while '' in modalities :
-          del modalities[modalities.index('')]
-			
+        modalities.extend(i)
   for g,h,i,j in zip(var_chi2,variable,modalities,l_clamod) :
     clamod = clamod.append({vchi2 : g, 
 								'variables' : h,
@@ -268,12 +245,19 @@ def clamod(result, vchi2):
 								'cla/mod' : j },
 								ignore_index=True)
     clamod = clamod.fillna(0)	
-  for i in range(len(result)) :
-    for j in range(len(clamod)):
-      if str(result[vchi2][i]) == str(clamod[vchi2][j]) \
-		and str(result['variables'][i]) == str(clamod['variables'][j]) \
-			and str(result['modalities'][i]) == str(clamod['modalities'][j]):
-        result['cla/mod'][i] = round(clamod['cla/mod'][j],7)
+  
+  clamod_dict = {
+    (str(row[vchi2]), \
+     str(row['variables']), \
+     str(row['modalities'])): round(row['cla/mod'], 7)
+    for index, row in clamod.iterrows()
+  }
+  for i, row in result.iterrows():
+    key = (str(row[vchi2]), \
+           str(row['variables']), \
+           str(row['modalities']))
+    if key in clamod_dict:
+      result.at[i, 'cla/mod'] = clamod_dict[key]
   return result
 
 	
@@ -313,34 +297,28 @@ def modcla(result,vchi2):
         var_chi2.append(v)
       li_modcla = modcla_value.index.tolist()
       i_modcla.append(li_modcla)
-      l_modalities = []
+      modalities = []
       for i in i_modcla :
-        for j in i :
-          v = str(j)+(';')
-          v = v.split(';')
-          l_modalities.append(v)
-        modalities = []
-        for i in l_modalities :
-          modalities = modalities+i
-        while '' in modalities :
-          del modalities[modalities.index('')]
-				
+        modalities.extend(i)
   for g,h,i,j in zip(var_chi2,variable,modalities,l_modcla) :
     modcla = modcla.append({vchi2 : g, 
 								'variables' : h,
 								'modalities' : i,
 								'mod/cla' : j },
 								ignore_index=True)
-	
-  for i in range(len(result)) :
-  #add the mod/cla column from modcla to mod/cla column from result		
-    for j in range(len(modcla)) :	
-      if str(result[vchi2][i]) == str(modcla[vchi2][j]) and \
-		str(result['variables'][i]) == str(modcla['variables'][j]) and \
-		str(result['modalities'][i]) == str(modcla['modalities'][j]):
-        result['mod/cla'][i] = round(modcla['mod/cla'][j],7)
-      if result['mod/cla'][i] == 'Not present' :
-        result['mod/cla'][i] = 0
+  modcla_dict = {
+    (str(row[vchi2]), \
+     str(row['variables']), \
+     str(row['modalities'])): round(row['mod/cla'], 7)
+    for index, row in modcla.iterrows()
+  }
+  for i, row in result.iterrows():
+    key = (str(row[vchi2]), \
+           str(row['variables']), \
+           str(row['modalities']))
+    if key in modcla_dict:
+      result.at[i, 'mod/cla'] = modcla_dict[key]
+  result["mod/cla"] = result["mod/cla"].replace('Not present',0)
   return result
 
 #column : global	
@@ -373,30 +351,25 @@ def globa(result):
       l_global.append(i)
     list_modalities = glob.index.tolist()	
     i_global.append(list_modalities)
-    l_modalities = []
-    for i in i_global :
-      for j in i :
-        v = str(j)+(';')
-        v = v.split(';')
-        l_modalities.append(v)
     modalities = []
-    for i in l_modalities :
-      modalities = modalities+i
-    while '' in modalities :
-      del modalities[modalities.index('')]
-	
+    for i in i_global :
+      modalities.extend(i)
   for h,i,j in zip(variables_2,modalities,l_global) :		
     glo = glo.append({'variables' : h,
 				   		  'modalities' : i,
 				   		  'global' : j},
 				   		  ignore_index=True)
-	
-  for i in range(len(result)) :	
-  #add the global column from glo to global column from result		
-    for j in range(len(glo)):
-      if str(result['variables'][i]) == str(glo['variables'][j]) and \
-		str(result['modalities'][i]) == str(glo['modalities'][j]):
-        result['global'][i] = round(glo['global'][j],7)
+  global_dict = { 
+     (str(row['variables']), \
+     str(row['modalities'])): round(row['global'], 7)
+    for index, row in glo.iterrows()
+  }
+  for i, row in result.iterrows():
+    key = (str(row['variables']), \
+           str(row['modalities']))
+    if key in global_dict:
+      result.at[i, 'global'] = global_dict[key]	
+  
   return result
 
 #column : p_value
@@ -419,151 +392,119 @@ def pvalue(result,vchi2):
   """
   global list_pval
   list_pval = []  
-  #table is a df that contain all the numbers we need for the p-value calcul
+
   global table
-  table = pd.DataFrame({vchi2 : chi2_var,
-						  'variables' : variables ,
-						  'modalities':modality, 
-						  'nj' : NA, 
-						  'nkj' : NA,
-						  'nk' : NA})
-  n = new_df.shape[0]#number of individuals
-	
-  #make the nj table
-  #nj number is the size of the modality for all individuals	
-  nj_values = [] 
-  nj_mod = []
-  table_nj = pd.DataFrame(columns = ['variables','modalities','nj'])
-  for c in new_df :
-    nj = pd.value_counts(new_df[c])
-    for i in nj :
-      nj_values.append(i)
-    list_modalities_nj = nj.index.tolist()
-    nj_mod.append(list_modalities_nj)
-    l_modalities_nj = []
-    for i in nj_mod :
-      for j in i :
-        v = str(j)+(';')
-        v = v.split(';')
-        l_modalities_nj.append(v)
-    modalities_nj = []
-    for i in l_modalities_nj :
-      modalities_nj = modalities_nj+i
-    while '' in modalities_nj :
-      del modalities_nj[modalities_nj.index('')]
-  for h,i,j in zip(variables_2,modalities_nj, nj_values) :	
-    table_nj = table_nj.append({'variables' : h,
-				   			  		'modalities' : i,
-				   			  		'nj' : j},
-				   			  		ignore_index=True)
-    table_nj = table_nj.fillna(0)
+  table = pd.DataFrame({
+    vchi2 : chi2_var,
+    'variables' : variables,
+    'modalities': modality, 
+    'nj' : NA, 
+    'nkj' : NA,
+    'nk' : NA
+  })
 
-  #make the nk table
-  #nk number is the size of the cluster
-  nk_values = []
-  name_chi2var = []
-  table_nk = pd.DataFrame(columns = [vchi2,'nk'])	
-  for v in dictio :
-    name_chi2var.append(v)
-    nk_values.append(dictio[v].shape[0])
-  for i,j in zip(name_chi2var, nk_values) :
-    table_nk = table_nk.append({vchi2 : i, 
-									'nk' : j},
-									ignore_index=True) 
-  #make the nkj table
-  # #nkj number is the size of modality per clusters
-  nkj_modalities = []
-  values_nkj = []
-  variables_nkj = []
-  chi2var_nkj = []
-  table_nkj = pd.DataFrame(columns = [vchi2,'variables','modalities','nkj'])	
-  for c in new_df :
-    for v in dictio :
-      nkj = pd.value_counts(dictio[v][c]) 
-      nk = dictio[v].shape[0]
-      for i in nkj :
-        values_nkj.append(i)
-        variables_nkj.append(nkj.name)
-        chi2var_nkj.append(v)
-      mod_nkj = nkj.index.tolist()
-      nkj_modalities.append(mod_nkj)
-      l_modalities_nkj = []
-      for i in nkj_modalities :
-        for j in i :
-          v = str(j)+(';')
-          v = v.split(';')
-          l_modalities_nkj.append(v)
-        modalities_nkj = []
-        for i in l_modalities_nkj :
-          modalities_nkj = modalities_nkj+i
-        while '' in modalities_nkj :
-          del modalities_nkj[modalities_nkj.index('')]
-			
-  for g,h,i,j in zip(chi2var_nkj,variables_nkj,modalities_nkj,values_nkj) :
-    table_nkj = table_nkj.append({vchi2 : g, 
-						              'variables' : h,
-						              'modalities' : i,
-						              'nkj' : j },
-						               ignore_index=True)
-    table_nkj = table_nkj.fillna(0)
-	
-  #attribute the nkj number from table_nkj to table
-  for i in range(len(table)) :	
-    for j in range(len(table_nkj)) :	
-      if str(table[vchi2][i]) == str(table_nkj[vchi2][j]) and \
-          str(table['variables'][i]) == str(table_nkj['variables'][j]) and \
-          str(table['modalities'][i]) == str(table_nkj['modalities'][j]):
-        table['nkj'][i] = table_nkj['nkj'][j]
-	
-    #attribute the nj number from table_nj to table		
-    for j in range(len(table_nj)):
-      if str(table['variables'][i]) == str(table_nj['variables'][j]) and \
-          str(table['modalities'][i]) == str(table_nj['modalities'][j]):
-        table['nj'][i] = table_nj['nj'][j]
-	
-    #attribute the nk number from table_nk to table	
-    for j in range(len(table_nk)):	
-      if str(table[vchi2][i]) == str(table_nk[vchi2][j]) :
-        table['nk'][i] = table_nk['nk'][j]
-    if table['nkj'][i] == 'Not present' :
-      table['nkj'][i] = 0
+  n = new_df.shape[0]
 
-  #p-value calcul
-  for i in range (len(result)) : 
-    for j in range(len(table)) :
-      if str(result[vchi2][i]) == str(table[vchi2][j]) and \
-        str(result['variables'][i]) == str(table['variables'][j]) and \
-        str(result['modalities'][i]) == str(table['modalities'][j]):
-        nj = table['nj'][j]
-        nk = table['nk'][j]
-        nkj = table['nkj'][j]
-        n_nk = n-nk
-        s1=0
-        s2=0
-        #if aux2 > aux3
-        for y in range(nkj+1,nj):
-          nm = table['nj'][j]-y
-          p = (bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
-          if s1 == s1+p :
-            break
-          else :
-            s1 = s1+p
-					
-        #if aux2 < aux3
-        for y in range(nkj,nj):
-          nm = table['nj'][j]-y
-          p = (bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
-          if s2 == s2+p :
-            break
-          else :
-            s2 = s2+p
-        p_value = 2*min(s1,(1-round(s2,7)))+\
-            (bi(nk,nkj)*bi(n_nk,nj-nkj))/bi(n,nj)
-        list_pval.append(p_value)
-        if p_value < 0.000001 :
-          result['p-value'][i] = "<10-6"
-        else : 
-          result['p-value'][i] = round(p_value,7)
+  nj_table = []
+  for c in new_df.columns:
+    nj = new_df[c].value_counts().reset_index()
+    nj.columns = ['modalities', 'nj']
+    nj['variables'] = c
+    nj_table.append(nj)
+
+  table_nj = pd.concat(nj_table, ignore_index=True)
+  table_nj = table_nj.fillna(0)
+
+  table_nk = pd.DataFrame(columns=[vchi2,'nk'])
+  for v, df in dictio.items():
+    nk = df.shape[0]
+    table_nk = table_nk.append({vchi2: v,'nk':nk}, ignore_index=True)
+
+
+  nkj_data = []
+  for c in new_df.columns:
+    for v, df in dictio.items():
+      nkj = df[c].value_counts().reset_index()
+      nkj.columns = ['modalities','nkj']
+      nkj['variables'] = c
+      nkj[vchi2] = v
+      nkj_data.append(nkj)
+
+  table_nkj = pd.concat(nkj_data, ignore_index=True)
+  table_nkj = table_nkj.fillna(0)
+  table.merge(table_nj[['variables', 'modalities', 'nj']], \
+                      on=['variables', 'modalities'], how='left')
+  table.merge(table_nkj[[vchi2, 'variables', 'modalities', 'nkj']], \
+                      on=[vchi2, 'variables', 'modalities'], how='left')
+  table.merge(table_nk[[vchi2, 'nk']],\
+                      on=[vchi2], how='left')
+
+  table_nkj_dict = {
+    (str(row[vchi2]), str(row['variables']), str(row['modalities'])): row['nkj']
+    for _, row in table_nkj.iterrows()
+  }
+  table_nj_dict = {
+    (str(row['variables']), str(row['modalities'])): row['nj']
+    for _, row in table_nj.iterrows()
+  }
+  table_nk_dict = {
+    (str(row[vchi2])): row['nk']
+    for _, row in table_nk.iterrows()
+  }
+  for i, row in table.iterrows():
+    key_nkj = (str(row[vchi2]), str(row['variables']), str(row['modalities']))
+    if key_nkj in table_nkj_dict:
+        table.at[i, 'nkj'] = table_nkj_dict[key_nkj]
+    key_nj = (str(row['variables']), str(row['modalities']))
+    if key_nj in table_nj_dict:
+        table.at[i, 'nj'] = table_nj_dict[key_nj]
+    key_nk = str(row[vchi2])
+    if key_nk in table_nk_dict:
+        table.at[i, 'nk'] = table_nk_dict[key_nk]
+    if table.at[i, 'nkj'] == 'Not present':
+        table.at[i, 'nkj'] = 0
+  
+
+  table_dict = {
+    (str(row[vchi2]), str(row['variables']), str(row['modalities'])): {
+        'nj': row['nj'],
+        'nk': row['nk'],
+        'nkj': row['nkj']
+    }
+    for _, row in table.iterrows()
+  }
+  for i, row in result.iterrows():
+    key=(str(row[vchi2]),str(row['variables']),str(row['modalities']))
+    if key in table_dict:
+      nj=table_dict[key]['nj']
+      nk=table_dict[key]['nk']
+      nkj=table_dict[key]['nkj']
+      n_nk=n-nk
+      s1=0
+      s2=0
+
+      for y in range(nkj+1,nj):
+        nm=nj-y
+        p=(bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
+        s1+=p
+        if s1==s1+p:
+          break
+
+      for y in range(nkj,nj):
+        nm=nj-y
+        p=(bi(nk,y)*bi(n_nk,nm))/bi(n,nj)
+        s2+=p
+        if s2==s2+p:
+          break
+        
+      p_value=2*min(s1,(1-round(s2,7)))+(bi(nk,nkj)*bi(n_nk,nj-nkj))/bi(n,nj)
+        
+      list_pval.append(p_value)
+        
+      if p_value < 0.000001:
+        result.at[i,'p-value']="<10-6"
+      else:
+        result.at[i,'p-value']=round(p_value,7)
   return result
 
 def vtest(result, v_p_value,cluster) :
@@ -580,7 +521,7 @@ def vtest(result, v_p_value,cluster) :
       DataFrame: a pandas DataFrame containing v-test for each vchi2, 
           			 variables and modalities
   """
-	
+
   for i in range(len(result)) :
     for j in range(len(table)) :
       if result['mod/cla'][i] > result['global'][i] :
@@ -606,7 +547,6 @@ def vtest(result, v_p_value,cluster) :
   result.drop(index_name,inplace=True)
   result = result.reset_index(drop=True)
   return result
-
 
 def variable_weight(result):
   """
@@ -714,7 +654,54 @@ def variable_weight(result):
 						            'contribution over&under mod' : ranking3})
   return weight
 
-def sdquanti(df, var, variable_cat, threshold_anova):
+def quanti_normality(df,quanti_var, shapiro_pvalue):
+  """
+    Actions performed:
+    * Make the normality test on each quantitative variable
+	
+    Args:
+      df: a pandas DataFrame containing only the quantitatives variables
+      quanti_var : name of the quantitative variable
+      threshold_normality : threshold choose by the user
+        
+    Returns:
+      DataFrame: a pandas DataFrame containing the normality results
+  """
+  list_stat=[]
+  list_pvalue = []
+  var_for_anova=[]
+  var_for_kruskal = []
+  for variable in quanti_var :
+    stat, p_value = shapiro(df[variable])
+    list_stat.append(stat)
+    list_pvalue.append(p_value)
+    if p_value < shapiro_pvalue :
+      var_for_kruskal.append(variable)
+    else:
+      var_for_anova.append(variable)
+  output_shapiro = pd.DataFrame({"variable":quanti_var,\
+                                 "statistic":list_stat,\
+                                 "p-value":list_pvalue})
+  return output_shapiro, var_for_anova, var_for_kruskal
+
+def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue):
+  list_stat = []
+  list_pvalue = []
+  homoscedasticity_variables = []
+  for var in quanti_var :
+    df_cat = [df[df[variable_cat] == cat][var] for cat in df[variable_cat].unique()]
+    stat, p_value = bartlett(*df_cat)
+    list_stat.append(stat)
+    list_pvalue.append(p_value)
+    if p_value > homoscedasticity_pvalue : 
+      homoscedasticity_variables.append(var)
+  output_bartlett = pd.DataFrame({"variable":quanti_var,\
+                                  "statistic":list_stat,\
+                                  "p-value":list_pvalue})
+  return output_bartlett, homoscedasticity_variables
+
+
+def anova(df, var, variable_cat, threshold_anova):
   """
     Actions performed:
     * Make the anova on each quantitative variable with variable_cat
@@ -750,6 +737,7 @@ def sdquanti(df, var, variable_cat, threshold_anova):
   list_eta2 = []
   list_pvalue = []
   info_interpretation = []
+  signi_anova_var = []
   for varia in var :
     lm = ols('df_na[varia] ~ C(df_na[variable_cat])', data = df_na).fit()
     table = sm.stats.anova_lm(lm)
@@ -765,6 +753,7 @@ def sdquanti(df, var, variable_cat, threshold_anova):
     else: 
       list_pvalue.append(round(pval,6))
     if pval < threshold_anova :
+      signi_anova_var.append(varia)
       info_interpretation.append("Significant")
     else :
       info_interpretation.append("Not significant")
@@ -772,9 +761,34 @@ def sdquanti(df, var, variable_cat, threshold_anova):
 						  'eta-squared' : list_eta2,
 						  'p-value' : list_pvalue,
               'interpretation' : info_interpretation})
-  return anova
+  return anova, signi_anova_var
 
-def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
+def kruskal_wallis(df, quanti_var, variable_cat, threshold_kw):
+  list_stat = []
+  list_pvalue = []
+  list_interpretation = []
+  signi_kw_var = []
+  for var in quanti_var :
+    df_cat = [df[df[variable_cat] == cat][var] for cat in df[variable_cat].unique()]
+    stat, p_value = kruskal(*df_cat)
+    list_stat.append(stat)
+    if p_value < 0.000001 :
+      list_pvalue.append("<10-6")
+    else: 
+      list_pvalue.append(round(p_value,6))
+    if p_value < threshold_kw :
+      signi_kw_var.append(var)
+      list_interpretation.append("Significant")
+    else : 
+      list_interpretation.append("Not significant")
+
+  output_kruskal_wallis = pd.DataFrame({"variable":quanti_var,\
+                                        "statistic":list_stat,\
+                                        "p-value":list_pvalue,\
+                                        "interpretation":list_interpretation})
+  return output_kruskal_wallis, signi_kw_var
+
+def quanti_analysis(df, var, signi_variable, variable_cat, thres_gaussian):
   """
     Actions performed:
     * Make the v-test and final statistics
@@ -799,7 +813,7 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
   overall_mean = []
   category_sd = [] 
   overall_sd = [] 
-  pv = []#
+  pv = []
   info_interpretation = []
   for varia in var : 
     I = len(df) #number of individuals
@@ -831,71 +845,31 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
       for i in sous_ov :
         som_ov = som_ov+(i[0]-i[1])*(i[0]-i[1])
       et_overall = round(sqrt(som_ov/Im),6)
-      index_pvalue = anova.index[anova["variable"] == varia].to_list()
-      for ind in index_pvalue :
-        index_pv = ind
-      if str(anova["p-value"][index_pv]) != "<10-6" :
-        if anova["p-value"][index_pv] > thres_anova :
-          for i,j in zip(dictionary_1,dictionary) :
-            v_test.append('Not significant')
-            pv.append("Not significant")
-            info_interpretation.append("Not significant")
-            Iq_df_na = len(dictionary_1[i])
-            Iq = len(dictionary[j][varia])
-            xq = round(dictionary[j][varia].mean(),6)
-            #mean of the modalities of the cluster 
-            data = dictionary_1[i]
-            mean_category.append(float(xq))
-            overall_mean.append(float(x))
-            sous_cat = np.empty((0,2), float)
-            for el in range(len(data)) :
-              data = data.reset_index(drop=True)
-              data=data.astype(type('float'))
-              sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), \
-                                                     float(xq)]]),axis=0)
-            som_cat = 0
-            for k in sous_cat :
-              som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
-            et_category = round(sqrt(som_cat/Iq_df_na),6)
-            category_sd.append(et_category)
-            overall_sd.append(et_overall)
-        else : 
-          for i,j in zip(dictionary_1,dictionary) :
-            Iq_df_na = len(dictionary_1[i])
-            Iq = len(dictionary[j][varia])
-            #mean of the modalities of the cluster
-            xq = round(dictionary[j][varia].mean(),6) 
-            data = dictionary_1[i]
-            mean_category.append(float(xq))
-            overall_mean.append(float(x))
-            sous_cat = np.empty((0,2), float)
-            for el in range(len(data)) :
-              data = data.reset_index(drop=True)
-              data=data.astype(type('float'))
-              sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]),\
-                                                 float(xq)]]),axis=0)
-            som_cat = 0
-            for k in sous_cat :
-              som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
-            et_category = round(sqrt(som_cat/Iq_df_na),6)
-            category_sd.append(et_category)
-            overall_sd.append(et_overall)
-            vtest= round((float(xq)-float(x))/sqrt(((et_overall**2)/Iq)*\
-                                                 ((I-Iq)/(I-1))),6)
-            v_test.append(vtest)
-            pvalue = (1-norm.cdf(abs(vtest)))*2
-            if pvalue < 0.000001 :
-              pv.append("<10-6")
-            else: 
-              pv.append(round(pvalue,6))
-            if pvalue < thres_gaussian and vtest < 0 :
-              info_interpretation.append("below average")
-            elif pvalue < thres_gaussian and vtest > 0 :
-              info_interpretation.append("above average")
-            elif pvalue > thres_gaussian :
-              info_interpretation.append("Not significant")
-				
-      else :
+      if varia not in signi_variable : 
+        for i,j in zip(dictionary_1,dictionary) :
+          v_test.append('Not significant')
+          pv.append("Not significant")
+          info_interpretation.append("Not significant")
+          Iq_df_na = len(dictionary_1[i])
+          Iq = len(dictionary[j][varia])
+          xq = round(dictionary[j][varia].mean(),6)
+          #mean of the modalities of the cluster 
+          data = dictionary_1[i]
+          mean_category.append(float(xq))
+          overall_mean.append(float(x))
+          sous_cat = np.empty((0,2), float)
+          for el in range(len(data)) :
+            data = data.reset_index(drop=True)
+            data=data.astype(type('float'))
+            sous_cat=np.append(sous_cat,np.array([[float(data[varia][el]), \
+                                                   float(xq)]]),axis=0)
+          som_cat = 0
+          for k in sous_cat :
+            som_cat = som_cat+(k[0]-k[1])*(k[0]-k[1])
+          et_category = round(sqrt(som_cat/Iq_df_na),6)
+          category_sd.append(et_category)
+          overall_sd.append(et_overall)
+      else : 
         for i,j in zip(dictionary_1,dictionary) :
           Iq_df_na = len(dictionary_1[i])
           Iq = len(dictionary[j][varia])
@@ -930,7 +904,7 @@ def quanti_analysis(anova, df, var, variable_cat, thres_anova,thres_gaussian):
             info_interpretation.append("above average")
           elif pvalue > thres_gaussian :
             info_interpretation.append("Not significant")
-				
+
   quantitative = pd.DataFrame({variable_cat : variable_cluster,
 							    'variable' : variable,
 								'Mean in category':mean_category,
