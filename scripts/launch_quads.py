@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import yaml
-with open("config_file_copy.yml", "r") as yamlfile:
+with open("config_file.yml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 import pandas as pd
@@ -167,6 +167,20 @@ except KeyError:
 if ms_quanti=="drop":
   try :
     df_quantitative = df_quantitative.infer_objects()
+    for col in quantitative:
+      na_count = df_quantitative[col].isnull().values.sum()
+      if na_count != 0:
+        if config["logging"]["log_level"]=="twice":
+          print(na_count, "missing values are in the column",col,\
+                "and the line containing these missing values are delete")
+          logger.info(str(na_count)+ " missing values are in the column "+\
+            col+" and the line containing these missing values are delete")
+        elif config["logging"]["log_level"]== "console" :
+          print(na_count, "missing values are in the column",col,\
+                "and the line containing these missing values are delete")
+        elif config["logging"]["log_level"]== "logger": 
+          logger.info(str(na_count)+ " missing values are in the column "+\
+            col+" and the line containing these missing values are delete")
     df_quantitative = df_quantitative.dropna()
   except ValueError :
     if config["logging"]["log_level"]=="twice":
@@ -181,7 +195,21 @@ if ms_quanti=="drop":
 elif ms_quanti=="zero":
   try :
     df_quantitative = df_quantitative.infer_objects()
-    df_quantitative = df_quantitative.fillna(0)
+    for col in quantitative:
+      na_count = df_quantitative[col].isnull().values.sum()
+      if na_count != 0:
+        df_quantitative[col] = df_quantitative[col].fillna(0)
+        if config["logging"]["log_level"]=="twice":
+          print(na_count, "missing values are in the column",col,\
+                "and the missing values are replaced by 0")
+          logger.info(str(na_count)+" missing values are in the column "+\
+            col+" and the missing values are replaced by 0")
+        elif config["logging"]["log_level"]== "console" :
+          print(na_count, "missing values are in the column",col,\
+                "and the missing values are replaced by 0")
+        elif config["logging"]["log_level"]== "logger": 
+          logger.info(str(na_count)+" missing values are in the column "+\
+            col+" and the missing values are replaced by 0")
   except ValueError :
     if config["logging"]["log_level"]=="twice":
       print("One/or more of your quantitative variable(s) is/are not quantitative")
@@ -196,7 +224,20 @@ elif ms_quanti=="mean":
   try :
     df_quantitative = df_quantitative.infer_objects()
     for col in quantitative:
-      df_quantitative[col] = df_quantitative[col].fillna(df_quantitative[col].mean())
+      na_count = df_quantitative[col].isnull().values.sum()
+      if na_count != 0 : 
+        df_quantitative[col] = df_quantitative[col].fillna(df_quantitative[col].mean())
+        if config["logging"]["log_level"]=="twice":
+          print(na_count, "missing values are in the column",col,\
+                "and the missing values are replaced by the mean of the column",col)
+          logger.info(str(na_count)+" missing values are in the column "+\
+            col+" and the missing values are replaced by the mean of the column "+col)
+        elif config["logging"]["log_level"]== "console" :
+          print(na_count, "missing values are in the column",col,\
+                "and the missing values are replaced by the mean of the column",col)
+        elif config["logging"]["log_level"]== "logger": 
+          logger.info(str(na_count)+" missing values are in the column "+\
+            col+" and the missing values are replaced by the mean of the column "+col)
   except ValueError :
     if config["logging"]["log_level"]=="twice":
       print("One/or more of your quantitative variable(s) is/are not quantitative")
@@ -317,10 +358,40 @@ except KeyError:
   sys.exit()
 
 #df_qualitative = df_qualitative.astype(str)
-if ms_quali=="drop":
-  df_qualitative  = df_qualitative.dropna()
-else :
-  df_qualitative = df_qualitative.fillna(ms_quali)
+
+for col in qualitative:
+  na_count = df_qualitative[col].isnull().values.sum()
+  if na_count != 0 :
+    if ms_quali=="drop":
+      if config["logging"]["log_level"]=="twice":
+        print(na_count, "missing values are in the column",col,\
+              "and the line containing these missing values are delete")
+        logger.info(str(na_count)+ " missing values are in the column "+\
+          col+" and the line containing these missing values are delete")
+      elif config["logging"]["log_level"]== "console" :
+        print(na_count, "missing values are in the column",col,\
+              "and the line containing these missing values are delete")
+      elif config["logging"]["log_level"]== "logger": 
+        logger.info(str(na_count)+ " missing values are in the column "+\
+          col+" and the line containing these missing values are delete")
+      df_qualitative  = df_qualitative.dropna()
+    else :
+      if config["logging"]["log_level"]=="twice":
+        print(na_count, "missing values are in the column",col,\
+              "and the missing values are replaced by the modality you choose:"\
+                ,ms_quali,"for the column",col)
+        logger.info(str(na_count)+ " missing values are in the column "+\
+          col+" and the missing values are replaced by the modality you choose: "\
+          +ms_quali+" for the column "+col)
+      elif config["logging"]["log_level"]== "console" :
+        print(na_count, "missing values are in the column",col,\
+              "and the missing values are replaced by the modality you choose:"\
+                ,ms_quali,"for the column",col)
+      elif config["logging"]["log_level"]== "logger": 
+        logger.info(str(na_count)+ " missing values are in the column "+\
+          col+" and the missing values are replaced by the modality you choose: "\
+          +ms_quali+" for the column "+col)
+    df_qualitative = df_qualitative.fillna(ms_quali)
 
 ###############################################################################
 #make the qualitative analysis
