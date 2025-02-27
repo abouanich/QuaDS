@@ -70,6 +70,8 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
   column = []
   chi_p_value = []
   chi = []
+  chi_column = []
+  fisher_variables = []
   fisher_column = []
   fisher_pvalue = []
   fisher=[]
@@ -77,9 +79,11 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
   fisher_significative = []
   for col in df[columns]:
     cont = pd.crosstab(df[col],df[vchi2])
+    cat_modalities = cont.columns.tolist()
 	# Chi-square test of independence
     chi2, p_chi2, dof, expected = chi2_contingency(cont)
     if np.all(expected >= 5) :
+      chi_column.append(col)
       if p_chi2 < 0.000001 :
         chi_p_value.append("<10-6")
       else:
@@ -95,29 +99,47 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
       else :
         chi_significative.append('Not significant')
     else :
-      fisher_column.append(col)
-      oddsratio, p_fisher = fisher_exact(cont)
-      if p_fisher < 0.000001 :
-        fisher_pvalue.append("<10-6")
-      else:
-        fisher_pvalue.append(round(p_fisher,7))
-      if p_fisher < threshold_fisher_exact :
+      cont = np.array(cont)
+      results = []
+      for i in range(cont.shape[1]):
+        for j in range(i+1, cont.shape[1]):
+          col1 = cont[:, i]
+          col2 = cont[:, j]
+          table = np.array([[np.sum((col1 == val1) \
+          & (col2 == val2)) for val2 in np.unique(col2)]\
+           for val1 in np.unique(col1)])
+          if table.shape == (2, 2):
+            odds_ratio, p_value = fisher_exact(table)
+            results.append((i, j, odds_ratio, p_value))
+      count_pvalue = 0
+      for result in results:
+        fisher_variables.append(col)
+        i, j, odds_ratio, p_fisher = result
+        fisher_column.append(cat_modalities[i]+" and "+cat_modalities[j])
+        if p_fisher < 0.000001 :
+          fisher_pvalue.append("<10-6")
+        else:
+          fisher_pvalue.append(round(p_fisher,7))
+        if p_fisher < threshold_fisher_exact :
+          count_pvalue += 1
+          fisher_significative.append('Significant')
+        else : 
+          fisher_significative.append("Not significant")
+        fisher.append(round(odds_ratio,2))
+      if count_pvalue == len(results):
         column.append(col)
-        fisher_significative.append('Significant')
-      else : 
-        fisher_significative.append("Not significant")
-      fisher.append(round(oddsratio,2))
-
+      count_pvalue = 0
   global new_df
   new_df = df[column]
   new_df.insert(len(column),vchi2,df[vchi2].to_list())
   #generate the table from the chi2 test with the variables and their p_value
 
-  X2 = pd.DataFrame({'Variables' : columns,
+  X2 = pd.DataFrame({'Variables' : chi_column,
                      'Chi2 Statistic' : chi, 
                      'p-value' : chi_p_value,
 			               'interpretation' : chi_significative})
-  FISHER = pd.DataFrame({'Variables' : fisher_column,
+  FISHER = pd.DataFrame({'Variables' : fisher_variables,
+                         'duo_analysis' : fisher_column,
                          'Odds ratio' : fisher, 
                          'p-value' : fisher_pvalue,
 			                   'interpretation' : fisher_significative})
