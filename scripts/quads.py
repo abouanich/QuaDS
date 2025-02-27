@@ -43,21 +43,21 @@ def bi(n,k) :
   """
   return math.comb(n,k)
 
-def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
+def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
   """
     Function used to select which modalities are over and under represented
-    in the different groups of the vchi2
+    in the different groups of the variable_cat
 
     Actions performed:
 
-      * Chi2 test for the variables with the vchi2
-      * Separate the pandas a dictionary of pandas for each group of vchi2
+      * Chi2 test for the variables with the variable_cat
+      * Separate the pandas a dictionary of pandas for each group of variable_cat
       * Make the v-test and final statistics
 	
 	Args:
       df: a pandas DataFrame 
       columns : the selected columns
-      vchi2 : the variable to test the chi2
+      variable_cat : the variable to test the chi2
       chi2_p_value : p-value for the chi2 test
         
     Returns:
@@ -65,7 +65,7 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
           	     for the variables
   """
 
-  #each columns make a chi2 test with the variable vchi2
+  #each columns make a chi2 test with the variable variable_cat
   global column
   column = []
   chi_p_value = []
@@ -78,7 +78,7 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
   chi_significative = []
   fisher_significative = []
   for col in df[columns]:
-    cont = pd.crosstab(df[col],df[vchi2])
+    cont = pd.crosstab(df[col],df[variable_cat])
     cat_modalities = cont.columns.tolist()
 	# Chi-square test of independence
     chi2, p_chi2, dof, expected = chi2_contingency(cont)
@@ -131,7 +131,7 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
       count_pvalue = 0
   global new_df
   new_df = df[column]
-  new_df.insert(len(column),vchi2,df[vchi2].to_list())
+  new_df.insert(len(column),variable_cat,df[variable_cat].to_list())
   #generate the table from the chi2 test with the variables and their p_value
 
   X2 = pd.DataFrame({'Variables' : chi_column,
@@ -145,31 +145,31 @@ def sdquali(df, columns, vchi2, threshold_chi2, threshold_fisher_exact) :
 			                   'interpretation' : fisher_significative})
   return X2, FISHER
 
-def quali_analysis(vchi2):
+def quali_analysis(variable_cat):
   """
     Function used to select which modalities are over and under represented
-    in the different groups of the vchi2
+    in the different groups of the variable_cat
 
     Actions performed:
 
-      * Chi2 test for the variables with the vchi2
-      * Separate the pandas a dictionary of pandas for each group of vchi2
+      * Chi2 test for the variables with the variable_cat
+      * Separate the pandas a dictionary of pandas for each group of variable_cat
       * Make the v-test and final statistics
 	
 	Args:
-      vchi2 : the variable to test the chi2
+      variable_cat : the variable to test the chi2
         
     Returns:
       DataFrame: a pandas DataFrame containing statistics analysis for each
-          	     vchi2, variables and modalities
+          	     variable_cat, variables and modalities
   """
   #separation of the dataframe for each variable chi2 with 
   #a dictionary of variable chi2
   global dictio
   dictio = {}
-  for i in new_df[vchi2].unique():
-    dictio[i] = new_df[  new_df[vchi2] == i ]
-	#order the dictionary by the number of vchi2
+  for i in new_df[variable_cat].unique():
+    dictio[i] = new_df[  new_df[variable_cat] == i ]
+	#order the dictionary by the number of variable_cat
     dictio = OrderedDict(sorted(dictio.items(), key=lambda x: x[0]))
 	
   #column : modalities
@@ -180,13 +180,13 @@ def quali_analysis(vchi2):
     unique_elements = new_df[col].unique()
     nb_mod_by_var.append(len(unique_elements))  
     index.extend(unique_elements)  
-  index_chi2 = np.sort(new_df[vchi2].unique())  
+  index_chi2 = np.sort(new_df[variable_cat].unique())  
   index = [elem for elem in index if elem not in index_chi2]  
   modality = index * len(index_chi2) + list(index_chi2)
 
-  #column : vchi2	
+  #column : variable_cat	
   global chi2_var
-  el = np.sort(new_df[vchi2].unique())
+  el = np.sort(new_df[variable_cat].unique())
   variable = [str(element) for element in el for _ in range(len(index))]
   chi2_var = variable + list(index_chi2)
 
@@ -194,15 +194,15 @@ def quali_analysis(vchi2):
   global variables
   global variables_2
   var = [([i]*j) for i,j in zip(column,nb_mod_by_var)]
-  nb_vchi2 = [vchi2] * len(new_df[vchi2].unique())
+  nb_variable_cat = [variable_cat] * len(new_df[variable_cat].unique())
   variables = []
   for i in var:
     variables.extend(i)
-  variables = variables * len(new_df[vchi2].unique()) + nb_vchi2
+  variables = variables * len(new_df[variable_cat].unique()) + nb_variable_cat
   variables_2 = []
   for i in var:
     variables_2.extend(i)
-  variables_2.extend(nb_vchi2)
+  variables_2.extend(nb_variable_cat)
 
   global NA
   NA = []
@@ -210,7 +210,7 @@ def quali_analysis(vchi2):
     NA.append('Not present')
 	
   result = pd.DataFrame({
-		vchi2 : chi2_var,
+		variable_cat : chi2_var,
 		'variables' : variables ,
 		'modalities':modality, 
 		'cla/mod' : NA, 
@@ -222,24 +222,24 @@ def quali_analysis(vchi2):
   return result
 
 #column : cla/mod
-def clamod(result, vchi2):
+def clamod(result, variable_cat):
   """
     Function used to make the cla/mod column for the result table
 
     Actions performed:
 
-      * create the cla/mod statistics for each vchi2, variables and modalities
+      * create the cla/mod statistics for each variable_cat, variables and modalities
 	
     Args:
       result : the pandas realised in the sdquali's function
-      vchi2 : the variable to test the chi2
+      variable_cat : the variable to test the chi2
         
     Returns:
       DataFrame: a pandas DataFrame containing cla/mod statistics analysis
-          			 for each vchi2, variables and modalities
+          			 for each variable_cat, variables and modalities
   """
   #add the cla/mod column from clamod to cla/mod column from result
-  clamod = pd.DataFrame(columns = [vchi2,'variables','modalities','cla/mod'])
+  clamod = pd.DataFrame(columns = [variable_cat,'variables','modalities','cla/mod'])
   i_clamod = []
   l_clamod = []
   variable = []
@@ -261,7 +261,7 @@ def clamod(result, vchi2):
       for i in i_clamod :
         modalities.extend(i)
   for g,h,i,j in zip(var_chi2,variable,modalities,l_clamod) :
-    clamod = clamod.append({vchi2 : g, 
+    clamod = clamod.append({variable_cat : g, 
 								'variables' : h,
 								'modalities' : i,
 								'cla/mod' : j },
@@ -269,13 +269,13 @@ def clamod(result, vchi2):
     clamod = clamod.fillna(0)	
   
   clamod_dict = {
-    (str(row[vchi2]), \
+    (str(row[variable_cat]), \
      str(row['variables']), \
      str(row['modalities'])): round(row['cla/mod'], 7)
     for index, row in clamod.iterrows()
   }
   for i, row in result.iterrows():
-    key = (str(row[vchi2]), \
+    key = (str(row[variable_cat]), \
            str(row['variables']), \
            str(row['modalities']))
     if key in clamod_dict:
@@ -284,23 +284,23 @@ def clamod(result, vchi2):
 
 	
 #column : mod/cla
-def modcla(result,vchi2):
+def modcla(result,variable_cat):
   """
     Function used to make the mod/cla column for the result table
 
     Actions performed:
 
-    * create the mod/cla statistics for each vchi2, variables and modalities
+    * create the mod/cla statistics for each variable_cat, variables and modalities
 	
     Args:
       result : the pandas realised in the sdquali's function
-      vchi2 : the variable to test the chi2
+      variable_cat : the variable to test the chi2
         
     Returns:
       DataFrame: a pandas DataFrame containing mod/cla statistics analysis 
-          			 for each vchi2, variables and modalities
+          			 for each variable_cat, variables and modalities
   """
-  modcla = pd.DataFrame(columns = [vchi2,'variables','modalities','mod/cla'])
+  modcla = pd.DataFrame(columns = [variable_cat,'variables','modalities','mod/cla'])
   i_modcla = []
   l_modcla = []
   variable = []
@@ -323,19 +323,19 @@ def modcla(result,vchi2):
       for i in i_modcla :
         modalities.extend(i)
   for g,h,i,j in zip(var_chi2,variable,modalities,l_modcla) :
-    modcla = modcla.append({vchi2 : g, 
+    modcla = modcla.append({variable_cat : g, 
 								'variables' : h,
 								'modalities' : i,
 								'mod/cla' : j },
 								ignore_index=True)
   modcla_dict = {
-    (str(row[vchi2]), \
+    (str(row[variable_cat]), \
      str(row['variables']), \
      str(row['modalities'])): round(row['mod/cla'], 7)
     for index, row in modcla.iterrows()
   }
   for i, row in result.iterrows():
-    key = (str(row[vchi2]), \
+    key = (str(row[variable_cat]), \
            str(row['variables']), \
            str(row['modalities']))
     if key in modcla_dict:
@@ -350,14 +350,14 @@ def globa(result):
 
     Actions performed:
 
-    * create the global statistics for each vchi2, variables and modalities
+    * create the global statistics for each variable_cat, variables and modalities
 	
     Args:
       result : the pandas realised in the sdquali's function
         
     Returns:
       DataFrame: a pandas DataFrame containing global statistics 
-          			 analysis for each vchi2, variables and modalities
+          			 analysis for each variable_cat, variables and modalities
   """
 
   glo = pd.DataFrame(columns = ['variables','modalities','global'])
@@ -395,7 +395,7 @@ def globa(result):
   return result
 
 #column : p_value
-def pvalue(result,vchi2):
+def pvalue(result,variable_cat):
   """
     Function used to make the p-value column for the result table
 
@@ -406,10 +406,10 @@ def pvalue(result,vchi2):
 	
     Args:
       result : the pandas realised in the sdquali's function
-      vchi2 : the variable to test the chi2
+      variable_cat : the variable to test the chi2
         
     Returns:
-      DataFrame: a pandas DataFrame containing the p-value for each vchi2, 
+      DataFrame: a pandas DataFrame containing the p-value for each variable_cat, 
           		     variables and modalities
   """
   global list_pval
@@ -417,7 +417,7 @@ def pvalue(result,vchi2):
 
   global table
   table = pd.DataFrame({
-    vchi2 : chi2_var,
+    variable_cat : chi2_var,
     'variables' : variables,
     'modalities': modality, 
     'nj' : NA, 
@@ -437,10 +437,10 @@ def pvalue(result,vchi2):
   table_nj = pd.concat(nj_table, ignore_index=True)
   table_nj = table_nj.fillna(0)
 
-  table_nk = pd.DataFrame(columns=[vchi2,'nk'])
+  table_nk = pd.DataFrame(columns=[variable_cat,'nk'])
   for v, df in dictio.items():
     nk = df.shape[0]
-    table_nk = table_nk.append({vchi2: v,'nk':nk}, ignore_index=True)
+    table_nk = table_nk.append({variable_cat: v,'nk':nk}, ignore_index=True)
 
 
   nkj_data = []
@@ -449,20 +449,20 @@ def pvalue(result,vchi2):
       nkj = df[c].value_counts().reset_index()
       nkj.columns = ['modalities','nkj']
       nkj['variables'] = c
-      nkj[vchi2] = v
+      nkj[variable_cat] = v
       nkj_data.append(nkj)
 
   table_nkj = pd.concat(nkj_data, ignore_index=True)
   table_nkj = table_nkj.fillna(0)
   table.merge(table_nj[['variables', 'modalities', 'nj']], \
                       on=['variables', 'modalities'], how='left')
-  table.merge(table_nkj[[vchi2, 'variables', 'modalities', 'nkj']], \
-                      on=[vchi2, 'variables', 'modalities'], how='left')
-  table.merge(table_nk[[vchi2, 'nk']],\
-                      on=[vchi2], how='left')
+  table.merge(table_nkj[[variable_cat, 'variables', 'modalities', 'nkj']], \
+                      on=[variable_cat, 'variables', 'modalities'], how='left')
+  table.merge(table_nk[[variable_cat, 'nk']],\
+                      on=[variable_cat], how='left')
 
   table_nkj_dict = {
-    (str(row[vchi2]), str(row['variables']), str(row['modalities'])): row['nkj']
+    (str(row[variable_cat]), str(row['variables']), str(row['modalities'])): row['nkj']
     for _, row in table_nkj.iterrows()
   }
   table_nj_dict = {
@@ -470,17 +470,17 @@ def pvalue(result,vchi2):
     for _, row in table_nj.iterrows()
   }
   table_nk_dict = {
-    (str(row[vchi2])): row['nk']
+    (str(row[variable_cat])): row['nk']
     for _, row in table_nk.iterrows()
   }
   for i, row in table.iterrows():
-    key_nkj = (str(row[vchi2]), str(row['variables']), str(row['modalities']))
+    key_nkj = (str(row[variable_cat]), str(row['variables']), str(row['modalities']))
     if key_nkj in table_nkj_dict:
         table.at[i, 'nkj'] = table_nkj_dict[key_nkj]
     key_nj = (str(row['variables']), str(row['modalities']))
     if key_nj in table_nj_dict:
         table.at[i, 'nj'] = table_nj_dict[key_nj]
-    key_nk = str(row[vchi2])
+    key_nk = str(row[variable_cat])
     if key_nk in table_nk_dict:
         table.at[i, 'nk'] = table_nk_dict[key_nk]
     if table.at[i, 'nkj'] == 'Not present':
@@ -488,7 +488,7 @@ def pvalue(result,vchi2):
   
 
   table_dict = {
-    (str(row[vchi2]), str(row['variables']), str(row['modalities'])): {
+    (str(row[variable_cat]), str(row['variables']), str(row['modalities'])): {
         'nj': row['nj'],
         'nk': row['nk'],
         'nkj': row['nkj']
@@ -496,7 +496,7 @@ def pvalue(result,vchi2):
     for _, row in table.iterrows()
   }
   for i, row in result.iterrows():
-    key=(str(row[vchi2]),str(row['variables']),str(row['modalities']))
+    key=(str(row[variable_cat]),str(row['variables']),str(row['modalities']))
     if key in table_dict:
       nj=table_dict[key]['nj']
       nk=table_dict[key]['nk']
@@ -535,12 +535,12 @@ def vtest(result, v_p_value,cluster) :
 
     Actions performed:
 
-    * calcule the v-test on each vchi2, variables and modalities
+    * calcule the v-test on each variable_cat, variables and modalities
 	
     Args:
           
     Returns:
-      DataFrame: a pandas DataFrame containing v-test for each vchi2, 
+      DataFrame: a pandas DataFrame containing v-test for each variable_cat, 
           			 variables and modalities
   """
 
@@ -683,11 +683,13 @@ def quanti_normality(df,quanti_var, shapiro_pvalue):
 	
     Args:
       df: a pandas DataFrame containing only the quantitatives variables
-      quanti_var : name of the quantitative variable
-      threshold_normality : threshold choose by the user
+      quanti_var: name of the quantitative variable
+      threshold_normality: threshold choose by the user
         
     Returns:
       DataFrame: a pandas DataFrame containing the normality results
+      List: a list containing the normal variables
+      List: a list containing the non normal variables
   """
   list_stat=[]
   list_pvalue = []
@@ -707,6 +709,21 @@ def quanti_normality(df,quanti_var, shapiro_pvalue):
   return output_shapiro, normal_variables, non_normal_variables
 
 def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue):
+  """
+    Actions performed:
+    * Make the homoscedasticity test on each quantitative variable
+	
+    Args:
+      df: a pandas DataFrame containing only the quantitatives variables
+      quanti_var: name of the quantitative variable
+      variable_cat: the categorial variable
+      homoscedasticity_normality: threshold choose by the user
+        
+    Returns:
+      DataFrame: a pandas DataFrame containing the homoscedasticity results
+      List: a list containing the homoscedastic variables
+      List: a list containing the non homoscedastic variables
+  """
   list_stat = []
   list_pvalue = []
   homoscedasticity_variables = []
@@ -735,9 +752,11 @@ def anova(df, var, variable_cat, threshold_anova):
       df: a pandas DataFrame containing only the quantitatives variables
       var : the quantitative variable
       variable_cat : the variable to test
+      threshold_anova: threshold choose by the user
         
     Returns:
       DataFrame: a pandas DataFrame containing the anova results
+      List: a list containing the significative variables to the anova
   """
   #separation of the dataframe for each variable_cat with 
   #a dictionary of variable_cat
@@ -788,7 +807,24 @@ def anova(df, var, variable_cat, threshold_anova):
               'interpretation' : info_interpretation})
   return anova, signi_anova_var
 
-def kruskal_wallis(df, var_non_homos, var_non_normal, variable_cat, threshold_kw):
+def kruskal_wallis(df,var_non_homos,var_non_normal,variable_cat,threshold_kw):
+  """
+    Actions performed:
+    * Make the kruskal wallis on each quantitative variable non homoscedatic
+     and/or non normal with variable_cat
+	
+    Args:
+      df: a pandas DataFrame containing only the quantitatives variables
+      var_non_homos: the quantitative variable non homoscedastic
+      var_non_normal: the quantitative variable non normal
+      variable_cat: the variable to test
+      threshold_kw: threshold choose by the user
+        
+    Returns:
+      DataFrame: a pandas DataFrame containing the kruskal wallis results
+      List: a list containing the significative variables to the kw and not
+            contained in the var_non_homos list
+  """
   quanti_var= []
   for i in var_non_homos:
     if i not in quanti_var :
@@ -801,7 +837,7 @@ def kruskal_wallis(df, var_non_homos, var_non_normal, variable_cat, threshold_kw
   list_interpretation = []
   signi_kw_var = []
   for var in quanti_var :
-    df_cat = [df[df[variable_cat] == cat][var] for cat in df[variable_cat].unique()]
+    df_cat=[df[df[variable_cat]==cat][var] for cat in df[variable_cat].unique()]
     stat, p_value = kruskal(*df_cat)
     list_stat.append(stat)
     if p_value < 0.000001 :
@@ -826,11 +862,11 @@ def quanti_analysis(df, var, signi_variable, variable_cat, thres_gaussian):
     * Make the v-test and final statistics
 	
     Args:
-      anova : the dataframe from the anova analysis
-      df: a pandas DataFrame containing only quantitative variable 
+      df: a pandas DataFrame containing only quantitative variable
       var : the quantitative variables
+      signi_variable: a list containing the significative variables to the anova
+                      and kruskal wallis and homoscedastic 
       variable_cat : the variable to test
-      thres_anova : the anova threshold to continue the statistics
       thres_gaussian : the gaussian threshold for the distribution
         
     Returns:
@@ -851,7 +887,7 @@ def quanti_analysis(df, var, signi_variable, variable_cat, thres_gaussian):
     I = len(df) #number of individuals
     Im = len(df_na)#number of individuals that don't contain missing values
     x = round(df[varia].mean(),6)#mean of the modalities
-    #check if all the data in the vchi2 are missing values
+    #check if all the data in the variable_cat are missing values
     ms = []
     for element in dictionary :
       variable_cluster.append(element)
