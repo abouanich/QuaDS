@@ -691,25 +691,26 @@ def quanti_normality(df,quanti_var, shapiro_pvalue):
   """
   list_stat=[]
   list_pvalue = []
-  var_for_anova=[]
-  var_for_kruskal = []
+  normal_variables=[]
+  non_normal_variables = []
   for variable in quanti_var :
     stat, p_value = shapiro(df[variable])
     list_stat.append(stat)
     list_pvalue.append(p_value)
     if p_value < shapiro_pvalue :
-      var_for_kruskal.append(variable)
+      non_normal_variables.append(variable)
     else:
-      var_for_anova.append(variable)
+      normal_variables.append(variable)
   output_shapiro = pd.DataFrame({"variable":quanti_var,\
                                  "statistic":list_stat,\
                                  "p-value":list_pvalue})
-  return output_shapiro, var_for_anova, var_for_kruskal
+  return output_shapiro, normal_variables, non_normal_variables
 
 def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue):
   list_stat = []
   list_pvalue = []
   homoscedasticity_variables = []
+  non_homoscedasticity_variables = []
   for var in quanti_var :
     df_cat = [df[df[variable_cat] == cat][var] for cat in df[variable_cat].unique()]
     stat, p_value = bartlett(*df_cat)
@@ -717,10 +718,12 @@ def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue)
     list_pvalue.append(p_value)
     if p_value > homoscedasticity_pvalue : 
       homoscedasticity_variables.append(var)
+    else :
+      non_homoscedasticity_variables.append(var)
   output_bartlett = pd.DataFrame({"variable":quanti_var,\
                                   "statistic":list_stat,\
                                   "p-value":list_pvalue})
-  return output_bartlett, homoscedasticity_variables
+  return output_bartlett, homoscedasticity_variables, non_homoscedasticity_variables
 
 
 def anova(df, var, variable_cat, threshold_anova):
@@ -785,7 +788,14 @@ def anova(df, var, variable_cat, threshold_anova):
               'interpretation' : info_interpretation})
   return anova, signi_anova_var
 
-def kruskal_wallis(df, quanti_var, variable_cat, threshold_kw):
+def kruskal_wallis(df, var_non_homos, var_non_normal, variable_cat, threshold_kw):
+  quanti_var= []
+  for i in var_non_homos:
+    if i not in quanti_var :
+      quanti_var.append(i)
+  for i in var_non_normal :
+    if i not in quanti_var:
+      quanti_var.append(i)
   list_stat = []
   list_pvalue = []
   list_interpretation = []
@@ -798,7 +808,7 @@ def kruskal_wallis(df, quanti_var, variable_cat, threshold_kw):
       list_pvalue.append("<10-6")
     else: 
       list_pvalue.append(round(p_value,6))
-    if p_value < threshold_kw :
+    if p_value < threshold_kw and var not in var_non_homos:
       signi_kw_var.append(var)
       list_interpretation.append("Significant")
     else : 

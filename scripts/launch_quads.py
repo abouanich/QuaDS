@@ -221,26 +221,31 @@ else:
 ###############################################################################
 #make the quantitative analysis for each quantitative variable
 ###############################################################################
-homoscedasticity_calcul, new_quanti_var = quanti_homoscedasticity(df_quantitative, \
+homosc_calcul, homosc_var, non_homos_var = quanti_homoscedasticity(df_quantitative,\
 			  config["variable_management"]["quantitative_variables"], \
 			  config["variable_management"]["factor_variable"],\
         config["thresholds_management"]["bartlett_threshold"])
-normality_calcul, var_anova, var_kruskalwallis =quanti_normality(df_quantitative, \
-			  new_quanti_var,\
+normality_calcul, normal_var, non_normal_var =quanti_normality(df_quantitative,\
+			    config["variable_management"]["quantitative_variables"],\
           config["thresholds_management"]["shapiro_threshold"]) 
+var_anova = []
+for i in normal_var :
+  if i in homosc_var :
+    var_anova.append(i)
 sd_anova, anova_var = anova(df_quantitative, \
 			  var_anova, \
 			  config["variable_management"]["factor_variable"],\
 				config["thresholds_management"]["anova_threshold"])
-sd_kruskal_wallis, kw_var = anova(df_quantitative, \
-			  var_kruskalwallis, \
+sd_kruskal_wallis, kw_var = kruskal_wallis(df_quantitative, \
+			  non_homos_var, \
+        non_normal_var, \
 			  config["variable_management"]["factor_variable"],\
 				config["thresholds_management"]["kruskal_wallis_threshold"])
 
 var_quanti_desc = anova_var+kw_var
 
 quanti_a = quanti_analysis(df_quantitative, \
-					new_quanti_var,\
+			    config["variable_management"]["quantitative_variables"],\
           var_quanti_desc,\
 					config["variable_management"]["factor_variable"], \
           config["thresholds_management"]["gaussian_threshold"])
@@ -416,8 +421,8 @@ if tab_type == "xlsx" :
     write_excel(file_name_weight, weight,idx=True)
   if len(normality_calcul) != 0 :
     write_excel(file_name_normality, normality_calcul,idx=True)
-  if len(homoscedasticity_calcul) != 0 :
-    write_excel(file_name_homoscedasticity, homoscedasticity_calcul,idx=True)
+  if len(homosc_calcul) != 0 :
+    write_excel(file_name_homoscedasticity, homosc_calcul,idx=True)
   if len(sd_anova) != 0 :
     write_excel(file_name_anova, sd_anova,idx=True)
   if len(sd_kruskal_wallis) != 0 :
@@ -435,8 +440,8 @@ if tab_type == "csv" :
     weight.to_csv(file_name_weight)
   if len(normality_calcul) != 0:
     normality_calcul.to_csv(file_name_normality)
-  if len(homoscedasticity_calcul) != 0:
-    homoscedasticity_calcul.to_csv(file_name_homoscedasticity)
+  if len(homosc_calcul) != 0:
+    homosc_calcul.to_csv(file_name_homoscedasticity)
   if len(sd_anova) != 0:
     sd_anova.to_csv(file_name_anova)
   if len(sd_kruskal_wallis) != 0:
