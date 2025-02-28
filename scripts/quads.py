@@ -111,6 +111,10 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
           if table.shape == (2, 2):
             odds_ratio, p_value = fisher_exact(table)
             results.append((i, j, odds_ratio, p_value))
+          else:
+            chi2, p_value, dof, expected = chi2_contingency(cont)
+            results.append((i,j,"None",p_value))
+
       count_pvalue = 0
       for result in results:
         fisher_variables.append(col)
@@ -125,7 +129,10 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
           fisher_significative.append('Significant')
         else : 
           fisher_significative.append("Not significant")
-        fisher.append(round(odds_ratio,2))
+        if odds_ratio != "None":
+          fisher.append(round(odds_ratio,2))
+        else:
+          fisher.append("None")
       if count_pvalue == len(results):
         column.append(col)
       count_pvalue = 0
