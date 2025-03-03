@@ -705,7 +705,6 @@ def quanti_normality(df,quanti_var,variable_cat,shapiro_pvalue):
   normal_variables=[]
   non_normal_variables = []
   factor_modalities = list(set(df[variable_cat].to_list()))
-  print(factor_modalities)
   for variable in quanti_var :
     count=0
     for factor_modality in factor_modalities :
