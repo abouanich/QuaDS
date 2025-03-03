@@ -27,7 +27,7 @@ You have to say in the config_file.yml the different parameters :
   - presence of an index in your datafile
   - list of qualitative variables names
   - list of quantitative variables names
-  - cluster variable
+  - factor variable
   - different thresholds of the tests
   - colors of the visual output
 
@@ -36,19 +36,22 @@ descriptives statistics :
     python3 scripts/launch_quads.py
 
 ## Outputs 
-For your qualitative analysis, you will obtain 2 outputs:
-  - Chi2.csv : informs which variable is implicated in the groups
-  - qualitative_hypergeometric.csv : informs if the variable is implicated in the groups, 
-    this file informs in each groups if the modality is:
+For your qualitative analysis, you will obtain maximum 4 outputs:
+  - Chi2.csv: informs which variable is implicated in the factor's modalitities
+  - fisher_exact.csv: informs which variable (with low frequencies) is implacated in the factor's modalities  
+  - qualitative_hypergeometric.csv: informs if the variable is implicated in the factor's     modalities, this file informs in each factor's modality if the variable modality is:
     - over-represented
     - under-represented
     - not significant
     - not present
-  - weight.csv : informs the qualitative variables contribution to the groups
+  - weight.csv: informs the qualitative variables contribution to the factor's modalities
   
-For your quantitative analysis, you will obtain 2 outputs: 
+For your quantitative analysis, you will obtain maximum 5 outputs: 
+  - normality.csv: informs if the quantitative variables have a normal distribution in the different factor's modalitities 
+  - homoscedasticity.csv: informs if the quantitative variables' standard deviation are the same in the different factor's modalitities 
   - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
-  - quantitative_gaussian.csv informs if the average of the variable is:
+  - kruskal_wallis.csv: informs if a variable have a significant higer or lower average than the average of all the groups for variables that are not normal distributed.
+  - quantitative_gaussian.csv informs for significative variable (to ANOVA or kruskal wallis) if the average of the variable is:
     - above from the average for all individuals
     - below from the average for all individuals
     - Not significantly different from the average for all individuals
