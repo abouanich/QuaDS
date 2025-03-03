@@ -63,10 +63,10 @@ file_management:
 variable_management:
 
   #: String: [names of the variables] for the qualitative variables
-  qualitative_variables: ["type","strand"]
+  qualitative_variables: ["type dupli","type TE"]
   
   #: String: [names of the variables] for the quantitative variables
-  quantitative_variables: ["nb_dupli","length"]
+  quantitative_variables: ["nb TE","Gene expression"]
   
   #: String: name of the cluster variable
   factor_variable: chr

@@ -1,3 +1,2 @@
 ,variable,eta-squared,p-value,interpretation
-0,nb_dupli,0.007248,<10-6,Significant
-1,length,0.000951,0.020941,Not significant
+0,Gene expression,0.993486,<10-6,Significant

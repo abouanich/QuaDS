@@ -1,5 +1,5 @@
 ,chr,variable,Mean in category,Overall mean,Sd in category,Overall sd,p-value,v-test,interpretation
-0,Chr01,nb_dupli,0.734388,0.637903,1.090902,0.980791,<10-6,6.375648,above average
-1,Chr02,nb_dupli,0.565638,0.637903,0.882553,0.980791,<10-6,-6.375563,below average
-2,Chr01,length,2608.013322,2703.673204,2581.641969,2685.248035,Not significant,Not significant,Not significant
-3,Chr02,length,2775.321172,2703.673204,2758.12945,2685.248035,Not significant,Not significant,Not significant
+0,Chr01,nb TE,4.540799,5.682653,1.54215,1.814893,<10-6,-40.77562,below average
+1,Chr02,nb TE,6.537886,5.682653,1.507196,1.814893,<10-6,40.775604,above average
+2,Chr01,Gene expression,499.42756,328.124978,11.904909,148.737319,<10-6,74.642295,above average
+3,Chr02,Gene expression,199.82164,328.124978,12.077754,148.737319,<10-6,-74.642296,below average

@@ -1,3 +1,3 @@
 ,variables,sum of all mod of all groups,number mod over,ratio over mod,contribution over mod,number mod under,ratio under mod,contribution under mod,number mod over&under,ratio over&under mod,contribution over&under mod
-0,strand,4,2,50.0,1,2,50.0,1,4,100.0,1
-1,type,8,2,25.0,2,2,25.0,2,4,50.0,2
+0,type TE,6,3,50.0,2,3,50.0,2,6,100.0,2
+1,type dupli,6,3,50.0,2,3,50.0,2,6,100.0,2

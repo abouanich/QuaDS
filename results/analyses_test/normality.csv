@@ -1,0 +1,5 @@
+,variable,Factor modality,statistic,p-value
+0,nb TE,Chr01,0.941964,<10-6
+1,nb TE,Chr02,0.927846,<10-6
+2,Gene expression,Chr01,0.998755,0.077142
+3,Gene expression,Chr02,0.999009,0.063541
