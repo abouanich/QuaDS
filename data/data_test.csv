@@ -15,7 +15,7 @@
 13,Chr02,MD02G1001400,multiple homolog,Multiple TE,6,202
 14,Chr02,MD02G1001500,multiple homolog,Multiple TE,9,208
 15,Chr02,MD02G1001600,unique homolog,Multiple TE,7,191
-16,Chr02,MD02G1001700,multiple homolog,Multiple TE,7,201
+16,Chr02,MD02G1001700,multiple homolog,,7,201
 17,Chr02,MD02G1001800,multiple homolog,Multiple TE,8,210
 18,Chr02,MD02G1001900,multiple homolog,Multiple TE,8,195
 19,Chr02,MD02G1002000,multiple homolog,Multiple TE,7,185
@@ -56,7 +56,7 @@
 54,Chr02,MD02G1005500,multiple homolog,Multiple TE,5,212
 55,Chr02,MD02G1005600,multiple homolog,Multiple TE,7,194
 56,Chr02,MD02G1005700,multiple homolog,Multiple TE,6,188
-57,Chr02,MD02G1005800,unique homolog,Multiple TE,4,214
+57,Chr02,MD02G1005800,unique homolog,,4,214
 58,Chr02,MD02G1005900,multiple homolog,Multiple TE,7,205
 59,Chr02,MD02G1006000,multiple homolog,Multiple TE,9,193
 60,Chr02,MD02G1006100,multiple homolog,Multiple TE,9,206
@@ -131,7 +131,7 @@
 129,Chr02,MD02G1013000,unique homolog,Multiple TE,6,185
 130,Chr02,MD02G1013100,multiple homolog,Multiple TE,7,173
 131,Chr02,MD02G1013200,multiple homolog,Multiple TE,5,190
-132,Chr02,MD02G1013300,multiple homolog,Multiple TE,6,201
+132,Chr02,MD02G1013300,multiple homolog,,6,201
 133,Chr02,MD02G1013400,multiple homolog,Multiple TE,5,210
 134,Chr02,MD02G1013500,multiple homolog,Multiple TE,4,194
 135,Chr02,MD02G1013600,unique homolog,Multiple TE,5,185
@@ -206,7 +206,7 @@
 204,Chr02,MD02G1020500,multiple homolog,Multiple TE,9,195
 205,Chr02,MD02G1020600,multiple homolog,Multiple TE,8,193
 206,Chr02,MD02G1020700,multiple homolog,Multiple TE,6,226
-207,Chr02,MD02G1020800,unique homolog,Multiple TE,6,197
+207,Chr02,MD02G1020800,unique homolog,,6,197
 208,Chr02,MD02G1020900,multiple homolog,Multiple TE,5,193
 209,Chr02,MD02G1021000,multiple homolog,Multiple TE,8,208
 210,Chr02,MD02G1021100,multiple homolog,Multiple TE,4,211
@@ -263,7 +263,7 @@
 261,Chr02,MD02G1026200,multiple homolog,Multiple TE,6,189
 262,Chr02,MD02G1026300,multiple homolog,Multiple TE,6,199
 263,Chr02,MD02G1026400,multiple homolog,Multiple TE,7,210
-264,Chr02,MD02G1026500,multiple homolog,Multiple TE,7,190
+264,Chr02,MD02G1026500,multiple homolog,,7,190
 265,Chr02,MD02G1026600,multiple homolog,Multiple TE,6,219
 266,Chr02,MD02G1026700,unique homolog,Multiple TE,7,183
 267,Chr02,MD02G1026800,unique homolog,Multiple TE,8,202
@@ -320,7 +320,7 @@
 318,Chr02,MD02G1031900,multiple homolog,Multiple TE,6,183
 319,Chr02,MD02G1032000,multiple homolog,Multiple TE,9,197
 320,Chr02,MD02G1032100,multiple homolog,Multiple TE,6,200
-321,Chr02,MD02G1032200,unique homolog,Multiple TE,7,186
+321,Chr02,MD02G1032200,unique homolog,,7,186
 322,Chr02,MD02G1032300,multiple homolog,Multiple TE,7,180
 323,Chr02,MD02G1032400,multiple homolog,Multiple TE,5,192
 324,Chr02,MD02G1032500,multiple homolog,Multiple TE,5,217
@@ -392,7 +392,7 @@
 390,Chr02,MD02G1039100,multiple homolog,Multiple TE,7,198
 391,Chr02,MD02G1039200,multiple homolog,Multiple TE,8,201
 392,Chr02,MD02G1039300,multiple homolog,Multiple TE,6,202
-393,Chr02,MD02G1039400,unique homolog,Multiple TE,7,206
+393,Chr02,MD02G1039400,unique homolog,,7,206
 394,Chr02,MD02G1039500,multiple homolog,Multiple TE,6,208
 395,Chr02,MD02G1039600,multiple homolog,Multiple TE,8,219
 396,Chr02,MD02G1039700,multiple homolog,Multiple TE,5,207
@@ -473,7 +473,7 @@
 471,Chr02,MD02G1047200,unique homolog,Multiple TE,6,177
 472,Chr02,MD02G1047300,multiple homolog,Multiple TE,6,200
 473,Chr02,MD02G1047400,multiple homolog,Multiple TE,6,191
-474,Chr02,MD02G1047500,multiple homolog,Multiple TE,4,172
+474,Chr02,MD02G1047500,multiple homolog,,4,172
 475,Chr02,MD02G1047600,multiple homolog,Multiple TE,7,196
 476,Chr02,MD02G1047700,multiple homolog,Multiple TE,6,200
 477,Chr02,MD02G1047800,multiple homolog,Multiple TE,4,210
@@ -551,7 +551,7 @@
 549,Chr02,MD02G1055000,multiple homolog,Multiple TE,9,219
 550,Chr02,MD02G1055100,multiple homolog,Multiple TE,8,207
 551,Chr02,MD02G1055200,multiple homolog,Multiple TE,5,183
-552,Chr02,MD02G1055300,multiple homolog,Multiple TE,5,186
+552,Chr02,MD02G1055300,multiple homolog,,5,186
 553,Chr02,MD02G1055400,multiple homolog,Multiple TE,7,194
 554,Chr02,MD02G1055500,unique homolog,Multiple TE,5,195
 555,Chr02,MD02G1055600,unique homolog,Multiple TE,6,155
@@ -632,7 +632,7 @@
 630,Chr02,MD02G1063100,multiple homolog,Multiple TE,9,211
 631,Chr02,MD02G1063200,multiple homolog,Multiple TE,8,214
 632,Chr02,MD02G1063300,multiple homolog,Multiple TE,7,192
-633,Chr02,MD02G1063400,unique homolog,Multiple TE,8,189
+633,Chr02,MD02G1063400,unique homolog,,8,189
 634,Chr02,MD02G1063500,multiple homolog,Multiple TE,9,204
 635,Chr02,MD02G1063600,multiple homolog,Multiple TE,7,216
 636,Chr02,MD02G1063700,multiple homolog,Multiple TE,9,199
@@ -734,7 +734,7 @@
 732,Chr02,MD02G1073300,multiple homolog,Multiple TE,7,217
 733,Chr02,MD02G1073400,multiple homolog,Multiple TE,7,203
 734,Chr02,MD02G1073500,multiple homolog,Multiple TE,9,178
-735,Chr02,MD02G1073600,unique homolog,Multiple TE,8,199
+735,Chr02,MD02G1073600,unique homolog,,8,199
 736,Chr02,MD02G1073700,multiple homolog,Multiple TE,5,194
 737,Chr02,MD02G1073800,multiple homolog,Multiple TE,7,206
 738,Chr02,MD02G1073900,multiple homolog,Multiple TE,6,201
@@ -809,7 +809,7 @@
 807,Chr02,MD02G1080800,unique homolog,Multiple TE,5,226
 808,Chr02,MD02G1080900,multiple homolog,Multiple TE,8,201
 809,Chr02,MD02G1081000,multiple homolog,Multiple TE,7,183
-810,Chr02,MD02G1081100,multiple homolog,Multiple TE,7,206
+810,Chr02,MD02G1081100,multiple homolog,,7,206
 811,Chr02,MD02G1081200,multiple homolog,Multiple TE,7,193
 812,Chr02,MD02G1081300,multiple homolog,Multiple TE,5,199
 813,Chr02,MD02G1081400,multiple homolog,Multiple TE,5,184
@@ -838,7 +838,7 @@
 836,Chr02,MD02G1083700,multiple homolog,Multiple TE,5,223
 837,Chr02,MD02G1083800,multiple homolog,Multiple TE,7,202
 838,Chr02,MD02G1083900,multiple homolog,Multiple TE,5,213
-839,Chr02,MD02G1084000,multiple homolog,Multiple TE,5,188
+839,Chr02,MD02G1084000,multiple homolog,,5,188
 840,Chr02,MD02G1084100,multiple homolog,Multiple TE,4,199
 841,Chr02,MD02G1084200,multiple homolog,Multiple TE,6,191
 842,Chr02,MD02G1084300,unique homolog,Multiple TE,7,207
@@ -890,7 +890,7 @@
 888,Chr02,MD02G1088900,multiple homolog,Multiple TE,7,199
 889,Chr02,MD02G1089000,multiple homolog,Multiple TE,5,207
 890,Chr02,MD02G1089100,unique homolog,Multiple TE,9,190
-891,Chr02,MD02G1089200,unique homolog,Multiple TE,7,217
+891,Chr02,MD02G1089200,unique homolog,,7,217
 892,Chr02,MD02G1089300,multiple homolog,Multiple TE,9,204
 893,Chr02,MD02G1089400,multiple homolog,Multiple TE,5,186
 894,Chr02,MD02G1089500,multiple homolog,Multiple TE,9,198
@@ -986,7 +986,7 @@
 984,Chr02,MD02G1098500,multiple homolog,Multiple TE,5,202
 985,Chr02,MD02G1098600,multiple homolog,Multiple TE,6,184
 986,Chr02,MD02G1098700,unique homolog,Multiple TE,5,208
-987,Chr02,MD02G1098800,unique homolog,Multiple TE,5,198
+987,Chr02,MD02G1098800,unique homolog,,5,198
 988,Chr02,MD02G1098900,multiple homolog,Multiple TE,5,196
 989,Chr02,MD02G1099000,multiple homolog,Multiple TE,7,208
 990,Chr02,MD02G1099100,multiple homolog,Multiple TE,5,230
@@ -3215,7 +3215,7 @@
 3213,Chr01,MD01G1000700,unique homolog,Multiple TE,5,511
 3214,Chr01,MD01G1000800,multiple homolog,Multiple TE,4,509
 3215,Chr01,MD01G1000900,multiple homolog,Multiple TE,3,484
-3216,Chr01,MD01G1001000,singleton,Multiple TE,4,485
+3216,Chr01,MD01G1001000,singleton,,4,485
 3217,Chr01,MD01G1001100,unique homolog,Multiple TE,4,483
 3218,Chr01,MD01G1001200,singleton,Multiple TE,5,512
 3219,Chr01,MD01G1001300,unique homolog,Multiple TE,6,495
@@ -3234,7 +3234,7 @@
 3232,Chr01,MD01G1002600,multiple homolog,Multiple TE,6,503
 3233,Chr01,MD01G1002700,multiple homolog,Multiple TE,4,495
 3234,Chr01,MD01G1002800,unique homolog,Multiple TE,3,504
-3235,Chr01,MD01G1002900,multiple homolog,Multiple TE,2,503
+3235,Chr01,MD01G1002900,multiple homolog,,2,503
 3236,Chr01,MD01G1003000,unique homolog,Multiple TE,5,524
 3237,Chr01,MD01G1003100,unique homolog,Multiple TE,4,493
 3238,Chr01,MD01G1003200,multiple homolog,Multiple TE,3,494
@@ -3338,7 +3338,7 @@
 3336,Chr01,MD01G1013000,unique homolog,Multiple TE,2,512
 3337,Chr01,MD01G1013100,multiple homolog,Multiple TE,7,488
 3338,Chr01,MD01G1013200,multiple homolog,Multiple TE,3,459
-3339,Chr01,MD01G1013300,unique homolog,Multiple TE,5,491
+3339,Chr01,MD01G1013300,unique homolog,,5,491
 3340,Chr01,MD01G1013400,multiple homolog,Multiple TE,5,501
 3341,Chr01,MD01G1013500,multiple homolog,Multiple TE,4,473
 3342,Chr01,MD01G1013600,unique homolog,Multiple TE,5,500
@@ -3423,7 +3423,7 @@
 3421,Chr01,MD01G1021500,multiple homolog,Multiple TE,5,491
 3422,Chr01,MD01G1021600,unique homolog,Multiple TE,5,509
 3423,Chr01,MD01G1021700,multiple homolog,Multiple TE,4,487
-3424,Chr01,MD01G1021800,multiple homolog,Multiple TE,5,492
+3424,Chr01,MD01G1021800,multiple homolog,,5,492
 3425,Chr01,MD01G1021900,unique homolog,Multiple TE,3,481
 3426,Chr01,MD01G1022000,multiple homolog,Multiple TE,6,492
 3427,Chr01,MD01G1022100,unique homolog,Multiple TE,6,505
@@ -3489,7 +3489,7 @@
 3487,Chr01,MD01G1028100,unique homolog,Multiple TE,7,503
 3488,Chr01,MD01G1028200,unique homolog,Multiple TE,6,491
 3489,Chr01,MD01G1028300,multiple homolog,Multiple TE,5,521
-3490,Chr01,MD01G1028400,multiple homolog,Multiple TE,5,503
+3490,Chr01,MD01G1028400,multiple homolog,,5,503
 3491,Chr01,MD01G1028500,unique homolog,Multiple TE,4,487
 3492,Chr01,MD01G1028600,multiple homolog,Multiple TE,5,511
 3493,Chr01,MD01G1028700,multiple homolog,Multiple TE,2,520
@@ -3563,8 +3563,8 @@
 3561,Chr01,MD01G1035500,multiple homolog,No TE,0,485
 3562,Chr01,MD01G1035600,unique homolog,Multiple TE,4,493
 3563,Chr01,MD01G1035700,multiple homolog,Multiple TE,6,478
-3564,Chr01,MD01G1035800,multiple homolog,No TE,0,495
-3565,Chr01,MD01G1035900,unique homolog,Multiple TE,3,493
+3564,Chr01,MD01G1035800,multiple homolog,No TE,,495
+3565,Chr01,MD01G1035900,unique homolog,,3,493
 3566,Chr01,MD01G1036000,multiple homolog,Multiple TE,3,496
 3567,Chr01,MD01G1036100,multiple homolog,Multiple TE,4,499
 3568,Chr01,MD01G1036200,unique homolog,Multiple TE,3,481
@@ -3650,7 +3650,7 @@
 3648,Chr01,MD01G1044200,multiple homolog,Multiple TE,3,512
 3649,Chr01,MD01G1044300,unique homolog,Multiple TE,6,523
 3650,Chr01,MD01G1044400,multiple homolog,Multiple TE,3,491
-3651,Chr01,MD01G1044500,multiple homolog,Multiple TE,6,522
+3651,Chr01,MD01G1044500,multiple homolog,,6,522
 3652,Chr01,MD01G1044600,unique homolog,Multiple TE,6,518
 3653,Chr01,MD01G1044700,multiple homolog,Multiple TE,6,515
 3654,Chr01,MD01G1044800,unique homolog,Multiple TE,5,500
@@ -3775,7 +3775,7 @@
 3773,Chr01,MD01G1056700,unique homolog,Multiple TE,6,505
 3774,Chr01,MD01G1056800,unique homolog,Multiple TE,5,492
 3775,Chr01,MD01G1056900,multiple homolog,Multiple TE,3,521
-3776,Chr01,MD01G1057000,multiple homolog,No TE,0,470
+3776,Chr01,MD01G1057000,multiple homolog,No TE,,470
 3777,Chr01,MD01G1057100,unique homolog,Multiple TE,3,497
 3778,Chr01,MD01G1057200,multiple homolog,Multiple TE,5,477
 3779,Chr01,MD01G1057300,multiple homolog,Multiple TE,7,511
@@ -3869,7 +3869,7 @@
 3867,Chr01,MD01G1066100,multiple homolog,Multiple TE,5,501
 3868,Chr01,MD01G1066200,unique homolog,Multiple TE,6,507
 3869,Chr01,MD01G1066300,unique homolog,Multiple TE,2,498
-3870,Chr01,MD01G1066400,multiple homolog,Multiple TE,3,518
+3870,Chr01,MD01G1066400,multiple homolog,,3,518
 3871,Chr01,MD01G1066500,multiple homolog,Multiple TE,6,488
 3872,Chr01,MD01G1066600,unique homolog,Multiple TE,4,488
 3873,Chr01,MD01G1066700,multiple homolog,Multiple TE,5,489
@@ -4007,7 +4007,7 @@
 4005,Chr01,MD01G1079900,multiple homolog,Multiple TE,5,506
 4006,Chr01,MD01G1080000,unique homolog,Multiple TE,6,508
 4007,Chr01,MD01G1080100,multiple homolog,Multiple TE,2,493
-4008,Chr01,MD01G1080200,multiple homolog,Multiple TE,2,511
+4008,Chr01,MD01G1080200,multiple homolog,,2,511
 4009,Chr01,MD01G1080300,unique homolog,Multiple TE,4,498
 4010,Chr01,MD01G1080400,multiple homolog,Multiple TE,5,499
 4011,Chr01,MD01G1080500,unique homolog,Multiple TE,4,501
@@ -4130,7 +4130,7 @@
 4128,Chr01,MD01G1092200,unique homolog,Multiple TE,6,500
 4129,Chr01,MD01G1092300,multiple homolog,Multiple TE,4,511
 4130,Chr01,MD01G1092400,unique homolog,Multiple TE,7,505
-4131,Chr01,MD01G1092500,unique homolog,Multiple TE,2,500
+4131,Chr01,MD01G1092500,unique homolog,,2,500
 4132,Chr01,MD01G1092600,multiple homolog,Multiple TE,5,492
 4133,Chr01,MD01G1092700,multiple homolog,Multiple TE,3,514
 4134,Chr01,MD01G1092800,unique homolog,Multiple TE,6,486
@@ -4447,7 +4447,7 @@
 4445,Chr01,MD01G1123900,multiple homolog,Multiple TE,5,502
 4446,Chr01,MD01G1124000,multiple homolog,Multiple TE,6,500
 4447,Chr01,MD01G1124100,unique homolog,Multiple TE,4,504
-4448,Chr01,MD01G1124200,multiple homolog,No TE,0,490
+4448,Chr01,MD01G1124200,multiple homolog,No TE,,490
 4449,Chr01,MD01G1124300,multiple homolog,Multiple TE,3,506
 4450,Chr01,MD01G1124400,unique homolog,Multiple TE,6,499
 4451,Chr01,MD01G1124500,multiple homolog,Multiple TE,5,491

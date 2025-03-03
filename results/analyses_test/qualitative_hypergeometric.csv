@@ -2,12 +2,14 @@
 0,Chr01,type dupli,unique homolog,65.1976669,41.8817652,27.50936,<10-6,20.8447884,over-represented
 1,Chr01,type dupli,multiple homolog,34.2040414,57.785179,72.3480121,<10-6,-21.117166,under-represented
 2,Chr01,type dupli,singleton,100.0,0.3330558,0.1426279,0.0011236,3.2576032,over-represented
-3,Chr01,type TE,Multiple TE,42.4443647,98.459617,99.3403459,<10-6,-7.6500187,under-represented
-4,Chr01,type TE,No TE,100.0,0.5828476,0.2495989,6.8e-06,4.4990299,over-represented
-5,Chr01,type TE,One TE,100.0,0.9575354,0.4100553,<10-6,5.9219821,over-represented
-6,Chr02,type dupli,unique homolog,34.8023331,16.7446211,27.50936,<10-6,-20.8721322,under-represented
-7,Chr02,type dupli,multiple homolog,65.7959586,83.2553789,72.3480121,<10-6,21.0905244,over-represented
-8,Chr02,type dupli,singleton,0.0,0.0,0.1426279,0.0238804,-2.2590484,under-represented
-9,Chr02,type TE,Multiple TE,57.5556353,100.0,99.3403459,<10-6,7.6500187,over-represented
-10,Chr02,type TE,No TE,0.0,0.0,0.2495989,0.0007952,-3.354451,under-represented
-11,Chr02,type TE,One TE,0.0,0.0,0.4100553,5e-06,-4.5646543,under-represented
+3,Chr01,type TE,Multiple TE,42.4553813,98.0432973,98.8946336,<10-6,-5.3466735,under-represented
+4,Chr01,type TE,missing values,40.0,0.4163197,0.4457122,0.7864516,Not significant,Not significant
+5,Chr01,type TE,No TE,100.0,0.5828476,0.2495989,6.8e-06,4.4990299,over-represented
+6,Chr01,type TE,One TE,100.0,0.9575354,0.4100553,<10-6,5.9219821,over-represented
+7,Chr02,type dupli,unique homolog,34.8023331,16.7446211,27.50936,<10-6,-20.8721322,under-represented
+8,Chr02,type dupli,multiple homolog,65.7959586,83.2553789,72.3480121,<10-6,21.0905244,over-represented
+9,Chr02,type dupli,singleton,0.0,0.0,0.1426279,0.0238804,-2.2590484,under-represented
+10,Chr02,type TE,Multiple TE,57.5446187,99.5322732,98.8946336,<10-6,5.2631827,over-represented
+11,Chr02,type TE,missing values,60.0,0.4677268,0.4457122,0.78645,Not significant,Not significant
+12,Chr02,type TE,No TE,0.0,0.0,0.2495989,0.0007952,-3.354451,under-represented
+13,Chr02,type TE,One TE,0.0,0.0,0.4100553,5e-06,-4.5646543,under-represented
