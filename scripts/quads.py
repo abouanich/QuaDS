@@ -22,6 +22,7 @@ from scipy.stats import chi2_contingency, fisher_exact, norm
 from scipy.stats import shapiro, bartlett, kruskal
 import math
 from math import *
+from itertools import combinations
 import statsmodels.formula.api as smf
 from statsmodels.formula.api import ols
 import statsmodels.api as sm
@@ -72,16 +73,19 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
   chi = []
   chi_column = []
   fisher_variables = []
+  duo_variable = []
   fisher_column = []
   fisher_pvalue = []
   fisher=[]
   chi_significative = []
+  duo_interpretation = []
   fisher_significative = []
   for col in df[columns]:
     cont = pd.crosstab(df[col],df[variable_cat])
     cat_modalities = cont.columns.tolist()
 	# Chi-square test of independence
     chi2, p_chi2, dof, expected = chi2_contingency(cont)
+    print(expected)
     if np.all(expected >= 5) :
       chi_column.append(col)
       if p_chi2 < 0.000001 :
@@ -99,42 +103,40 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
       else :
         chi_significative.append('Not significant')
     else :
+      var_modalities = list(cont.index)
       cont = np.array(cont)
       results = []
-      for i in range(cont.shape[1]):
-        for j in range(i+1, cont.shape[1]):
-          col1 = cont[:, i]
-          col2 = cont[:, j]
-          table = np.array([[np.sum((col1 == val1) \
-          & (col2 == val2)) for val2 in np.unique(col2)]\
-           for val1 in np.unique(col1)])
-          if table.shape == (2, 2):
-            odds_ratio, p_value = fisher_exact(table)
-            results.append((i, j, odds_ratio, p_value))
-          else:
-            chi2, p_value, dof, expected = chi2_contingency(cont)
-            results.append((i,j,"None",p_value))
+      rows,cols=cont.shape
+      for i in combinations(range(rows),2):
+        for j in combinations(range(cols),2):
+          table = cont[np.array(i), :][:, np.array(j)]
+          odds_ratio, p_value = fisher_exact(table)
+          results.append((i, j, odds_ratio, p_value))
 
       count_pvalue = 0
       for result in results:
         fisher_variables.append(col)
         i, j, odds_ratio, p_fisher = result
-        fisher_column.append(cat_modalities[i]+" and "+cat_modalities[j])
+        fisher_column.append(cat_modalities[j[0]]+" and "+cat_modalities[j[1]])
+        duo_variable.append(var_modalities[i[0]]+" and "+var_modalities[i[1]])
+        fisher.append(round(odds_ratio,6))
         if p_fisher < 0.000001 :
           fisher_pvalue.append("<10-6")
         else:
-          fisher_pvalue.append(round(p_fisher,7))
+          fisher_pvalue.append(round(p_fisher,6))
         if p_fisher < threshold_fisher_exact :
           count_pvalue += 1
-          fisher_significative.append('Significant')
+          duo_interpretation.append('Significant')
         else : 
-          fisher_significative.append("Not significant")
-        if odds_ratio != "None":
-          fisher.append(round(odds_ratio,2))
-        else:
-          fisher.append("None")
+          duo_interpretation.append("Not significant")
+
       if count_pvalue == len(results):
         column.append(col)
+        for el in results :
+          fisher_significative.append("Significant")
+      else:
+        for el in results :
+          fisher_significative.append("Not significant")
       count_pvalue = 0
   global new_df
   new_df = df[column]
@@ -146,10 +148,12 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
                      'p-value' : chi_p_value,
 			               'interpretation' : chi_significative})
   FISHER = pd.DataFrame({'Variables' : fisher_variables,
-                         'duo_analysis' : fisher_column,
+                         'duo_factor_analysis' : fisher_column,
+                         'duo_variable': duo_variable,
                          'Odds ratio' : fisher, 
                          'p-value' : fisher_pvalue,
-			                   'interpretation' : fisher_significative})
+                         'duo_interpretation':duo_interpretation,
+			                   'variable_interpretation' : fisher_significative})
   return X2, FISHER
 
 def quali_analysis(variable_cat):
