@@ -1,5 +1,7 @@
+INFO:__main__:3 missing values are in the column nb TE and the missing values are replaced by 0
 INFO:__main__:quantitative analysis done.
 WARNING:__main__:Take care, be sure your qualitative variables are indeed qualitative
+INFO:__main__:25 missing values are in the column type TE and the missing values are replaced by the modality you choose: missing values for the column type TE
 INFO:__main__:qualitative analysis done.
 INFO:__main__:cla/mod calcul done.
 INFO:__main__:mod/cla calcul done
