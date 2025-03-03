@@ -683,7 +683,7 @@ def variable_weight(result):
 						            'contribution over&under mod' : ranking3})
   return weight
 
-def quanti_normality(df,quanti_var, shapiro_pvalue):
+def quanti_normality(df,quanti_var,variable_cat,shapiro_pvalue):
   """
     Actions performed:
     * Make the normality test on each quantitative variable
@@ -699,18 +699,35 @@ def quanti_normality(df,quanti_var, shapiro_pvalue):
       List: a list containing the non normal variables
   """
   list_stat=[]
+  list_variable = []
+  list_factor=[]
   list_pvalue = []
   normal_variables=[]
   non_normal_variables = []
+  factor_modalities = list(set(df[variable_cat].to_list()))
+  print(factor_modalities)
   for variable in quanti_var :
-    stat, p_value = shapiro(df[variable])
-    list_stat.append(stat)
-    list_pvalue.append(p_value)
-    if p_value < shapiro_pvalue :
-      non_normal_variables.append(variable)
+    count=0
+    for factor_modality in factor_modalities :
+      list_variable.append(variable)
+      list_factor.append(factor_modality)
+      df_cat = df[df[variable_cat]==factor_modality]
+      stat, p_value = shapiro(df_cat[variable])
+      list_stat.append(round(stat,6))
+      if p_value < 0.000001 :
+        list_pvalue.append("<10-6")
+      else: 
+        list_pvalue.append(round(p_value,6))
+      if p_value < shapiro_pvalue :
+        count = count
+      else :
+        count +=1
+    if count != len(factor_modalities) :
+        non_normal_variables.append(variable)
     else:
       normal_variables.append(variable)
-  output_shapiro = pd.DataFrame({"variable":quanti_var,\
+  output_shapiro = pd.DataFrame({"variable":list_variable,\
+                                 "Factor modality":list_factor,\
                                  "statistic":list_stat,\
                                  "p-value":list_pvalue})
   return output_shapiro, normal_variables, non_normal_variables
@@ -738,8 +755,11 @@ def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue)
   for var in quanti_var :
     df_cat = [df[df[variable_cat] == cat][var] for cat in df[variable_cat].unique()]
     stat, p_value = bartlett(*df_cat)
-    list_stat.append(stat)
-    list_pvalue.append(p_value)
+    list_stat.append(round(stat,6))
+    if p_value < 0.000001 :
+      list_pvalue.append("<10-6")
+    else: 
+      list_pvalue.append(round(p_value,6))
     if p_value > homoscedasticity_pvalue : 
       homoscedasticity_variables.append(var)
     else :

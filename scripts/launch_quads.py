@@ -268,6 +268,7 @@ homosc_calcul, homosc_var, non_homos_var = quanti_homoscedasticity(df_quantitati
         config["thresholds_management"]["bartlett_threshold"])
 normality_calcul, normal_var, non_normal_var =quanti_normality(df_quantitative,\
 			    config["variable_management"]["quantitative_variables"],\
+			    config["variable_management"]["factor_variable"],\
           config["thresholds_management"]["shapiro_threshold"]) 
 var_anova = []
 for i in normal_var :
