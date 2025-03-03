@@ -1,2 +1,4 @@
-,Variables,duo_analysis,Odds ratio,p-value,interpretation
-0,type dupli,Chr01 and Chr02,None,<10-6,Significant
+,Variables,duo_factor_analysis,duo_variable,Odds ratio,p-value,duo_interpretation,variable_interpretation
+0,type dupli,Chr01 and Chr02,multiple homolog and singleton,0.0,1.1e-05,Significant,Significant
+1,type dupli,Chr01 and Chr02,multiple homolog and unique homolog,0.318754,<10-6,Significant,Significant
+2,type dupli,Chr01 and Chr02,singleton and unique homolog,inf,0.009415,Significant,Significant
