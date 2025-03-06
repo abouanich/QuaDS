@@ -16,6 +16,12 @@ from utils import write_excel
 import shutil
 from quads import *
 import sys
+import time 
+
+###############################################################################
+#start timer
+###############################################################################
+start_time = time.time()
 
 ###############################################################################
 #name variables
@@ -465,7 +471,7 @@ elif config["logging"]["log_level"]== "logger":
   logger.info("hypergeometric distribution done.")
 
 #variable weight  
-weight = variable_weight(quali_a)
+weight = variable_weight(test_value)
 if config["logging"]["log_level"]=="twice":
   print("variable weight done.")
   logger.info("variable weight done.")
@@ -552,3 +558,14 @@ font = dict(color=config["figure_management"]["not_significant"],size=20),\
 showarrow=False)
 sunburst.show()
 
+###############################################################################
+#end timer
+###############################################################################
+end_time = time.time()
+if config["logging"]["log_level"]=="twice":
+  print("QuaDS time: "+str(round((end_time-start_time),2))+" seconds")
+  logger.info("QuaDS time: "+str(round((end_time-start_time),2))+" seconds")
+elif config["logging"]["log_level"]== "console" :
+  print("QuaDS time: "+str(round((end_time-start_time),2))+" seconds")
+elif config["logging"]["log_level"]== "logger": 
+  logger.info("QuaDS time: "+str(round((end_time-start_time),2))+" seconds")
