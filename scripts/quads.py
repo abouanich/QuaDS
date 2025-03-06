@@ -85,7 +85,6 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
     cat_modalities = cont.columns.tolist()
 	# Chi-square test of independence
     chi2, p_chi2, dof, expected = chi2_contingency(cont)
-    print(expected)
     if np.all(expected >= 5) :
       chi_column.append(col)
       if p_chi2 < 0.000001 :
@@ -556,29 +555,26 @@ def vtest(result, v_p_value,cluster) :
   """
 
   for i in range(len(result)) :
-    for j in range(len(table)) :
-      if result['mod/cla'][i] > result['global'][i] :
-        val = 1
-      else :
-        val = 0 
-      if list_pval[i] < v_p_value :
-        result['v-test'][i] = round((1-2*val)*\
-                                    norm.ppf(list_pval[i]/2),7)
-      else :
-        result['v-test'][i] = 'Not significant'
+    if result['mod/cla'].iloc[i] > result['global'].iloc[i] :
+      val = 1
+    else :
+      val = 0 
+    if list_pval[i] < v_p_value :
+      result['v-test'].iloc[i] = round((1-2*val)*\
+                                  norm.ppf(list_pval[i]/2),7)
+    else :
+      result['v-test'].iloc[i] = 'Not significant'
 		
-    if result['v-test'][i] != 'Not significant':
-      if result['v-test'][i] < 0 :
-        result['interpretation'][i] ='under-represented'
-      elif result['v-test'][i] > 0 :
-        result['interpretation'][i] ='over-represented'
-    elif result['mod/cla'][i] == 0 :
-      result['interpretation'][i] = 'Not present'
-    elif result['v-test'][i] == 'Not significant' :
-      result['interpretation'][i] ='Not significant'
-  index_name = result[(result["variables"] == cluster)].index
-  result.drop(index_name,inplace=True)
-  result = result.reset_index(drop=True)
+    if result['v-test'].iloc[i] != 'Not significant':
+      if result['v-test'].iloc[i] < 0 :
+        result['interpretation'].iloc[i] ='under-represented'
+      elif result['v-test'].iloc[i] > 0 :
+        result['interpretation'].iloc[i] ='over-represented'
+    elif result['mod/cla'].iloc[i] == 0 :
+      result['interpretation'].iloc[i] = 'Not present'
+    elif result['v-test'].iloc[i] == 'Not significant' :
+      result['interpretation'].iloc[i] ='Not significant'
+  result = result[(result["variables"] != cluster)].reset_index(drop=True)
   return result
 
 def variable_weight(result):
