@@ -147,8 +147,8 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
                      'p-value' : chi_p_value,
 			               'interpretation' : chi_significative})
   FISHER = pd.DataFrame({'Variables' : fisher_variables,
-                         'duo_factor_analysis' : fisher_column,
-                         'duo_variable': duo_variable,
+                         'duo_levels_factor' : fisher_column,
+                         'duo_levels_variable': duo_variable,
                          'Odds ratio' : fisher, 
                          'p-value' : fisher_pvalue,
                          'duo_interpretation':duo_interpretation,
