@@ -77,19 +77,19 @@ variable_management:
 thresholds_management:
 
   #: Float: threshold for the shapiro test
-  shapiro_threshold: 0.01
+  shapiro_threshold: 0.05
 
   #: Float: threshold for the bartlett test
-  bartlett_threshold: 0.01
+  bartlett_threshold: 0.05
 
   #: Float: threshold for the anova test
-  anova_threshold: 0.01
+  anova_threshold: 0.05
 
   #: Float: threshold for the kruskal wallis test
-  kruskal_wallis_threshold: 0.01
+  kruskal_wallis_threshold: 0.05
 
   #: Float: threshold for gaussian distribution
-  gaussian_threshold: 0.01
+  gaussian_threshold: 0.05
 
   #: Float: threshold for the X2 test
   x2_threshold: 0.05

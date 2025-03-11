@@ -12,6 +12,7 @@ You have to create a Python environment to run the pipeline.
     conda create -n environment_quads
     conda activate environment_quads
     conda install python=3.9
+    conda install r-base
 
 It relies on several libraries which are listed in the `requirement.txt` file.
 Alternatively the dependencies can by installed using pip:

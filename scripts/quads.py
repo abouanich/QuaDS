@@ -26,6 +26,9 @@ from itertools import combinations
 import statsmodels.formula.api as smf
 from statsmodels.formula.api import ols
 import statsmodels.api as sm
+import rpy2.robjects.numpy2ri
+from rpy2.robjects.packages import importr
+rpy2.robjects.numpy2ri.activate()
 #from fichier import files_enter
 
 ################################################################################
@@ -73,13 +76,9 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
   chi = []
   chi_column = []
   fisher_variables = []
-  duo_variable = []
-  fisher_column = []
   fisher_pvalue = []
-  fisher=[]
   chi_significative = []
-  duo_interpretation = []
-  fisher_significative = []
+  fisher_interpretation = []
   for col in df[columns]:
     cont = pd.crosstab(df[col],df[variable_cat])
     cat_modalities = cont.columns.tolist()
@@ -102,8 +101,22 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
       else :
         chi_significative.append('Not significant')
     else :
+      fisher_variables.append(col)
       var_modalities = list(cont.index)
       cont = np.array(cont)
+      stats = importr('stats')
+      res = stats.fisher_test(cont)
+      p_fisher = res[0][0]
+      if p_fisher < 0.000001 :
+        fisher_pvalue.append("<10-6")
+      else:
+        fisher_pvalue.append(round(p_fisher,6))
+      if p_fisher < threshold_fisher_exact :
+        fisher_interpretation.append('Significant')
+        column.append(col)
+      else : 
+        fisher_interpretation.append("Not significant")
+      """
       results = []
       rows,cols=cont.shape
       for i in combinations(range(rows),2):
@@ -137,6 +150,7 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
         for el in results :
           fisher_significative.append("Not significant")
       count_pvalue = 0
+      """
   global new_df
   new_df = df[column]
   new_df.insert(len(column),variable_cat,df[variable_cat].to_list())
@@ -147,12 +161,8 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
                      'p-value' : chi_p_value,
 			               'interpretation' : chi_significative})
   FISHER = pd.DataFrame({'Variables' : fisher_variables,
-                         'duo_levels_factor' : fisher_column,
-                         'duo_levels_variable': duo_variable,
-                         'Odds ratio' : fisher, 
                          'p-value' : fisher_pvalue,
-                         'duo_interpretation':duo_interpretation,
-			                   'variable_interpretation' : fisher_significative})
+                         'interpretation':fisher_interpretation})
   return X2, FISHER
 
 def quali_analysis(variable_cat):
