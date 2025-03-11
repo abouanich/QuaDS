@@ -734,7 +734,7 @@ def quanti_homoscedasticity(df,quanti_var, variable_cat,homoscedasticity_pvalue)
       list_pvalue.append("<10-6")
     else: 
       list_pvalue.append(round(p_value,6))
-    if p_value > homoscedasticity_pvalue : 
+    if p_value >= homoscedasticity_pvalue : 
       homoscedasticity_variables.append(var)
     else :
       non_homoscedasticity_variables.append(var)
