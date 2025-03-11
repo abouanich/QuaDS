@@ -51,10 +51,10 @@ file_management:
   homoscedasticity_test: homoscedasticity.csv
   anova_test: anova.csv
   kruskal_wallis_test: kruskal_wallis.csv
-  quantitative_enrichment: quantitative_gaussian.csv
+  quantitative_enrichment: quantitative_results.csv
   chi2_test: Chi2.csv
   fisher_test: fisher_exact.csv
-  qualitative_enrichment: qualitative_hypergeometric.csv
+  qualitative_enrichment: qualitative_results.csv
   variable_weight: weight.csv
 
 
