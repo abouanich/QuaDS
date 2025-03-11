@@ -116,41 +116,6 @@ def sdquali(df, columns, variable_cat, threshold_chi2, threshold_fisher_exact) :
         column.append(col)
       else : 
         fisher_interpretation.append("Not significant")
-      """
-      results = []
-      rows,cols=cont.shape
-      for i in combinations(range(rows),2):
-        for j in combinations(range(cols),2):
-          table = cont[np.array(i), :][:, np.array(j)]
-          odds_ratio, p_value = fisher_exact(table)
-          results.append((i, j, odds_ratio, p_value))
-
-      count_pvalue = 0
-      for result in results:
-        fisher_variables.append(col)
-        i, j, odds_ratio, p_fisher = result
-        fisher_column.append(cat_modalities[j[0]]+" and "+cat_modalities[j[1]])
-        duo_variable.append(var_modalities[i[0]]+" and "+var_modalities[i[1]])
-        fisher.append(round(odds_ratio,6))
-        if p_fisher < 0.000001 :
-          fisher_pvalue.append("<10-6")
-        else:
-          fisher_pvalue.append(round(p_fisher,6))
-        if p_fisher < threshold_fisher_exact :
-          count_pvalue += 1
-          duo_interpretation.append('Significant')
-        else : 
-          duo_interpretation.append("Not significant")
-
-      if count_pvalue == len(results):
-        column.append(col)
-        for el in results :
-          fisher_significative.append("Significant")
-      else:
-        for el in results :
-          fisher_significative.append("Not significant")
-      count_pvalue = 0
-      """
   global new_df
   new_df = df[column]
   new_df.insert(len(column),variable_cat,df[variable_cat].to_list())
