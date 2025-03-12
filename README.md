@@ -38,21 +38,21 @@ descriptives statistics :
 
 ## Outputs 
 For your qualitative analysis, you will obtain maximum 4 outputs:
-  - Chi2.csv: informs which variable is implicated in the factor's modalitities
-  - fisher_exact.csv: informs which variable (with low frequencies) is implacated in the factor's modalities  
-  - qualitative_hypergeometric.csv: informs if the variable is implicated in the factor's     modalities, this file informs in each factor's modality if the variable modality is:
+  - Chi2.csv: informs which variable is implicated in the factor's levels
+  - fisher_exact.csv: informs which variable (with low expected frequency) is implacated in the factor's levels  
+  - qualitative_results.csv: informs if the variable is implicated in the factor's levels, this file informs in each factor's level if the variable modality is:
     - over-represented
     - under-represented
     - not significant
     - not present
-  - weight.csv: informs the qualitative variables contribution to the factor's modalities
+  - weight.csv: informs the qualitative variables contribution to the factor's levels
   
 For your quantitative analysis, you will obtain maximum 5 outputs: 
-  - normality.csv: informs if the quantitative variables have a normal distribution in the different factor's modalitities 
-  - homoscedasticity.csv: informs if the quantitative variables' standard deviation are the same in the different factor's modalitities 
-  - anova.csv : informs if a variable have a significant higer or lower average than the average of all the groups.
-  - kruskal_wallis.csv: informs if a variable have a significant higer or lower average than the average of all the groups for variables that are not normal distributed.
-  - quantitative_gaussian.csv informs for significative variable (to ANOVA or kruskal wallis) if the average of the variable is:
+  - normality.csv: informs if the quantitative variables have a normal distribution in the different factor's levels 
+  - homoscedasticity.csv: informs if the quantitative variables' variance are the same in the different factor's levels 
+  - anova.csv : informs if a variable have a significant higher or lower average than the average of all the groups.
+  - kruskal_wallis.csv: informs if a variable have a significant higher or lower average than the average of all the groups for variables that are not normal distributed.
+  - quantitative_results.csv informs for significative variable (to ANOVA or kruskal wallis) if the average of the variable is:
     - above from the average for all individuals
     - below from the average for all individuals
     - Not significantly different from the average for all individuals
