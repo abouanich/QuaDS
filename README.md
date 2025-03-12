@@ -37,25 +37,26 @@ descriptives statistics :
     python3 scripts/launch_quads.py
 
 ## Outputs 
-For your qualitative analysis, you will obtain maximum 4 outputs:
-  - Chi2.csv: informs which variable is implicated in the factor's levels
-  - fisher_exact.csv: informs which variable (with low expected frequency) is implacated in the factor's levels  
-  - qualitative_results.csv: informs if the variable is implicated in the factor's levels, this file informs in each factor's level if the variable modality is:
+
+For your qualitative analysis, you may obtain up to 4 output files:
+  - Chi2.csv: contains the results of the Chi-squared test of independence which assess whether a variable is dependent on the factor.
+  - fisher_exact.csv: an alternative to the Chi-squared when the expected frequencies in the contingency table between the variable and the factor are very low (<5). It also tests the dependency between the variable and the factor.
+  - qualitative_results.csv: for dependent variables, this file describes the dependency of the factor levels. For each factor level, it indicates whether the variable modality is:
     - over-represented
     - under-represented
     - not significant
     - not present
-  - weight.csv: informs the qualitative variables contribution to the factor's levels
+  - weight.csv: indicates the contribution of the qualitative variables to the factor levels
   
-For your quantitative analysis, you will obtain maximum 5 outputs: 
-  - normality.csv: informs if the quantitative variables have a normal distribution in the different factor's levels 
-  - homoscedasticity.csv: informs if the quantitative variables' variance are the same in the different factor's levels 
-  - anova.csv : informs if a variable have a significant higher or lower average than the average of all the groups.
-  - kruskal_wallis.csv: informs if a variable have a significant higher or lower average than the average of all the groups for variables that are not normal distributed.
-  - quantitative_results.csv informs for significative variable (to ANOVA or kruskal wallis) if the average of the variable is:
-    - above from the average for all individuals
-    - below from the average for all individuals
-    - Not significantly different from the average for all individuals
+For your quantitative analysis, you may obtain up to 5 outputs files:
+  - normality.csv: contains the results of the Shapiro-Wilk test, which assesses whether each quantitative variable meets the normality assumption within the compared factor levels.
+  - homoscedasticity.csv: contains the results of Bartlett's test, which verifies the equality of variances between the factor levels.
+  - anova.csv : when assumptions are met, this test determines whether there is a significance difference in at least one factor level for each quantitative variable.
+  - kruskal_wallis.csv: the non-parametric alternative of anova, used when at least one assumption is not met.
+  - quantitative_results.csv: provides information on variables with significant differences (based on anova and Kruskal-Wallis results) and only when the homoscedasticity assumption is verified. If homoscedasticity is not verified, Kruskal-Wallis is applied but, no further description of the factor levels is performed. This file indicates whether the variable mean is:
+    - above the overall average
+    - below the overall average
+    - Not significantly different from the overall average
 
 
 ## Visuals
