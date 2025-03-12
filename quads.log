@@ -10,3 +10,14 @@ INFO:__main__:pvalue done.
 INFO:__main__:hypergeometric distribution done.
 INFO:__main__:variable weight done.
 INFO:__main__:QuaDS time: 25.56 seconds
+INFO:rpy2.situation:cffi mode is CFFI_MODE.ANY
+DEBUG:rpy2.situation:Looking for R home with: R RHOME
+INFO:rpy2.situation:R home found: /home/abouanich/anaconda3/envs/environment_quads/lib/R
+DEBUG:rpy2.situation:Looking for LD_LIBRARY_PATH with: /home/abouanich/anaconda3/envs/environment_quads/lib/R/bin/Rscript -e cat(Sys.getenv("LD_LIBRARY_PATH"))
+INFO:rpy2.situation:R library path: 
+INFO:rpy2.situation:LD_LIBRARY_PATH: 
+DEBUG:rpy2.rinterface_lib.ffi_proxy:cffi mode is InterfaceType.API
+INFO:rpy2.rinterface_lib.embedded:Default options to initialize R: rpy2, --quiet, --no-save
+DEBUG:rpy2.rinterface_lib.embedded:Calling R setup_Rmainloop.
+DEBUG:rpy2.rinterface_lib.embedded:Setting functions for R callbacks.
+INFO:rpy2.rinterface_lib.embedded:R is already initialized. No need to initialize.
